@@ -29,6 +29,6 @@ class Reader(xml.sax.handler.ContentHandler):
 if __name__ == '__main__':
     time.clock()
     grabber = Reader(target_attrs=('page'))
-    xml.sax.parse('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', grabber)
+    xml.sax.parse('../data/training.xml', grabber)
     print time.clock()
     print grabber.counter
