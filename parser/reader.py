@@ -1,12 +1,13 @@
 import time
 import xml.sax
+import Queue
 
 class Reader(xml.sax.handler.ContentHandler):
     """SAX Handler which will store selected attribute values."""
-    def __init__(self):
-        self.counter = 0
+    def __init__(self, article_queue):
         self._reset_article()
         self._current_tag = u''
+        self._queue = article_queue
 
     def _reset_article(self):
         self._article = {
@@ -30,15 +31,20 @@ class Reader(xml.sax.handler.ContentHandler):
         self._current_tag = u''
         if name == 'page':
             if self._article['text'][:len('#REDIRECT')] != '#REDIRECT':
-                print '%08d: %r' % (self.counter, self._article['title'])
                 self._current_tag = u''
-                self.counter = self.counter + 1
+                self._queue.put(self._article)
             self._reset_article()
 
 
 if __name__ == '__main__':
     time.clock()
-    reader = Reader()
+    queue = Queue.Queue()
+    reader = Reader(queue)
     xml.sax.parse('../data/training.xml', reader)
+    counter = 1
+    while not queue.empty():
+        article = queue.get()
+        print '%08d: %r' % (counter, article['title'])
+        counter += 1
     print time.clock()
-    print reader.counter
+    print counter
