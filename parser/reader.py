@@ -1,9 +1,11 @@
+"""An xml parser that adds wikipedia articles to a queue
+"""
+
 import time
 import xml.sax
 import Queue
 
 class Reader(xml.sax.handler.ContentHandler):
-    """SAX Handler which will store selected attribute values."""
     def __init__(self, article_queue):
         self._reset_article()
         self._current_tag = u''

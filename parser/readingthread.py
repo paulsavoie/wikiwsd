@@ -1,3 +1,6 @@
+"""A thread wrapper for the xml reader
+"""
+
 import time
 import threading
 import xml.sax
@@ -5,10 +8,10 @@ import Queue
 from reader import Reader
 
 class ReadingThread(threading.Thread):
-    def __init__(self, path, article_queue):
+    def __init__(self, xml_path, article_queue):
         threading.Thread.__init__(self)
         self._reader = Reader(article_queue)
-        self._path = path
+        self._path = xml_path
 
     def run(self):
         xml.sax.parse(self._path, self._reader)
