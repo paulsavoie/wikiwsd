@@ -107,7 +107,7 @@ class WikiParser():
             
             # insert article
             cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%d, %s, NOW(), %d);', 
-                (article['id'], article['title'], len(links)))
+                (int(article['id']), article['title'], len(links)))
 
             # insert links
             for link in links:
