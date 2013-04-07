@@ -103,24 +103,29 @@ class WikiParser():
 
         # insert into db # TODO
         if self._db_connection:
-            cur = self._db_connection.cursor()
-            
-            # insert article
-            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, NOW(), %s, %s);', 
-                (article['id'], article['title'], len(links)))
+            try:
+                cur = self._db_connection.cursor()
+                
+                # insert article
+                cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, NOW(), %s, %s);', 
+                    (article['id'], article['title'], len(links)))
 
-            # insert links
-            for link in links:
-                cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%s, %s, %s);',
-                    link)
+                # insert links
+                for link in links:
+                    cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%s, %s, %s);',
+                        link)
 
-            # insert disambiguations
-            for disambiguation in disambiguations:
-                cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %s, %s);',
-                    disambiguation)
+                # insert disambiguations
+                for disambiguation in disambiguations:
+                    cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %s, %s);',
+                        disambiguation)
 
-            # commit inserts
-            self._db_connection.commit()
+                # commit inserts
+                self._db_connection.commit()
+
+            except mysqldb.Error, e:
+                print "Error in article '%s' (%d)" % (article['title'], article['id'])
+                print "Error %d: %s" % (e.args[0],e.args[1])
 
         #for disambiguation in disambiguations:
         #    print disambiguation[0].encode('ascii', 'ignore') + ' == ' + disambiguation[1].encode('ascii', 'ignore')
