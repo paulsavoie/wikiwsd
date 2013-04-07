@@ -1,5 +1,5 @@
 CREATE TABLE `articles` (
-    `id` BIGINT NOT NULL PRIMARY KEY,
+    `id` UNSIGNED BIGINT NOT NULL PRIMARY KEY,
     `lastparsed` DATETIME NOT NULL,
     `title` VARCHAR(200) NOT NULL UNIQUE,
     `linkincount` INTEGER NOT NULL DEFAULT 0,
@@ -8,8 +8,8 @@ CREATE TABLE `articles` (
 );
 
 CREATE TABLE `links` (
-    `id` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `article_id` BIGINT NOT NULL,
+    `id` UNSIGNED BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `article_id` UNSIGNED BIGINT NOT NULL,
     `token_index` INTEGER NOT NULL,
     `target_article` VARCHAR(200) NOT NULL,
     FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`),
@@ -17,10 +17,10 @@ CREATE TABLE `links` (
 );
 
 CREATE TABLE `disambiguations` (
-    `id` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` UNSIGNED BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `string` VARCHAR(200) NOT NULL,
     `meaning` VARCHAR(200) NOT NULL,
-    `article_id` BIGINT NOT NULL,
+    `article_id` UNSIGNED BIGINT NOT NULL,
     `token_index` INTEGER NOT NULL,
     FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`),
     INDEX (`article_id`),
