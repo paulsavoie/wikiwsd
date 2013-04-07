@@ -106,7 +106,7 @@ class WikiParser():
             cur = self._db_connection.cursor()
             
             # insert article
-            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, %s, NOW(), %s);', 
+            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, NOW(), %s, %s);', 
                 (article['id'], article['title'], len(links)))
 
             # insert links
