@@ -106,17 +106,17 @@ class WikiParser():
             cur = self._db_connection.cursor()
             
             # insert article
-            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%d, %s, NOW(), %d);', 
+            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, %s, NOW(), %s);', 
                 (article['id'], article['title'], len(links)))
 
             # insert links
             for link in links:
-                cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%d, %d, %s);',
+                cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%s, %s, %s);',
                     link)
 
             # insert disambiguations
             for disambiguation in disambiguations:
-                cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %d, %d);',
+                cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %s, %s);',
                     disambiguation)
 
             # commit inserts
