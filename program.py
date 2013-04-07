@@ -8,35 +8,33 @@ from wikiparser import WorkingThread
 from wikiparser import ReadingThread
 
 class Program():
-    def __init__(self, xml_path, db_connection=None, max_queue_size=10):
+    def __init__(self, xml_path, max_queue_size=10, num_threads=1, 
+            db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd'):
         self._queue = Queue.Queue(maxsize=max_queue_size)
         self._reading_thread = ReadingThread(xml_path, self._queue)
-        self._working_thread1 = WorkingThread(self._queue, db_connection)
-        self._working_thread2 = WorkingThread(self._queue, db_connection)
-        self._working_thread3 = WorkingThread(self._queue, db_connection)
+        self._worker_threads = []
+        for i in range (0, num_threads):
+            con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True)
+            self._worker_threads.append(WorkingThread(self._queue, con))
 
     def run(self):
         self._reading_thread.start()
-        self._working_thread1.start()
-        self._working_thread2.start()
-        self._working_thread3.start()
+        for worker in self._worker_threads:
+            worker.start()
         # wait until there is something in the queue
         while self._queue.empty():
             pass
         self._queue.join()
-        self._working_thread1.end()
-        self._working_thread2.end()
-        self._working_thread3.end()
-        self._working_thread1.join()
-        self._working_thread2.join()
-        self._working_thread3.join()
+        for worker in self._worker_threads:
+            worker.end()
+        for worker in self._worker_threads:
+            worker.join()
         self._reading_thread.join()
 
 
 if __name__ == '__main__':
     try:
-        con = mysqldb.connect('localhost', 'wikiwsd', 'wikiwsd', 'wikiwsd', charset='utf8', use_unicode=True)
-        prog = Program('data/training.xml', con)
+        prog = Program('data/training.xml', num_threads=4)
         time.clock()
         prog.run()
         print time.clock()
