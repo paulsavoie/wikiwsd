@@ -34,7 +34,11 @@ class Reader(xml.sax.handler.ContentHandler):
         if name == 'page':
             if self._article['text'][:len('#REDIRECT')] != '#REDIRECT':
                 self._current_tag = u''
-                self._queue.put(self._article)
+                try:
+                    article['id'] = int(article['id'])
+                    self._queue.put(self._article)
+                except ValueError:
+                    print 'Article "%s" could not be parsed, as %d is not a valid integer id' % (article['title'], article['id'])
             self._reset_article()
 
 

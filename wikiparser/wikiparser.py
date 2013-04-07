@@ -89,11 +89,11 @@ class WikiParser():
                                 if len(current_link_target) != 0 and len(current_link_token) != 0:
 
                                     # append link ready for entry in db
-                                    links.append((int(article['id']), token_index, current_link_target))
+                                    links.append(article['id'], token_index, current_link_target))
 
                                     # if target is different from used word # TODO: maybe faster with boolean?
                                     if current_link_token != current_link_target:
-                                        disambiguations.append((current_link_token, current_link_target, int(article['id']), token_index))
+                                        disambiguations.append((current_link_token, current_link_target, article['id'], token_index))
 
                             # clean up and prepare for next link
                             in_link = False
@@ -107,7 +107,7 @@ class WikiParser():
             
             # insert article
             cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%d, %s, NOW(), %d);', 
-                (int(article['id']), article['title'], len(links)))
+                (article['id'], article['title'], len(links)))
 
             # insert links
             for link in links:
