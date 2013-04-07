@@ -35,7 +35,7 @@ class Reader(xml.sax.handler.ContentHandler):
             if self._article['text'][:len('#REDIRECT')] != '#REDIRECT':
                 self._current_tag = u''
                 try:
-                    self._article['id'] = int(self._article['id'])
+                    self._article['id'] = long(self._article['id'])
                     self._queue.put(self._article)
                 except ValueError:
                     print 'Article "%s" could not be parsed, as %d is not a valid integer id' % (self._article['title'], self._article['id'])
