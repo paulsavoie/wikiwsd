@@ -7,9 +7,9 @@ import Queue
 from wikiparser import WikiParser
 
 class WorkingThread(threading.Thread):
-    def __init__(self, article_queue):
+    def __init__(self, article_queue, db_connection=None):
         threading.Thread.__init__(self)
-        self._parser = WikiParser()
+        self._parser = WikiParser(db_connection)
         self._queue = article_queue
         self._end = False
 

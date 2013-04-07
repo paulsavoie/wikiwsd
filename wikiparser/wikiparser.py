@@ -4,9 +4,11 @@
 import nltk.data
 from nltk.tokenize import *
 import re
+import MySQLdb as mysqldb
 
 class WikiParser():
-    def __init__(self):
+    def __init__(self, db_connection=None):
+        self._db_connection = db_connection
         self._sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
         self._word_tokenizer = WhitespaceTokenizer() #WordPunctTokenizer()
         self._INCORRECT_TOKENS = (u'Category', u'File',
@@ -100,7 +102,25 @@ class WikiParser():
                             end_link = False
 
         # insert into db # TODO
-        
+        if self._db_connection:
+            cur = self._db_connection.cursor()
+            
+            # insert article
+            cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%d, %s, NOW(), %d);', 
+                (article['id'], article['title'], len(links)))
+
+            # insert links
+            for link in links:
+                cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%d, %d, %s);',
+                    link)
+
+            # insert disambiguations
+            for disambiguation in disambiguations:
+                cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %d, %d);',
+                    disambiguation)
+
+            # commit inserts
+            self._db_connection.commit()
 
         #for disambiguation in disambiguations:
         #    print disambiguation[0].encode('ascii', 'ignore') + ' == ' + disambiguation[1].encode('ascii', 'ignore')
