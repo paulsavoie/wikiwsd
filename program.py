@@ -25,7 +25,7 @@ class Program():
 
 
 if __name__ == '__main__':
-    prog = Program('data/training.xml')
+    prog = Program('data/single2.xml')
     time.clock()
     prog.run()
     print time.clock()

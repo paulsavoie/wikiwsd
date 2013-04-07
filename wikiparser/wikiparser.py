@@ -8,11 +8,12 @@ import re
 class WikiParser():
     def __init__(self):
         self._sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-        self._word_tokenizer = WordPunctTokenizer()
-        self._INCORRECT_TOKENS = ('Category', 'File',
-            'als', 'ast', 'zh-min-nan', 'be-x-old', 'pdc', 'hif', 'ilo', 'krc', 'lad', 'jbo', 'arz',
-            'mwl', 'sah', 'sco', 'simple', 'ckb', 'fiu-vro', 'war', 'zh-yue', 'diq', 'bat-smg', 'vec',
-            'vro', 'pnb', 'yue', 'bat', 'fiu' )
+        self._word_tokenizer = WhitespaceTokenizer() #WordPunctTokenizer()
+        self._INCORRECT_TOKENS = (u'Category', u'File',
+            u'als', u'ast', u'zh-min-nan', u'be-x-old', u'pdc', u'hif', u'ilo',
+            u'krc', u'lad', u'jbo', u'arz', u'mwl', u'sah', u'sco', u'simple', 
+            u'ckb', u'fiu-vro', u'war', u'zh-yue', u'diq', u'bat-smg', u'vec', 
+            u'vro', u'pnb', u'yue', u'bat', u'fiu' )
 
     def parse_article(self, article):
         links = []
@@ -28,44 +29,63 @@ class WikiParser():
         lines = article['text'].strip().split('\n')
         for line in lines:
             line = line.strip()
+
+            # remove hyphens
+            line = line.replace("''", "")
+
             if len(line) > 4:
                 # do not consider lines only holding links # TODO: is that correct?
-                if line[0] != '[' and line[-1] != ']' and line[0] != '{' and line[-1] != '}':
+                #if line[0] != '[' and line[-1] != ']' and line[0] != '{' and line[-1] != '}':
 
-                    sentences = self._sent_detector.tokenize(line)
-                    for sentence in sentences:
-                        words = self._word_tokenizer.tokenize(sentence)
+                sentences = self._sent_detector.tokenize(line)
+                for sentence in sentences:
+                    words = self._word_tokenizer.tokenize(sentence)
 
-                        # search for links
-                        for word in words:
-                            token_index += 1
-                            if len(word) >= 2 and word[0] == '[' and word[1] == '[':
-                                in_link = True
-                                in_target = True
-                                word = word[2:]
+                    # search for links
+                    for word in words:
+                        token_index += 1
+                        if len(word) >= 2 and word[0] == '[' and word[1] == '[':
+                            in_link = True
+                            in_target = True
+                            word = word[2:]
 
-                            # we are in a link
-                            if in_link:
-                                # links to files, categories or other languages are not considered
-                                if word in self._INCORRECT_TOKENS or word.find(':') != -1:
+                        # we are in a link
+                        if in_link:
+                            # links to files, categories or other languages are not considered
+                            if word.find(':') != -1 or word in self._INCORRECT_TOKENS:
+                                end_link = True
+                                word = u''
+                            else:
+                                # strip word if end of link already
+                                if word.find(']]') != -1:
+                                    word = word[:word.find(']]')]
                                     end_link = True
-                                    word = u''
+
+                                # if target and token are different
+                                separator_index = word.find('|')
+                                if separator_index != -1:
+                                #if len(word) == 1 and word[0] == '|':
+                                    in_target = False
+                                    current_link_target += word[:separator_index]
+                                    current_link_token = word[separator_index+1:]
+                                    if len(current_link_token) > 0:
+                                        current_link_token += u' '
                                 else:
-                                    # strip word if end of link already
-                                    if word.find(']]') != -1:
-                                        word = word[:word.find(']]')]
+                                    if in_target:
+                                        current_link_target += word + u' '
+                                    current_link_token += word + u' '
+                        if end_link:
+                            if len(current_link_target) > 0:
+                                
+                                current_link_token = current_link_token.strip()
+                                current_link_target = current_link_target.strip()
 
-                                    # if target and token are different
-                                    if len(word) == 1 and word[0] == '|':
-                                        in_target = False
-                                        current_link_token = u''
-                                    else:
-                                        if in_target:
-                                            current_link_target += word + u' '
-                                        current_link_token += word + u' '
+                                # remove hyphens (only an anchor on page)
+                                if current_link_target.find('#') != -1:
+                                    current_link_target = current_link_target[:current_link_target.find('#')]
 
-                            if end_link:
-                                if len(current_link_target) > 0:
+                                if len(current_link_target) != 0 and len(current_link_token) != 0:
+
                                     # append link ready for entry in db
                                     links.append((article['id'], token_index, current_link_target))
 
@@ -80,3 +100,11 @@ class WikiParser():
                             end_link = False
 
         # insert into db # TODO
+        
+
+        #for disambiguation in disambiguations:
+        #    print disambiguation[0].encode('ascii', 'ignore') + ' == ' + disambiguation[1].encode('ascii', 'ignore')
+        #print len(disambiguations)
+        #for link in links:
+        #    print link[2].encode('ascii', 'ignore')
+        #print len(links)
