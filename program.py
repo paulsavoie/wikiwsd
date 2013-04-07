@@ -35,7 +35,7 @@ class Program():
 
 if __name__ == '__main__':
     try:
-        con = mysqldb.connect('localhost', 'wikiwsd', 'wikiwsd', 'wikiwsd')
+        con = mysqldb.connect('localhost', 'wikiwsd', 'wikiwsd', 'wikiwsd', charset='utf8', use_unicode=True)
         prog = Program('data/training.xml', con)
         time.clock()
         prog.run()
