@@ -124,7 +124,7 @@ class WikiParser():
                 self._db_connection.commit()
 
             except mysqldb.Error, e:
-                print "Error in article '%s' (%d)" % (article['title'], article['id'])
+                print "Error in article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id'])
                 print "Error %d: %s" % (e.args[0],e.args[1])
 
         #for disambiguation in disambiguations:

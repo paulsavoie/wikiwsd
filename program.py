@@ -34,7 +34,7 @@ class Program():
 
 if __name__ == '__main__':
     try:
-        prog = Program('data/training.xml', num_threads=4)
+        prog = Program('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=8)
         time.clock()
         prog.run()
         print time.clock()
