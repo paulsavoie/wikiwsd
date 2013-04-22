@@ -8,7 +8,7 @@ from wikiparser import WorkingThread
 from wikiparser import ReadingThread
 
 class Program():
-    def __init__(self, xml_path, max_queue_size=10, num_threads=1, 
+    def __init__(self, xml_path, max_queue_size=20, num_threads=1, 
             db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd'):
         self._queue = Queue.Queue(maxsize=max_queue_size)
         self._reading_thread = ReadingThread(xml_path, self._queue)
@@ -21,20 +21,20 @@ class Program():
         self._reading_thread.start()
         for worker in self._worker_threads:
             worker.start()
-        # wait until there is something in the queue
-        while self._queue.empty():
-            pass
+	# wait until all articles are read
+	self._reading_thread.join()
+
+        # wait for all articles to be processed
         self._queue.join()
         for worker in self._worker_threads:
             worker.end()
         for worker in self._worker_threads:
             worker.join()
-        self._reading_thread.join()
 
 
 if __name__ == '__main__':
     try:
-        prog = Program('data/training.xml', num_threads=4)
+        prog = Program('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=8)
         time.clock()
         prog.run()
         print time.clock()

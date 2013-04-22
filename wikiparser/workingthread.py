@@ -17,7 +17,7 @@ class WorkingThread(threading.Thread):
         while not self._end:
             try:
                 article = self._queue.get(True, 2)
-                print 'parsing article %s' % (article['title'])
+                print 'parsing article %s' % (article['title'].encode('ascii', 'ignore'))
                 self._parser.parse_article(article)
                 self._queue.task_done()
             except Queue.Empty:
