@@ -41,7 +41,10 @@ class Reader(xml.sax.handler.ContentHandler):
                 self._current_tag = u''
                 try:
                     self._article['id'] = long(self._article['id'])
-                    self._queue.put(self._article)
+                    # throw away all articles with ':' in titles (are 
+                    # most likely files, categories, etc.)
+                    if (self._article['title'].find(':') == -1)
+                        self._queue.put(self._article)
                 except ValueError:
                     print 'Article "%s" could not be parsed, as %d is not a valid integer id' % (self._article['title'], self._article['id'])
             self._reset_article()
