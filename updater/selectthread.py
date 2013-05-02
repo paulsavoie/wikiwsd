@@ -4,6 +4,7 @@
 import time
 import threading
 import Queue
+import MySQLdb as mysqldb
 
 class SelectThread(threading.Thread):
     def __init__(self, link_queue, db_connection=None):
@@ -15,9 +16,12 @@ class SelectThread(threading.Thread):
         if self._db_connection:
             cur = self._db_connection.cursor()
             # iterate over each article
-            cur.execute('SELECT * FROM links;')
-            numrows = int(cur.rowcount)
-            for i in range(numrows):
-                row = cur.fetchone()
+            cur.execute('SELECT id, target_article FROM links;')
+            counter = 0
+            for row in cur:
                 # add target title to queue
-                link_queue.put(row[3])
+                #print 'added link "%s"' % (row[0])
+                self._link_queue.put(row[1])
+                counter = counter + 1
+                if counter % 100 == 0:
+                    print 'added %d links' % counter
