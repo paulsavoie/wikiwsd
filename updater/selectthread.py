@@ -16,12 +16,12 @@ class SelectThread(threading.Thread):
         if self._db_connection:
             cur = self._db_connection.cursor()
             # iterate over each article
-            cur.execute('SELECT id, target_article FROM links;')
+            cur.execute('SELECT id, article_id, target_article FROM links;')
             counter = 0
             for row in cur:
                 # add target title to queue
                 #print 'added link "%s"' % (row[0])
-                self._link_queue.put(row[1])
+                self._link_queue.put((row[1], row[2]))
                 counter = counter + 1
                 if counter % 100 == 0:
                     print 'added %d links' % counter
