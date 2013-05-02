@@ -1,3 +1,7 @@
+CREATE DATABASE `wikiwsd`;
+GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
+GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
+
 CREATE TABLE `articles` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
     `lastparsed` DATETIME NOT NULL,
@@ -26,3 +30,16 @@ CREATE TABLE `disambiguations` (
     INDEX (`article_id`),
     INDEX USING HASH (`string`)
 );
+
+CREATE TABLE `disambiguations_reduced` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    INDEX USING HASH (`string`)
+    ) SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM disambiguations GROUP BY `string`, `meaning`;
+
+-- TODO
+
+CREATE TABLE `links_reduced` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`),
+    INDEX (`article_id`)
+) SELECT COUNT(*) as `numlinks`, `article_id`, `target_article` FROM links GROUP BY `article_id`, `target_article`;
