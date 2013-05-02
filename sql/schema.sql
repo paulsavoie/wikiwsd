@@ -31,15 +31,12 @@ CREATE TABLE `disambiguations` (
     INDEX USING HASH (`string`)
 );
 
-CREATE TABLE `disambiguations_reduced` (
+CREATE TABLE `article_links` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    INDEX USING HASH (`string`)
-    ) SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM disambiguations GROUP BY `string`, `meaning`;
-
--- TODO
-
-CREATE TABLE `links_reduced` (
-    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`),
-    INDEX (`article_id`)
-) SELECT COUNT(*) as `numlinks`, `article_id`, `target_article` FROM links GROUP BY `article_id`, `target_article`;
+    `source_article_id` BIGINT UNSIGNED NOT NULL,
+    `target_article_id` BIGINT UNSIGNED NOT NULL,
+    `count` INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (`source_article_id`) REFERENCES `articles` (`id`),
+    FOREIGN KEY (`target_article_id`) REFERENCES `articles` (`id`),
+    INDEX (`target_article_id`)
+);
