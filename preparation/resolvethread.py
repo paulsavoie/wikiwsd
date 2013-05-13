@@ -11,6 +11,7 @@ class Resolver(xml.sax.handler.ContentHandler):
         self._queue = redirect_queue
         self._reset_redirect()
         self._current_tag = u''
+        self._article_counter = 0
 
     def _reset_redirect(self):
         self._redirect = {
@@ -33,9 +34,12 @@ class Resolver(xml.sax.handler.ContentHandler):
     def endElement(self, name):
         self._current_tag = u''
         if name == 'page':
+            self._article_counter += 1
             if len(self._redirect['source']) > 0 and len(self._redirect['target']) > 0 and self._redirect['source'].find(u':') == -1:
                 self._queue.put(self._redirect)
             self._reset_redirect()
+            if self._article_counter % 1000 == 0:
+                print '%d articles parsed' % (self._article_counter)
 
 class ResolveThread(threading.Thread):
     def __init__(self, xml_path, redirect_queue):
