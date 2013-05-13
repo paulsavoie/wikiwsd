@@ -33,7 +33,7 @@ class Resolver(xml.sax.handler.ContentHandler):
     def endElement(self, name):
         self._current_tag = u''
         if name == 'page':
-            if len(self._redirect['source']) > 0 and len(self._redirect['target']) > 0:
+            if len(self._redirect['source']) > 0 and len(self._redirect['target']) > 0 and self._redirect['source'].find(u':') == -1:
                 self._queue.put(self._redirect)
             self._reset_redirect()
 

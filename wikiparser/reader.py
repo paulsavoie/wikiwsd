@@ -37,7 +37,7 @@ class Reader(xml.sax.handler.ContentHandler):
         if name == 'id':
             self._id_done = True
         elif name == 'page':
-            if self._article['text'][:len('#REDIRECT')] != '#REDIRECT':
+            if self._article['text'][:len('#REDIRECT')] != '#REDIRECT' and self._article['title'].find(u':') == -1:
                 self._current_tag = u''
                 try:
                     self._article['id'] = long(self._article['id'])
