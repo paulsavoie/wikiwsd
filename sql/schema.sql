@@ -53,3 +53,4 @@ CREATE TABLE `redirects` (
 -- retrieve number of articles that link to A and B
 SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM (SELECT source_article_id, target_article_id FROM article_links WHERE target_article_id=18948043 OR target_article_id=272207) AS tmp GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp2;
 
+cur.execute('INSERT INTO article_links(source_article_id, target_article_id, count) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE count=count+1;', (source_id, target_id))

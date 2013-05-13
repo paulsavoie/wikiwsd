@@ -21,7 +21,7 @@ class PrepareThread(threading.Thread):
                 target_name = vals['target']
                 #print 'saving redirect "%s" --> "%s"' % (source_name.encode('ascii', 'ignore'), target_name.encode('ascii', 'ignore'))
                 cur = self._db_connection.cursor()
-                cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', source_name, target_name)
+                cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', (source_name, target_name))
                 self._queue.task_done()
             except Queue.Empty:
                 pass
