@@ -1,6 +1,6 @@
-CREATE DATABASE `wikiwsd`;
-GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
-GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
+CREATE DATABASE `wikiwsd2`;
+GRANT ALL ON `wikiwsd2`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
+GRANT ALL ON `wikiwsd2`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
 
 CREATE TABLE `articles` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
@@ -40,6 +40,14 @@ CREATE TABLE `article_links` (
     FOREIGN KEY (`target_article_id`) REFERENCES `articles` (`id`),
     INDEX (`target_article_id`)
 );
+
+CREATE TABLE `redirects` (
+    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `source_article_name` VARCHAR(200) NOT NULL,
+    `target_article_name` VARCHAR(200) NOT NULL,
+    INDEX USING HASH (`source_article_name`)
+);
+
 -- TODO
 
 -- retrieve number of articles that link to A and B

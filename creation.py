@@ -7,12 +7,12 @@ import MySQLdb as mysqldb
 import MySQLdb.cursors
 from wikiparser import WorkingThread
 from wikiparser import ReadingThread
-from updater import SelectThread
-from updater import UpdateThread
+from preparation import ResolveThread
+from preparation import PrepareThread
 
-class Program():
+class Creator():
     def __init__(self, xml_path, max_queue_size=20, num_threads=1, 
-            db_host='10.0.0.1', db_user='wikiwsd', db_pass='wikiwsd', action='learn'):
+            db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd', action='learn'):
         self._queue = Queue.Queue(maxsize=max_queue_size)
         if action == 'learn':
             self._reading_thread = ReadingThread(xml_path, self._queue)
@@ -20,13 +20,12 @@ class Program():
             for i in range (0, num_threads):
                 con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True)
                 self._worker_threads.append(WorkingThread(self._queue, con))
-        elif action == 'update':
-            con_select = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True, cursorclass=MySQLdb.cursors.SSCursor)
-            self._reading_thread = SelectThread(self._queue, con_select)
+        elif action == 'prepare':
+            self._reading_thread = ResolveThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True)
-                self._worker_threads.append(UpdateThread(self._queue, con))
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
+                self._worker_threads.append(PrepareThread(self._queue, con))
 
     def run(self):
         self._reading_thread.start()
@@ -45,7 +44,10 @@ class Program():
 
 if __name__ == '__main__':
     try:
-        prog = Program('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=52, max_queue_size=100, action='update')
+        # first action 'prepare' to learn links
+        # then action 'learn' to learn
+        prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='prepare')
+        #prog = Creator('data/training.xml', num_threads=25, max_queue_size=300, db_host='10.11.0.103', action='prepare')
         time.clock()
         prog.run()
         print time.clock()
