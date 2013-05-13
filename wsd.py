@@ -83,12 +83,12 @@ class WordSenseDisambiguator():
         for d in disambiguations:
             print d
             for m in disambiguations[d]:
-                print '\t%.2f\t%s' % (m['percentage'], m['meaning'].encode('ascii', 'ignore'))
+                print '\t%.2f\t%05d: %s' % (m['percentage'], m['meaning'].encode('ascii', 'ignore'))
 
 
 if __name__ == '__main__':
     try:
-        prog = WordSenseDisambiguator(db_host='10.0.0.1')
+        prog = WordSenseDisambiguator(db_host='10.11.0.103')
         time.clock()
         prog.run()
         print time.clock()
