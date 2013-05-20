@@ -133,12 +133,12 @@ class WikiParser():
                     if target_article_id == 0:
                         print "Error adding link from %s --> %s " % (article['title'].encode('ascii', 'ignore'), link.encode('ascii', 'ignore'))
                     else:
-                        print 'INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);' % (article['id'], target_article_id, links[link])
-                        #cur.execute('INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);',
-                        #    (article['id'], target_article_id, links[link]))
+                        #print 'INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);' % (article['id'], target_article_id, links[link])
+                        cur.execute('INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);',
+                            (article['id'], target_article_id, links[link]))
 
-                        print 'UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;' % target_article_id
-                        #cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_id)
+                        #print 'UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;' % target_article_id
+                        cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_id)
 
 
                 # insert disambiguations
@@ -147,13 +147,12 @@ class WikiParser():
                     if target_article_id == 0:
                         print "Error adding disambiguation from %s --> %s " % (article['title'].encode('ascii', 'ignore'), link.encode('ascii', 'ignore'))
                     else:
-                        print'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;' % (disambiguation[0].encode('ascii', 'ignore'), target_article_id)
-                        #cur.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
-                        #    (disambiguation[0], target_article_id))
-
+                        #print'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;' % (disambiguation[0].encode('ascii', 'ignore'), target_article_id)
+                        cur.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
+                            (disambiguation[0], target_article_id))
 
                 # commit inserts
-                #self._db_connection.commit()
+                self._db_connection.commit()
 
             except mysqldb.Error, e:
                 print "Error in article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id'])
