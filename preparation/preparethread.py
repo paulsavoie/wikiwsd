@@ -19,10 +19,16 @@ class PrepareThread(threading.Thread):
                 vals = self._queue.get(True, 2)
                 source_name = vals['source']
                 target_name = vals['target']
-                #print 'saving redirect "%s" --> "%s"' % (source_name.encode('ascii', 'ignore'), target_name.encode('ascii', 'ignore'))
+                article_id = vals['id']
                 cur = self._db_connection.cursor()
-                cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', (source_name, target_name))
-                self._db_connection.commit()
+                if len(target_name) == 0: # make an insert into articles
+                    #print 'saving new article (%s, %d)' % (source_name.encode('ascii', 'ignore'), article_id)
+                    cur.execute('INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(%s, NOW(), %s, %s);', 
+                        (article_id, source_name, 0))
+                else: # update redirects
+                    #print 'saving redirect "%s" --> "%s"' % (source_name.encode('ascii', 'ignore'), target_name.encode('ascii', 'ignore'))
+                    #cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', (source_name, target_name))
+                    #self._db_connection.commit()
                 self._queue.task_done()
             except Queue.Empty:
                 pass

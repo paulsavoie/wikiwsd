@@ -12,11 +12,13 @@ class Resolver(xml.sax.handler.ContentHandler):
         self._reset_redirect()
         self._current_tag = u''
         self._article_counter = 0
+        self._id_done = False
 
     def _reset_redirect(self):
         self._redirect = {
             'source': u'',
-            'target': u''
+            'target': u'',
+            'id': u''
         }
         self._id_done = False
 
@@ -30,13 +32,21 @@ class Resolver(xml.sax.handler.ContentHandler):
     def characters(self, content):
         if self._current_tag == 'title':
             self._redirect['source'] += content
+        elif self._current_tag == 'id' and not self._id_done:
+            self._redirect['id'] += content
 
     def endElement(self, name):
         self._current_tag = u''
+        if name == 'id': # only first id is article id, latter one is revision id
+            self._id_done = True
         if name == 'page':
             self._article_counter += 1
-            if len(self._redirect['source']) > 0 and len(self._redirect['target']) > 0 and self._redirect['source'].find(u':') == -1:
-                self._queue.put(self._redirect)
+            if len(self._redirect['source']) > 0 and self._redirect['source'].find(u':') == -1:
+                try:
+                    self._redirect['id'] = long(self._redirect['id'])
+                    self._queue.put(self._redirect)
+                except ValueError:
+                    print 'ERROR: Article "%s" could not be parsed, as %s is not a valid integer id' % (self._redirect['source'].encode('ascii', 'ignore'), self._redirect['id'])
             self._reset_redirect()
             if self._article_counter % 1000 == 0:
                 print '%d articles parsed' % (self._article_counter)
