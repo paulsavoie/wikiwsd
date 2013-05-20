@@ -18,7 +18,7 @@ class Creator():
             self._reading_thread = ReadingThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True)
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
                 self._worker_threads.append(WorkingThread(self._queue, con))
         elif action == 'prepare':
             self._reading_thread = ResolveThread(xml_path, self._queue)
@@ -46,8 +46,8 @@ if __name__ == '__main__':
     try:
         # first action 'prepare' to learn links
         # then action 'learn' to learn
-        prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='prepare')
-        #prog = Creator('data/training.xml', num_threads=25, max_queue_size=300, db_host='10.11.0.103', action='prepare')
+        #prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='learn')
+        prog = Creator('data/training.xml', num_threads=25, max_queue_size=300, db_host='10.11.0.103', action='learn')
         time.clock()
         prog.run()
         print time.clock()

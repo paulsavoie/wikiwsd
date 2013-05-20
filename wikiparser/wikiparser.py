@@ -17,8 +17,26 @@ class WikiParser():
             u'ckb', u'fiu-vro', u'war', u'zh-yue', u'diq', u'bat-smg', u'vec', 
             u'vro', u'pnb', u'yue', u'bat', u'fiu' )
 
+    def __resolve_article_id(self, title):
+        article_id = 0
+        if self._db_connection:
+            cur = self._db_connection.cursor()
+            cur.execute('SELECT id FROM articles WHERE title=%s;', title)
+            row = cur.fetchone()
+            
+            if row != None:
+                article_id = row[0]
+            else:
+                cur.execute('SELECT id FROM articles WHERE title = (SELECT target_article_name FROM redirects WHERE source_article_name=%s LIMIT 0,1);',
+                    title)
+                row = cur.fetchone()
+                if row != None:
+                    article_id = row[0]
+        return article_id
+
+
     def parse_article(self, article):
-        links = []
+        links = {}
         disambiguations = []
         token_index = 0
 
@@ -89,11 +107,14 @@ class WikiParser():
                                 if len(current_link_target) != 0 and len(current_link_token) != 0:
 
                                     # append link ready for entry in db
-                                    links.append((article['id'], token_index, current_link_target))
+                                    if not current_link_target in links:
+                                        links[current_link_target] = 1
+                                    else:
+                                        links[current_link_target] += 1
 
                                     # if target is different from used word # TODO: maybe faster with boolean?
                                     if current_link_token != current_link_target:
-                                        disambiguations.append((current_link_token, current_link_target, article['id'], token_index))
+                                        disambiguations.append((current_link_token, current_link_target))
 
                             # clean up and prepare for next link
                             in_link = False
@@ -106,22 +127,33 @@ class WikiParser():
             try:
                 cur = self._db_connection.cursor()
                 
-                # insert article
-                cur.execute('INSERT INTO articles(id, lastparsed, title, linkoutcount) VALUES(%s, NOW(), %s, %s);', 
-                    (article['id'], article['title'], len(links)))
-
                 # insert links
                 for link in links:
-                    cur.execute('INSERT INTO links(article_id, token_index, target_article) VALUES(%s, %s, %s);',
-                        link)
+                    target_article_id = self.__resolve_article_id(link)
+                    if target_article_id == 0:
+                        print "Error adding link from %s --> %s " % (article['title'].encode('ascii', 'ignore'), link.encode('ascii', 'ignore'))
+                    else:
+                        print 'INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);' % (article['id'], target_article_id, links[link])
+                        #cur.execute('INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);',
+                        #    (article['id'], target_article_id, links[link]))
+
+                        print 'UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;' % target_article_id
+                        #cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_id)
+
 
                 # insert disambiguations
                 for disambiguation in disambiguations:
-                    cur.execute('INSERT INTO disambiguations(string, meaning, article_id, token_index) VALUES(%s, %s, %s, %s);',
-                        disambiguation)
+                    target_article_id = self.__resolve_article_id(disambiguation[1])
+                    if target_article_id == 0:
+                        print "Error adding disambiguation from %s --> %s " % (article['title'].encode('ascii', 'ignore'), link.encode('ascii', 'ignore'))
+                    else:
+                        print'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;' % (disambiguation[0].encode('ascii', 'ignore'), target_article_id)
+                        #cur.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
+                        #    (disambiguation[0], target_article_id))
+
 
                 # commit inserts
-                self._db_connection.commit()
+                #self._db_connection.commit()
 
             except mysqldb.Error, e:
                 print "Error in article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id'])

@@ -44,7 +44,7 @@ CREATE TABLE `article_links` (
 -- VERSION 2
 CREATE TABLE `redirects` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `source_article_name` VARCHAR(200) NOT NULL,
+    `source_article_name` VARCHAR(200) NOT NULL UNIQUE,
     `target_article_name` VARCHAR(200) NOT NULL,
     INDEX USING HASH (`source_article_name`)
 );
@@ -60,10 +60,11 @@ CREATE TABLE `articles` (
 CREATE TABLE `disambiguations` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `string` VARCHAR(200) NOT NULL,
-    `target_article_id` VARCHAR(200) NOT NULL,
-    `occurences` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `target_article_id` BIGINT UNSIGNED NOT NULL,
+    `occurrences` BIGINT UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (`target_article_id`) REFERENCES `articles` (`id`),
-    INDEX USING HASH (`string`)
+    INDEX USING HASH (`string`),
+    INDEX (`target_article_id`)
 );
 
 CREATE TABLE `links` (
@@ -73,7 +74,8 @@ CREATE TABLE `links` (
     `count` INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (`source_article_id`) REFERENCES `articles` (`id`),
     FOREIGN KEY (`target_article_id`) REFERENCES `articles` (`id`),
-    INDEX (`target_article_id`)
+    INDEX (`target_article_id`),
+    INDEX (`source_article_id`)
 );
 
 -- retrieve number of articles that link to A and B
