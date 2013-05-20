@@ -25,6 +25,7 @@ class PrepareThread(threading.Thread):
                     #print 'saving new article (%s, %d)' % (source_name.encode('ascii', 'ignore'), article_id)
                     cur.execute('INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(%s, NOW(), %s, %s);', 
                         (article_id, source_name, 0))
+                    self._db_connection.commit()
                 else: # update redirects
                     pass
                     #print 'saving redirect "%s" --> "%s"' % (source_name.encode('ascii', 'ignore'), target_name.encode('ascii', 'ignore'))
