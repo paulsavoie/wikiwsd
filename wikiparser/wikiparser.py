@@ -133,8 +133,8 @@ class WikiParser():
                     if target_article_id == 0:
                         print "Error adding link from %s --> %s " % (article['title'].encode('ascii', 'ignore'), link.encode('ascii', 'ignore'))
                     else:
-                        #print 'INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);' % (article['id'], target_article_id, links[link])
-                        cur.execute('INSERT INTO links(source_article_id, target_article_id, counts) VALUES(%s, %s, %s);',
+                        #print 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(%s, %s, %s);' % (article['id'], target_article_id, links[link])
+                        cur.execute('INSERT INTO links(source_article_id, target_article_id, count) VALUES(%s, %s, %s);',
                             (article['id'], target_article_id, links[link]))
 
                         #print 'UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;' % target_article_id
