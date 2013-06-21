@@ -18,13 +18,13 @@ class Creator():
             self._reading_thread = ReadingThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
                 self._worker_threads.append(WorkingThread(self._queue, con))
         elif action == 'prepare':
             self._reading_thread = ResolveThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
                 self._worker_threads.append(PrepareThread(self._queue, con))
 
     def run(self):
