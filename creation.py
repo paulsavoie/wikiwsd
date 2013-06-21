@@ -46,7 +46,8 @@ if __name__ == '__main__':
     try:
         # first action 'prepare' to learn links
         # then action 'learn' to learn
-        prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='learn')
+        prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='prepare')
+        #prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='learn')
         #prog = Creator('data/training.xml', num_threads=25, max_queue_size=300, db_host='10.11.0.103', action='learn')
         time.clock()
         prog.run()
