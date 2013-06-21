@@ -1,6 +1,6 @@
-CREATE DATABASE `wikiwsd2` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-GRANT ALL ON `wikiwsd2`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
-GRANT ALL ON `wikiwsd2`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
+CREATE DATABASE `wikiwsd3` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON `wikiwsd3`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
+GRANT ALL ON `wikiwsd3`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
 
 CREATE TABLE `articles` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY,
@@ -41,7 +41,7 @@ CREATE TABLE `article_links` (
     INDEX (`target_article_id`)
 );
 
--- VERSION 2
+-- VERSION 2 & 3
 CREATE TABLE `redirects` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `source_article_name` VARCHAR(200) NOT NULL UNIQUE,
