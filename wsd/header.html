@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+    <head>
+        <meta type='charset' value='utf-8' />
+        <style type='text/css'>
+            body {
+                font-family: sans-serif;
+            }
+            div.text-ctn {
+                position: absolute;
+                left: 30px;
+                top: 30px;
+                right: 30px;
+                border: 1px solid #555555;
+                padding: 20px;
+            }
+            div.disambiguations {
+                display: none;
+                color: black;
+                position: absolute;
+                z-index: 2;
+                top: 20px;
+                left: 0px;
+                border: 1px solid black;
+                background: white;
+                width: 450px;
+            }
+            div.disambiguations ul {
+                list-style-type: none;
+                margin-top: 5px;
+                margin-bottom: 0px;
+                padding: 0px;
+            }
+            div.disambiguations ul li {
+                border-bottom: 1px solid #555555;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            div.disambiguations ul li:last-child {
+                border-bottom: 0px solid transparent;
+            }
+            div.disambiguations ul li.selected {
+                background: #FFFD96;
+            }
+            div.disambiguations ul li span.percentage {
+                float: right;
+            }
+            span.noun {
+                color: blue;
+                position: relative;
+            }
+            span.noun:hover div.disambiguations {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='text-ctn'>

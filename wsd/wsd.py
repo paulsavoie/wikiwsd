@@ -5,15 +5,16 @@ import time
 import MySQLdb as mysqldb
 import nltk
 import math
+from outputter import HTMLOutputter
 
 class WordSenseDisambiguator():
     def __init__(self, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html',
             db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd'):
-        self._db_connection = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd', charset='utf8', use_unicode=True)
+        self._db_connection = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
         self._input_file = input_file
         self._output_file = output_file
 
-    def __retrieve_nouns(self):
+    def __retrieve_words(self):
         # read text from input file
         f = open(self._input_file, 'r')
         text = f.read()
@@ -23,67 +24,73 @@ class WordSenseDisambiguator():
         tokenized = nltk.word_tokenize(text)
         tagged = nltk.pos_tag(tokenized)
 
-        # extract nouns
-        nouns = []
+        # extract words
+        words = []
         index = 0
+        prevNoun = False
         for token in tagged:
             word = token[0]
             tag = token[1]
             if tag[0:2] == 'NN':
-                #if tag == 'NNS':
-                #    word = word[:-1]
-                nouns.append({'token': word, 'tag': tag, 'index': index, 'length': 1})
+                # combine adjacent nouns
+                if prevNoun:
+                    words[len(words)-1]['token'] = words[len(words)-1]['token'] + ' %s' % (word)
+                    words[len(words)-1]['length'] += 1
+                else:
+                    words.append({'token': word, 'isNoun': True, 'tag': tag, 'index': index, 'length': 1, 'disambiguations': []})
+                prevNoun = True
+            else:
+                words.append({'token': word, 'isNoun': False, 'tag': tag, 'index': index, 'length': 1})
+                prevNoun = False
             index+= 1
 
-        # combine adjacent nouns
-        last_index = 0
-        counter = 0
-        while counter < len(nouns) -1:
-            noun = nouns[counter+1]
-            if noun['index'] == last_index+1:
-                nouns[counter]['token'] += ' ' + noun['token']
-                nouns[counter]['length'] += 1
-                nouns.remove(noun)
-            else:
-                counter = counter + 1
-            last_index = noun['index']
-        return nouns
+        return words
 
-    def __retrieve_disambiguations(self, nouns):
+    def __retrieve_disambiguations(self, words):
         cur = self._db_connection.cursor()
         disambiguations = {}
 
         # retrieve disambiguations ordered by frequency        
-        for noun in nouns:
-            if disambiguations.has_key(noun['token']) == False: # only if not retrieved yet
-                print 'retrieving disambiguations for %s' % (noun)
-                noun_disambiguations = []
+        for word in words:
+            if word['isNoun']:
+                if disambiguations.has_key(word['token']):
+                    word['disambiguations'] = disambiguations[word['token']] 
+                else: # only if not retrieved yet
+                    print 'retrieving disambiguations for %s' % (word['token'])
+                    #noun_disambiguations = []
 
-                # check if an article exists with the title of the noun and add as 100%
-                
-                #cur.execute('SELECT COUNT(*) FROM articles WHERE title=%s;', noun['token'])
-                #result = cur.fetchone()
-                #if result[0] > 0:
-                #    noun_disambiguations.append({'percentage': 1.0, 'meaning': noun['token']})
+                    # check if an article exists with the title of the noun and add as 100%
+                    
+                    #cur.execute('SELECT COUNT(*) FROM articles WHERE title=%s;', noun['token'])
+                    #result = cur.fetchone()
+                    #if result[0] > 0:
+                    #    noun_disambiguations.append({'percentage': 1.0, 'meaning': noun['token']})
 
-                # select disambiguations
-                cur.execute('SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM `disambiguations` WHERE `string` = %s GROUP BY `string`, `meaning` ORDER BY `occurrences` DESC;', 
-                    noun['token'])
-                rows = cur.fetchall()
+                    # select disambiguations
+                    #cur.execute('SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM `disambiguations` WHERE `string` = %s GROUP BY `string`, `meaning` ORDER BY `occurrences` DESC;', 
+                    #    word['token'])
+                    cur.execute('SELECT target_article_id, articles.title, SUM(occurrences) AS occurrences FROM disambiguations LEFT JOIN articles ON articles.id = disambiguations.target_article_id WHERE string = %s GROUP BY target_article_id ORDER BY occurrences DESC;',
+                        word['token'])
+                    rows = cur.fetchall()
 
-                # calculate total count
-                total = 0
-                for row in rows:
-                    total+= row[0]
-                
-                
-                # add to list
-                for row in rows:
-                    percentage = float(row[0]) / float(total)
-                    if percentage >= 0.01: # TODO: threshold
-                        noun_disambiguations.append({'percentage': percentage, 'meaning': row[2]})
+                    # calculate total count
+                    total = 0
+                    for row in rows:
+                        total+= row[2]
+                    
+                    # add to list
+                    for row in rows:
+                        percentage = float(row[2]) / float(total)
+                        if percentage >= 0.01: # TODO: threshold
+                            word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0] })
 
-                disambiguations[noun['token']] = noun_disambiguations
+                    # if no disambiguation, check if entry exists as article
+                    cur.execute('SELECT id FROM articles WHERE title = %s;', word['token'])
+                    row = cur.fetchone()
+                    if row != None:
+                        word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0] })
+
+                    disambiguations[word['token']] = word['disambiguations']
 
         return disambiguations
 
@@ -114,14 +121,19 @@ class WordSenseDisambiguator():
 
 
     def run(self):
-        nouns = self.__retrieve_nouns()
+        #nouns = self.__retrieve_nouns()
+        words = self.__retrieve_words()
 
-        disambiguations = self.__retrieve_disambiguations(nouns)
+        #disambiguations = self.__retrieve_disambiguations(nouns)
+        disambiguations = self.__retrieve_disambiguations(words)
 
-        for d in disambiguations:
-            print d
-            for m in disambiguations[d]:
-                print '\t%.2f\t: %s' % (m['percentage'], m['meaning'].encode('ascii', 'ignore'))
+        outputter = HTMLOutputter()
+        outputter.output(words, self._output_file)
+
+        # for d in disambiguations:
+        #     print d
+        #     for m in disambiguations[d]:
+        #         print '\t%.2f\t: %s' % (m['percentage'], m['meaning'].encode('ascii', 'ignore'))
 
         #print 'relatedness for (%s, %s): %.2f' % (disambiguations['orbit'][0]['meaning'].encode('ascii', 'ignore'), 
         #                                          disambiguations['Apollo'][0]['meaning'].encode('ascii', 'ignore'), 
@@ -130,50 +142,52 @@ class WordSenseDisambiguator():
         #                                          disambiguations['Apollo'][0]['meaning'].encode('ascii', 'ignore'), 
         #                                          self.__retrieve_relatedness('Orbit', disambiguations['Apollo'][0]['meaning']))
 
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][0]['meaning'], disambiguations['drinks'][0]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][1]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][1]['meaning'], disambiguations['drinks'][0]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][2]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][2]['meaning'], disambiguations['drinks'][0]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][3]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][3]['meaning'], disambiguations['drinks'][0]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][4]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][4]['meaning'], disambiguations['drinks'][0]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][5]['meaning'], disambiguations['drinks'][0]['meaning']))
 
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][0]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][0]['meaning'], disambiguations['drinks'][5]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][1]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][1]['meaning'], disambiguations['drinks'][5]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][2]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][2]['meaning'], disambiguations['drinks'][5]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][3]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][3]['meaning'], disambiguations['drinks'][5]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][4]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][4]['meaning'], disambiguations['drinks'][5]['meaning']))
-        print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
-                                                  self.__retrieve_relatedness(disambiguations['bar'][5]['meaning'], disambiguations['drinks'][5]['meaning']))
+
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][0]['meaning'], disambiguations['drinks'][0]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][1]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][1]['meaning'], disambiguations['drinks'][0]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][2]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][2]['meaning'], disambiguations['drinks'][0]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][3]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][3]['meaning'], disambiguations['drinks'][0]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][4]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][4]['meaning'], disambiguations['drinks'][0]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][5]['meaning'], disambiguations['drinks'][0]['meaning']))
+
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][0]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][0]['meaning'], disambiguations['drinks'][5]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][1]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][1]['meaning'], disambiguations['drinks'][5]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][2]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][2]['meaning'], disambiguations['drinks'][5]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][3]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][3]['meaning'], disambiguations['drinks'][5]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][4]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][4]['meaning'], disambiguations['drinks'][5]['meaning']))
+        # print 'relatedness for (%s, %s): %.2f' % (disambiguations['bar'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           disambiguations['drinks'][5]['meaning'].encode('ascii', 'ignore'), 
+        #                                           self.__retrieve_relatedness(disambiguations['bar'][5]['meaning'], disambiguations['drinks'][5]['meaning']))
 
 
 if __name__ == '__main__':
     try:
-        prog = WordSenseDisambiguator(db_host='10.11.0.103')
+        prog = WordSenseDisambiguator(db_host='10.11.0.101')
         time.clock()
         prog.run()
         print time.clock()
     except mysqldb.Error, e:
-        print "Error %d: %s" % (e.args[0],e.args[1])
+        print e
