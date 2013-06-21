@@ -21,7 +21,7 @@ class WordSenseDisambiguator():
         f.close()
 
         # process text to tokenize and pos-tag it
-        tokenized = nltk.word_tokenize(text)
+        tokenized = nltk.wordpunct_tokenize(text)
         tagged = nltk.pos_tag(tokenized)
 
         # extract words
@@ -69,7 +69,7 @@ class WordSenseDisambiguator():
                     # select disambiguations
                     #cur.execute('SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM `disambiguations` WHERE `string` = %s GROUP BY `string`, `meaning` ORDER BY `occurrences` DESC;', 
                     #    word['token'])
-                    cur.execute('SELECT target_article_id, articles.title, SUM(occurrences) AS occurrences FROM disambiguations LEFT JOIN articles ON articles.id = disambiguations.target_article_id WHERE string = %s GROUP BY target_article_id ORDER BY occurrences DESC;',
+                    cur.execute('SELECT target_article_id, articles.title, SUM(occurrences) as occurrences, articles.articleincount FROM disambiguations LEFT JOIN articles ON articles.id = disambiguations.target_article_id WHERE string = %s GROUP BY target_article_id ORDER BY occurrences DESC;',
                         word['token'])
                     rows = cur.fetchall()
 
@@ -82,13 +82,19 @@ class WordSenseDisambiguator():
                     for row in rows:
                         percentage = float(row[2]) / float(total)
                         if percentage >= 0.01: # TODO: threshold
-                            word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0] })
+                            word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0], 'articleincount': int(row[3]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
 
                     # if no disambiguation, check if entry exists as article
-                    cur.execute('SELECT id FROM articles WHERE title = %s;', word['token'])
+                    cur.execute('SELECT id, articles.articleincount FROM articles WHERE title = %s;', word['token'])
                     row = cur.fetchone()
                     if row != None:
-                        word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0] })
+                        # check if already in list
+                        already_found = False
+                        for dis in word['disambiguations']:
+                            if dis['id'] == row[0]:
+                                already_found = True
+                        if not already_found:
+                            word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0], 'articleincount': int(row[1]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
 
                     disambiguations[word['token']] = word['disambiguations']
 
@@ -97,28 +103,139 @@ class WordSenseDisambiguator():
     def __retrieve_relatedness(self, a, b):
         # retrieve ids
         cur = self._db_connection.cursor()
-        cur.execute('SELECT `id` FROM `articles` WHERE `title` = %s;', a)
-        a_id = cur.fetchone()[0]
-        cur.execute('SELECT `id` FROM `articles` WHERE `title` = %s;', b)
-        b_id = cur.fetchone()[0]
+        #cur.execute('SELECT `id` FROM `articles` WHERE `title` = %s;', a)
+        #a_id = cur.fetchone()[0]
+        #cur.execute('SELECT `id` FROM `articles` WHERE `title` = %s;', b)
+        #b_id = cur.fetchone()[0]
 
         # retrieve total counts
-        cur.execute('SELECT COUNT(*) FROM `article_links` WHERE `target_article_id` = %s;', a_id)
-        a_total_in = float(cur.fetchone()[0])
-        cur.execute('SELECT COUNT(*) FROM `article_links` WHERE `target_article_id` = %s;', b_id)
-        b_total_in = float(cur.fetchone()[0])
+        #cur.execute('SELECT COUNT(*) FROM `article_links` WHERE `target_article_id` = %s;', a)
+        #a_total_in = float(cur.fetchone()[0])
+        #cur.execute('SELECT COUNT(*) FROM `article_links` WHERE `target_article_id` = %s;', b)
+        #b_total_in = float(cur.fetchone()[0])
+
+        a_id = a['id']
+        b_id = b['id']
+        a_total_in = float(a['articleincount'])
+        b_total_in = float(b['articleincount'])
+
+        if a_total_in == 0.0 or b_total_in == 0.0:
+            return 0.0
 
         # retrieve common articles
-        cur.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM (SELECT source_article_id, target_article_id FROM article_links WHERE target_article_id=%s OR target_article_id=%s) AS tmp GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp2;', 
+        #cur.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM (SELECT source_article_id, target_article_id FROM article_links WHERE target_article_id=%s OR target_article_id=%s) AS tmp GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp2;', 
+        #    (a_id, b_id))
+        cur.execute(' SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM links WHERE target_article_id=%s OR target_article_id=%s GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp;',
             (a_id, b_id))
         common_in = float(cur.fetchone()[0])
 
         # calculate relatedness
         total_articles = 4696033.0
 
+        if common_in == 0.0:
+            return 0.0
         relatedness = (math.log(max(a_total_in, b_total_in)) - math.log(common_in)) / (math.log(total_articles) - math.log(min(a_total_in, b_total_in)))
         return relatedness
 
+    def __decide(self, words):
+        # extract nouns
+        nouns = []
+        for word in words:
+            if word['isNoun']:
+                word['numCmp'] = 0
+                word['finalIndex'] = -1
+                nouns.append(word)
+
+        # order nouns by cardinality asc
+        #sorted_nouns = sorted(nouns, key=lambda noun: len(noun['disambiguations']))
+
+        # temporary cache for relatedness
+        relatedness_cache = {}
+        # quickly fill cache to make life easier
+        for noun in nouns:
+            for disambiguation in noun['disambiguations']:
+                relatedness_cache[disambiguation['id']] = { }
+
+        # start with lowest cardinality and decide
+        for index in range(0, len(nouns)):
+            noun = nouns[index]
+            if noun['finalIndex'] == -1 and len(noun['disambiguations']) > 0: # only if not decided yet
+
+                # if there is only one possible meaning, take it
+                if len(noun['disambiguations']) == 1:
+                    noun['finalIndex'] = 0
+                else:
+
+                    # compare to all others in surrounding (min 6)
+                    start_2 = index - 3
+                    if start_2 < 0:
+                        start_2 = 0
+                    end_2 = start_2 + 7
+                    if end_2 > len(nouns):
+                        end_2 = len(nouns)
+                        start_2 = end_2-7
+                        if start_2 < 0:
+                            start_2 = 0
+                    for index2 in range(start_2, end_2):
+                        if index2 != index and noun['finalIndex'] == -1:
+                            noun2 = nouns[index2]
+                            print 'comparing %s to %s' % (noun['token'], noun2['token'])
+                            if noun2['finalIndex'] != -1:
+                                noun2_disambiguations = [noun2['disambiguations'][noun2['finalIndex']]]
+                            else:
+                                noun2_disambiguations = noun2['disambiguations']
+                            for disambiguation2 in noun2_disambiguations:
+                                # compare every disambiguation to every other one
+                                for disambiguation in noun['disambiguations']:
+                                    # first, lookup in cache
+                                    if relatedness_cache[disambiguation['id']].has_key(disambiguation2['id']):
+                                        relatedness = relatedness_cache[disambiguation['id']][disambiguation2['id']]
+                                    else: # otherwise calculate
+                                        #print 'retrieving relatedness between %s and %s' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'))
+                                        relatedness = self.__retrieve_relatedness(disambiguation, disambiguation2)
+                                        # store for later in cache
+                                        relatedness_cache[disambiguation['id']][disambiguation2['id']] = relatedness
+                                        relatedness_cache[disambiguation2['id']][disambiguation['id']] = relatedness
+                                    
+                                    disambiguation['cumulativeRelatedness'] += relatedness
+
+                                # normalize relatedness
+                                total_relatedness = 0.0
+                                for disambiguation in noun['disambiguations']:
+                                    total_relatedness += disambiguation['cumulativeRelatedness']
+
+                                for disambiguation in noun['disambiguations']:
+                                    normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
+                                    disambiguation['averageRelatedness'] = normalizedCumulative
+                                    disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
+
+                            noun['numCmp'] += 1 # noun compared to one more
+                            
+                            # sort disambiguations according to cumulative relatedness
+                            disambiguations_copy = list(noun['disambiguations'])
+                            sorted_disambiguations = sorted(disambiguations_copy, key=lambda dis: -dis['overallMatch'])
+
+                            disambiguations_tmp = list(noun['disambiguations'])
+                            sorted_tmp = sorted(disambiguations_tmp, key=lambda dis: -dis['averageRelatedness'])
+                            print '\tbest match (%f): %s' % (sorted_tmp[0]['averageRelatedness'], sorted_tmp[0]['meaning'].encode('ascii', 'ignore'))
+
+                            # if compared to at least 4 other nouns and cumulativeRelatedness of first is significantly higher than of second, take first
+                            if noun['numCmp'] > 3 and sorted_disambiguations[0]['overallMatch'] > 2.5 * sorted_disambiguations[1]['overallMatch']:
+                                # find original index
+                                tmp_index = 0
+                                while (noun['finalIndex'] == -1):
+                                    if  noun['disambiguations'][tmp_index]['id'] == sorted_disambiguations[0]['id']:
+                                        noun['finalIndex'] = tmp_index 
+                                    tmp_index = tmp_index + 1
+                    
+                    # take the best match
+                    disambiguations_copy = list(noun['disambiguations'])
+                    sorted_disambiguations = sorted(disambiguations_copy, key=lambda dis: -dis['overallMatch'])
+                    tmp_index = 0
+                    while (noun['finalIndex'] == -1):
+                        if  noun['disambiguations'][tmp_index]['id'] == sorted_disambiguations[0]['id']:
+                            noun['finalIndex'] = tmp_index 
+                        tmp_index = tmp_index + 1
 
     def run(self):
         #nouns = self.__retrieve_nouns()
@@ -127,8 +244,11 @@ class WordSenseDisambiguator():
         #disambiguations = self.__retrieve_disambiguations(nouns)
         disambiguations = self.__retrieve_disambiguations(words)
 
+        self.__decide(words)
+
         outputter = HTMLOutputter()
         outputter.output(words, self._output_file)
+        
 
         # for d in disambiguations:
         #     print d
@@ -188,6 +308,9 @@ if __name__ == '__main__':
         prog = WordSenseDisambiguator(db_host='10.11.0.101')
         time.clock()
         prog.run()
-        print time.clock()
+        total = round(time.clock())
+        minutes = total / 60
+        seconds = total % 60
+        print 'Finished in %d minutes and %d seconds' % (minutes, seconds)
     except mysqldb.Error, e:
         print e

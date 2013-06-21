@@ -20,9 +20,20 @@ class HTMLOutputter():
         for token in tokens:
             if token.has_key('disambiguations'):
                 disambiguations_html = '<div class="disambiguations"><ul>'
+                disambiguations_html += '<li class="header"><span class="label">Meaning</span><span class="percentage">Overall</span><span class="percentage">Rel.</span><span class="percentage">Comm.</span></li>'
+                index = 0
                 for disambiguation in token['disambiguations']:
-                    disambiguations_html += '<li><span class="label">%s</span><span class="percentage">%d%%</span></li>' % (disambiguation['meaning'].encode('ascii', 'ignore'), 
+                    className = ''
+                    if index == token['finalIndex']:
+                        className = 'selected'
+                    disambiguations_html += '<li class="%s"><span class="label">%s</span><span class="id">%s</span><span class="percentage">%d%%</span><span class="percentage">%d%%</span><span class="percentage">%d%%</span></li>' % ( 
+                        className,
+                        disambiguation['meaning'].encode('ascii', 'ignore'), 
+                        disambiguation['id'],
+                        round(disambiguation['overallMatch']*100),
+                        round(disambiguation['averageRelatedness']*100),
                         round(disambiguation['percentage']*100))
+                    index = index + 1
                 disambiguations_html += '</ul></div>'
                 html += ' <span class="noun">%s%s</span>' % (token['token'], disambiguations_html)
             else:
