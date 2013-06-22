@@ -113,8 +113,9 @@ class WikiParser():
                                         links[current_link_target] += 1
 
                                     # if target is different from used word # TODO: maybe faster with boolean?
-                                    if current_link_token != current_link_target:
-                                        disambiguations.append((current_link_token, current_link_target))
+                                    #if current_link_token != current_link_target:
+                                    # always add disambiguation
+                                    disambiguations.append((current_link_token, current_link_target))
 
                             # clean up and prepare for next link
                             in_link = False
