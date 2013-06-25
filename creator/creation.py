@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #prog = Creator('/home/paul/data/wikipedia/enwiki-20130102-pages-articles.xml', num_threads=26, max_queue_size=300, action='learn')
 
     #prog = Creator('../data/training.xml', num_threads=8, max_queue_size=300, db_host='localhost', action='prepare')
-    prog = Creator('../data/training.xml', num_threads=8, max_queue_size=300, db_host='localhost', action='learn')
+    prog = Creator('../data/training.xml', num_threads=26, max_queue_size=300, db_host='localhost', action='learn')
     time.clock()
     prog.run()
     print time.clock()
