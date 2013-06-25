@@ -120,16 +120,12 @@ class WikiParser():
         source_article = self.__resolve_article(article['title'])
 
         # insert links
-        target_articles = []
         for link in links:
             target_article = self.__resolve_article(link)
             if target_article == None:
                 print 'ERROR: could not find article "%s" for link update' % (link.encode('ascii', 'ignore'))
             else:
-                target_article.articles_link_here.append(source_article)
-                target_articles.append( { "article": target_article, "incount": links[link] } )
-
-        self._db.articles.update(target_articles)
+                self._db.articles.update( { "title": link }, { "$push": { "articles_link_here" : { "article": target_article, "incount": links[link] } } } )
 
         # insert meanings
         meanings_insert = []
