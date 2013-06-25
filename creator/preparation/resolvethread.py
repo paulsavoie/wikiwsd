@@ -5,6 +5,7 @@ import time
 import threading
 import xml.sax
 import Queue
+import logging
 
 class Resolver(xml.sax.handler.ContentHandler):
     def __init__(self, redirect_queue):
@@ -26,7 +27,7 @@ class Resolver(xml.sax.handler.ContentHandler):
         self._current_tag = name
         if self._current_tag == 'redirect':
             if not 'title' in attrs.getNames():
-                print 'Warning: Attribute "title" not in redirect tag of article "%s"' % (self._redirect['source'].encode('ascii', 'ignore'))
+                logging.warning('Attribute "title" not in redirect tag of article "%s"' % (self._redirect['source'].encode('ascii', 'ignore')))
             self._redirect['target'] = attrs.getValue('title')
 
     def characters(self, content):
@@ -46,10 +47,10 @@ class Resolver(xml.sax.handler.ContentHandler):
                     self._redirect['id'] = long(self._redirect['id'])
                     self._queue.put(self._redirect)
                 except ValueError:
-                    print 'ERROR: Article "%s" could not be parsed, as %s is not a valid integer id' % (self._redirect['source'].encode('ascii', 'ignore'), self._redirect['id'])
+                    logging.error('Article "%s" could not be parsed, as %s is not a valid integer id' % (self._redirect['source'].encode('ascii', 'ignore'), self._redirect['id']))
             self._reset_redirect()
             if self._article_counter % 1000 == 0:
-                print '%d articles parsed' % (self._article_counter)
+                logging.info('%d articles parsed' % (self._article_counter))
 
 class ResolveThread(threading.Thread):
     def __init__(self, xml_path, redirect_queue):

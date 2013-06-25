@@ -5,6 +5,7 @@ import nltk.data
 from nltk.tokenize import *
 import re
 import MySQLdb as mysqldb
+import logging
 
 class WikiParser():
     def __init__(self, client, database):
@@ -123,7 +124,7 @@ class WikiParser():
         for link in links:
             target_article = self.__resolve_article(link)
             if target_article == None:
-                print 'ERROR: could not find article "%s" for link update' % (link.encode('ascii', 'ignore'))
+                logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
             else:
                 self._db.articles.update( { "title": link }, { "$push": { "articles_link_here" : { "article": target_article, "incount": links[link] } } } )
 
@@ -132,6 +133,6 @@ class WikiParser():
         for disambiguation in disambiguations:
             target_article = self.__resolve_article(disambiguation[1])
             if target_article == None:
-                print 'ERROR: could not find article "%s" for meaning update' % (disambiguation[1].encode('ascii', 'ignore'))
+                logging.error('could not find article "%s" for meaning update' % (disambiguation[1].encode('ascii', 'ignore')))
             else:
                 self._db.meanings.update( { "string": disambiguation[0] }, { "$push": { "targets": target_article } }, upsert=True )

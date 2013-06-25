@@ -4,6 +4,7 @@
 import time
 import xml.sax
 import Queue
+import logging
 
 class Reader(xml.sax.handler.ContentHandler):
     def __init__(self, article_queue):
@@ -46,7 +47,7 @@ class Reader(xml.sax.handler.ContentHandler):
                     if self._article['title'].find(':') == -1:
                         self._queue.put(self._article)
                 except ValueError:
-                    print 'Article "%s" could not be parsed, as %d is not a valid integer id' % (self._article['title'], self._article['id'])
+                    logging.error('Article "%s" could not be parsed, as %d is not a valid integer id' % (self._article['title'].encode('ascii', 'ignore'), self._article['id']))
             self._reset_article()
 
 

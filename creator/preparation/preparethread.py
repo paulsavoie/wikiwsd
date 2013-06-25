@@ -5,6 +5,7 @@ import time
 import threading
 import Queue
 import pymongo
+import logging
 
 class PrepareThread(threading.Thread):
     def __init__(self, redirect_queue, client, database):
@@ -24,7 +25,7 @@ class PrepareThread(threading.Thread):
                 self._db.redirects.insert(self._redirect_bulk, w=1)
             #print 'successfully inserted: %s' % (self._article_bulk[0]['title'].encode('ascii', 'ignore'))
         except pymongo.errors.DuplicateKeyError, e:
-            print 'ERROR: DuplicateKeyError: %s' % (str(e))
+            logging.error('DuplicateKeyError: %s' % (str(e)))
         finally:
             self._redirect_bulk = []
             self._article_bulk = []
