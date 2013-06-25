@@ -14,13 +14,6 @@ class Decider:
         # order nouns by cardinality asc
         #sorted_nouns = sorted(nouns, key=lambda noun: len(noun['disambiguations']))
 
-        # temporary cache for relatedness
-        relatedness_cache = {}
-        # quickly fill cache to make life easier
-        for noun in nouns:
-            for disambiguation in noun['disambiguations']:
-                relatedness_cache[disambiguation['id']] = { }
-
         # start with lowest cardinality and decide
         for index in range(0, len(nouns)):
             noun = nouns[index]
@@ -52,16 +45,9 @@ class Decider:
                             for disambiguation2 in noun2_disambiguations:
                                 # compare every disambiguation to every other one
                                 for disambiguation in noun['disambiguations']:
-                                    # first, lookup in cache
-                                    if relatedness_cache[disambiguation['id']].has_key(disambiguation2['id']):
-                                        relatedness = relatedness_cache[disambiguation['id']][disambiguation2['id']]
-                                    else: # otherwise calculate
-                                        #print 'retrieving relatedness between %s and %s' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'))
-                                        relatedness = self.__relatedness_calculator.calculate_relatedness(disambiguation, disambiguation2)
-                                        #print '\t: relatedness of %s to %s: %f' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'), relatedness)
-                                        # store for later in cache
-                                        relatedness_cache[disambiguation['id']][disambiguation2['id']] = relatedness
-                                        relatedness_cache[disambiguation2['id']][disambiguation['id']] = relatedness
+                                    #print 'retrieving relatedness between %s and %s' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'))
+                                    relatedness = self.__relatedness_calculator.calculate_relatedness(disambiguation, disambiguation2)
+                                    #print '\t: relatedness of %s to %s: %f' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'), relatedness)
                                     
                                     disambiguation['cumulativeRelatedness'] += (relatedness / float(len(noun2_disambiguations))) # if only one, it counts more
 
