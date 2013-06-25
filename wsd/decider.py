@@ -5,18 +5,21 @@ class Decider:
     def decide(self, words):
         # extract nouns
         nouns = []
+        index = 0
         for word in words:
             if word['isNoun']:
                 word['numCmp'] = 0
                 word['finalIndex'] = -1
+                word['termIndex'] = index
+                index += 1
                 nouns.append(word)
 
         # order nouns by cardinality asc
-        #sorted_nouns = sorted(nouns, key=lambda noun: len(noun['disambiguations']))
+        sorted_nouns = sorted(nouns, key=lambda noun: len(noun['disambiguations']))
 
         # start with lowest cardinality and decide
         for index in range(0, len(nouns)):
-            noun = nouns[index]
+            noun = sorted_nouns[index]
             if noun['finalIndex'] == -1 and len(noun['disambiguations']) > 0: # only if not decided yet
 
                 # if there is only one possible meaning, take it
@@ -25,7 +28,7 @@ class Decider:
                 else:
 
                     # compare to all others in surrounding (min 6)
-                    start_2 = index - 3
+                    start_2 = noun['termIndex'] - 3
                     if start_2 < 0:
                         start_2 = 0
                     end_2 = start_2 + 7
