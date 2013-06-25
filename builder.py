@@ -72,7 +72,10 @@ def build():
             setup = Creator(path, db_host=host, db_port=port, num_threads=8, max_queue_size=300, action='prepare')
             time.clock()
             setup.run()
-            print time.clock()
+            total = round(time.clock())
+            minutes = total / 60
+            seconds = total % 60
+            print 'Finished after %d minutes and %02d seconds' % (minutes, seconds)
             print 'Preparation of database finished - detailed information can be found in preparation.log logfile!'
         else:
             print 'Aborting!'
@@ -91,7 +94,10 @@ def build():
             setup = Creator(path, db_host=host, db_port=port, num_threads=26, max_queue_size=300, action='learn')
             time.clock()
             setup.run()
-            print time.clock()
+            total = round(time.clock())
+            minutes = total / 60
+            seconds = total % 60
+            print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
             print 'Database ready to work! - find detailed information in "learning.log"'
         else:
             print 'Aborting!'
