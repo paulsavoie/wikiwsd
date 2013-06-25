@@ -126,7 +126,7 @@ class WikiParser():
             if target_article == None:
                 logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
             else:
-                self._db.articles.update( { "title": link }, { "$push": { "articles_link_here" : { "article": target_article, "incount": links[link] } } } )
+                self._db.articles.update( { "title": link }, { "$push": { "articles_link_here" : { "article": target_article['id'], "incount": links[link] } } } )
 
         # insert meanings
         meanings_insert = []
