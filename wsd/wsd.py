@@ -10,7 +10,7 @@ from outputter import HTMLOutputter
 class WordSenseDisambiguator():
     def __init__(self, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html',
             db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd'):
-        self._db_connection = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd2', charset='utf8', use_unicode=True)
+        self._db_connection = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
         self._input_file = input_file
         self._output_file = output_file
 
@@ -125,7 +125,7 @@ class WordSenseDisambiguator():
         # retrieve common articles
         #cur.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM (SELECT source_article_id, target_article_id FROM article_links WHERE target_article_id=%s OR target_article_id=%s) AS tmp GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp2;', 
         #    (a_id, b_id))
-        cur.execute(' SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM links WHERE target_article_id=%s OR target_article_id=%s GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp;',
+        cur.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM links WHERE target_article_id=%s OR target_article_id=%s GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp;',
             (a_id, b_id))
         common_in = float(cur.fetchone()[0])
 
@@ -134,6 +134,9 @@ class WordSenseDisambiguator():
 
         if common_in == 0.0:
             return 0.0
+
+        #return common_in / (a_total_in + b_total_in) # does not work so vell in general (if stddev < 3, take other measure)
+
         relatedness = (math.log(max(a_total_in, b_total_in)) - math.log(common_in)) / (math.log(total_articles) - math.log(min(a_total_in, b_total_in)))
         return relatedness
 
@@ -193,11 +196,12 @@ class WordSenseDisambiguator():
                                     else: # otherwise calculate
                                         #print 'retrieving relatedness between %s and %s' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'))
                                         relatedness = self.__retrieve_relatedness(disambiguation, disambiguation2)
+                                        #print '\t: relatedness of %s to %s: %f' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'), relatedness)
                                         # store for later in cache
                                         relatedness_cache[disambiguation['id']][disambiguation2['id']] = relatedness
                                         relatedness_cache[disambiguation2['id']][disambiguation['id']] = relatedness
                                     
-                                    disambiguation['cumulativeRelatedness'] += relatedness
+                                    disambiguation['cumulativeRelatedness'] += (relatedness / float(len(noun2_disambiguations))) # if only one, it counts more
 
                                 # normalize relatedness
                                 total_relatedness = 0.0
@@ -205,7 +209,10 @@ class WordSenseDisambiguator():
                                     total_relatedness += disambiguation['cumulativeRelatedness']
 
                                 for disambiguation in noun['disambiguations']:
-                                    normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
+                                    if total_relatedness == 0.0:
+                                        normalizedCumulative = 0.0
+                                    else:
+                                        normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
                                     disambiguation['averageRelatedness'] = normalizedCumulative
                                     disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
 
@@ -305,7 +312,7 @@ class WordSenseDisambiguator():
 
 if __name__ == '__main__':
     try:
-        prog = WordSenseDisambiguator(db_host='10.11.0.101')
+        prog = WordSenseDisambiguator(db_host='localhost')
         time.clock()
         prog.run()
         total = round(time.clock())
