@@ -24,7 +24,7 @@ class WordSenseDisambiguator():
         text = f.read()
         f.close()
 
-        termIdentifier = TermIdentifier()
+        termIdentifier = TermIdentifier(self._db_connection)
         words = termIdentifier.identify_terms(text)
 
         meaningFinder = MeaningFinder(self._db_connection)
