@@ -18,8 +18,6 @@ class WordSenseDisambiguator():
         self._output_file = output_file
 
     def run(self):
-        #nouns = self.__retrieve_nouns()
-        #words = self.__retrieve_words()
         f = open(self._input_file, 'r')
         text = f.read()
         f.close()

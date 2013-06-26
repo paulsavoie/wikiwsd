@@ -4,3 +4,4 @@ data/simpleoutput.html
 preparation.log
 *.log
 *.json
+tmp.py
