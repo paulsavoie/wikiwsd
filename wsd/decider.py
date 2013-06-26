@@ -1,3 +1,5 @@
+import logging
+
 class Decider:
     def __init__(self, relatedness_calculator):
         self.__relatedness_calculator = relatedness_calculator
@@ -40,7 +42,7 @@ class Decider:
                     for index2 in range(start_2, end_2):
                         if index2 != index and noun['finalIndex'] == -1:
                             noun2 = nouns[index2]
-                            print 'comparing %s to %s' % (noun['token'], noun2['token'])
+                            logging.info('comparing %s to %s' % (noun['token'], noun2['token']))
                             if noun2['finalIndex'] != -1:
                                 noun2_disambiguations = [noun2['disambiguations'][noun2['finalIndex']]]
                             else:
@@ -75,7 +77,7 @@ class Decider:
 
                             disambiguations_tmp = list(noun['disambiguations'])
                             sorted_tmp = sorted(disambiguations_tmp, key=lambda dis: -dis['averageRelatedness'])
-                            print '\tbest match (%f): %s' % (sorted_tmp[0]['averageRelatedness'], sorted_tmp[0]['meaning'].encode('ascii', 'ignore'))
+                            logging.info('\tbest match (%f): %s' % (sorted_tmp[0]['averageRelatedness'], sorted_tmp[0]['meaning'].encode('ascii', 'ignore')))
 
                             # if compared to at least 4 other nouns and cumulativeRelatedness of first is significantly higher than of second, take first
                             if noun['numCmp'] > 3 and sorted_disambiguations[0]['overallMatch'] > 2.5 * sorted_disambiguations[1]['overallMatch']:

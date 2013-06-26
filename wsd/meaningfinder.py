@@ -1,4 +1,5 @@
 import MySQLdb as mysqldb
+import logging
 
 class MeaningFinder:
     def __init__(self, db_connection):
@@ -14,7 +15,7 @@ class MeaningFinder:
                 if disambiguations.has_key(word['token']):
                     word['disambiguations'] = disambiguations[word['token']] 
                 else: # only if not retrieved yet
-                    print 'retrieving disambiguations for %s' % (word['token'])
+                    logging.info('retrieving disambiguations for %s' % (word['token']))
                     #noun_disambiguations = []
 
                     # check if an article exists with the title of the noun and add as 100%

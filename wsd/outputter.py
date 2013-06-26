@@ -1,5 +1,6 @@
 """ Outputs the results as nice html
 """
+import os
 
 class HTMLOutputter():
     def __init__(self):
@@ -8,11 +9,14 @@ class HTMLOutputter():
 
     def output(self, tokens, output_path):
         # load html tepmlates
+        header_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'header.html')
+        footer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'footer.html')
+
         header_html = 'There was an error loading the header HTML template'
         footer_html = 'There was an error loading the footer HTML template'
-        with open('header.html', 'r') as header_f:
+        with open(header_path, 'r') as header_f:
             header_html = header_f.read()
-        with open('footer.html', 'r') as footer_f:
+        with open(footer_path, 'r') as footer_f:
             footer_html = footer_f.read()
 
         # concatenate actual html
@@ -42,5 +46,5 @@ class HTMLOutputter():
         # write output
         with open(output_path, 'w') as output_f:
             output_f.write(header_html)
-            output_f.write(html)
+            output_f.write(html.encode('utf-8', 'ignore'))
             output_f.write(footer_html)
