@@ -2,4 +2,4 @@
 data/simpleinput.txt
 data/simpleoutput.html
 preparation.log
-learning.log
+*.log
