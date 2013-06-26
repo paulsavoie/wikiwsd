@@ -4,3 +4,4 @@ from commonnessretriever import CommonnessRetriever
 from relatednesscalculator import RelatednessCalculator
 from decider import Decider
 from outputter import HTMLOutputter
+from mysqlconnector import MySQLConnector

@@ -9,11 +9,11 @@ from commonnessretriever import CommonnessRetriever
 from relatednesscalculator import RelatednessCalculator
 from decider import Decider
 from outputter import HTMLOutputter
+from mysqlconnector import MySQLConnector 
 
 class WordSenseDisambiguator():
-    def __init__(self, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html',
-            db_host='localhost', db_user='wikiwsd', db_pass='wikiwsd'):
-        self._db_connection = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
+    def __init__(self, db_connector, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html'):
+        self._db_connector = db_connector
         self._input_file = input_file
         self._output_file = output_file
 
@@ -22,13 +22,13 @@ class WordSenseDisambiguator():
         text = f.read()
         f.close()
 
-        termIdentifier = TermIdentifier(self._db_connection)
+        termIdentifier = TermIdentifier(self._db_connector)
         words = termIdentifier.identify_terms(text)
 
-        meaningFinder = MeaningFinder(self._db_connection)
+        meaningFinder = MeaningFinder(self._db_connector)
         disambiguations = meaningFinder.find_meanings(words)
 
-        commonnessRetriever = CommonnessRetriever(self._db_connection)
+        commonnessRetriever = CommonnessRetriever(self._db_connector)
         relatednessCalculator = RelatednessCalculator(commonnessRetriever)
 
         decider = Decider(relatednessCalculator)
@@ -40,7 +40,8 @@ class WordSenseDisambiguator():
 
 if __name__ == '__main__':
     try:
-        prog = WordSenseDisambiguator(db_host='localhost')
+        dbConnector = MySQLConnector('localhost')
+        prog = WordSenseDisambiguator(db_connector=dbConnector)
         time.clock()
         prog.run()
         total = round(time.clock())
