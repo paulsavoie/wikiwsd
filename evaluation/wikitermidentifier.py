@@ -105,7 +105,8 @@ class WikiTermIdentifier():
                                 else:
                                     # strip word if end of link already
                                     if word.find(']]') != -1:
-                                        word = word[:word.find(']]')] + word[word.find(']]')+2:]
+                                        postfix += word[word.find(']]')+2:]
+                                        word = word[:word.find(']]')]
                                         # ignore several links in the same word
                                         word = word.replace('[[', '')
                                         word = word.replace(']]', '')
@@ -146,7 +147,7 @@ class WikiTermIdentifier():
                                         #if current_link_token != current_link_target:
                                         # always add disambiguation
                                         #disambiguations.append((current_link_token, current_link_target))
-                                        terms.append({'token': current_link_token, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start), 'disambiguations': [], 'original': current_link_target })
+                                        terms.append({'token': current_link_token + postfix, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start), 'disambiguations': [], 'original': current_link_target })
 
                                 # clean up and prepare for next link
                                 in_link = False

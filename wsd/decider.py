@@ -40,7 +40,7 @@ class Decider:
                         if start_2 < 0:
                             start_2 = 0
                     for index2 in range(start_2, end_2):
-                        if index2 != index and noun['finalIndex'] == -1:
+                        if noun['token'] != nouns[index2]['token'] and noun['finalIndex'] == -1:
                             noun2 = nouns[index2]
                             logging.info('comparing %s to %s' % (noun['token'], noun2['token']))
                             if noun2['finalIndex'] != -1:

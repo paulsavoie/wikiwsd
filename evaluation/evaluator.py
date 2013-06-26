@@ -24,11 +24,23 @@ class Evaluator():
 
         # TODO: temporary connect to mysql db - change with upgrade to mongodb
         db_connection = mysqldb.connect('localhost', 'wikiwsd', 'wikiwsd', 'wikiwsd3', charset='utf8', use_unicode=True)
+        cur = db_connection.cursor()
 
         total = 0.0
         correct = 0.0
         for sample in samples:
             words = sample['terms']
+
+            # update the correct meaning in case of redirects
+            for word in words:
+                if word.has_key('original'):
+                    original = word['original']
+                    cur.execute('SELECT target_article_name FROM redirects WHERE source_article_name=%s', original)
+                    row = cur.fetchone()
+                    if row != None:
+                        word['original'] = row[0]
+
+
             # TODO: modify meaningFinder to only retrieve reduced meanings
             meaningFinder = MeaningFinder(db_connection)
             disambiguations = meaningFinder.find_meanings(words)

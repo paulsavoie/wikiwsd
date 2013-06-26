@@ -46,7 +46,7 @@ def evaluate():
 
         answer = ''
         while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This step will require up to an hour to perform. Do you want to continue? (y/n): ').strip().lower()
+            answer = raw_input('This step will require up to several minutes depending on how many items are parsed. Do you want to continue? (y/n): ').strip().lower()
         print
         if answer[0] == 'y':
             logging.basicConfig(filename='evaluation-1.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
