@@ -2,6 +2,7 @@ import logging
 import xml.sax
 import random
 import json
+from wikitermidentifier import WikiTermIdentifier
 
 class SampleReader:
     def __init__(self, path, numSamples, output):
@@ -10,6 +11,7 @@ class SampleReader:
         self.__output_path = output
         self.__xml_reader = XMLSampleReader(self)
         self.__samples = {}
+        self.__term_identifier = WikiTermIdentifier()
 
     def read(self):
         # read from actual file
@@ -46,8 +48,17 @@ class SampleReader:
         # store samples in output file
         logging.info('Read %d samples from input file' % len(self.__samples))
 
+        # parse the text
+        output = []
+        for sample in self.__samples.values():
+            article_id = sample['id']
+            article_title = sample['title']
+            logging.info('Identifying terms in article %s' % article_title)
+            identified = self.__term_identifier.identify_terms(sample['text'])
+            output.append( { "id": article_id, "title": article_title, "links": identified['links'], 'terms' : identified['terms'] } )
+
         output_f = open(self.__output_path, 'w')
-        output_f.write(json.JSONEncoder().encode(self.__samples))
+        output_f.write(json.JSONEncoder().encode(output))
         output_f.close()
         logging.info('Saved samples in JSON file %s' % (self.__output_path))
 
