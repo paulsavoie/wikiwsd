@@ -1,5 +1,13 @@
-"""A thread wrapper for the xml reader
-"""
+# -*- coding: utf-8 -*-
+'''
+This file holds the code to read articles from the Wikipedia 
+Dump file in order to prepare the database for it and store
+the redirections
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
 
 import time
 import threading
@@ -8,7 +16,15 @@ import Queue
 import logging
 
 class Resolver(xml.sax.handler.ContentHandler):
+    """A SAX Content handler that reads articles from the Wikipedia dump file
+    """
+
     def __init__(self, redirect_queue):
+        """constructor
+
+        Arguments:
+            redirect_queue --- a queue to push the read articles to
+        """
         self._queue = redirect_queue
         self._reset_redirect()
         self._current_tag = u''
@@ -42,7 +58,7 @@ class Resolver(xml.sax.handler.ContentHandler):
             self._id_done = True
         if name == 'page':
             self._article_counter += 1
-            if len(self._redirect['source']) > 0 and self._redirect['source'].find(u':') == -1:
+            if len(self._redirect['source']) > 0 and self._redirect['source'].find(u':') == -1 and len(self._redirect['target']):
                 try:
                     self._redirect['id'] = long(self._redirect['id'])
                     self._queue.put(self._redirect)
@@ -52,7 +68,14 @@ class Resolver(xml.sax.handler.ContentHandler):
             if self._article_counter % 1000 == 0:
                 logging.info('%d articles parsed' % (self._article_counter))
 
+
 class ResolveThread(threading.Thread):
+    """constructor
+
+    Arguments:
+        xml_path --- the path to the wikipedia dump file
+        redirect_queue --- the queue that the read articles will be added to
+    """
     def __init__(self, xml_path, redirect_queue):
         threading.Thread.__init__(self)
         self._reader = Resolver(redirect_queue)
@@ -60,11 +83,3 @@ class ResolveThread(threading.Thread):
 
     def run(self):
         xml.sax.parse(self._path, self._reader)
-
-
-if __name__ == '__main__':
-    time.clock()
-    thread = ResolveThread('../data/training.xml', Queue.Queue())
-    thread.start()
-    thread.join()
-    print time.clock()

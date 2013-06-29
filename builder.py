@@ -1,4 +1,4 @@
-from creator import DBSetup, Creator
+from wsd.creator import DBSetup, Creator
 import sys
 import os
 import time

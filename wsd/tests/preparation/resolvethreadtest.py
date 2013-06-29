@@ -1,10 +1,28 @@
-from __future__ import absolute_import
 import unittest
-from preparation import ResolveThread
+import Queue
+from wsd.creator.preparation import ResolveThread
 
 class ResolveThreadTest(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_simple(self):
-        self.assertEqual(2, 1)
+    def test_normal_article(self):
+        queue = Queue.Queue()
+        thread = ResolveThread('wsd/tests/data/single1.xml', queue)
+        thread.start()
+        thread.join()
+
+        self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
+
+    def test_redirect(self):
+        queue = Queue.Queue()
+        thread = ResolveThread('wsd/tests/data/single3.xml', queue)
+        thread.start()
+        thread.join()
+
+        self.assertEqual(queue.empty(), False, 'No item in queue')
+        article = queue.get()
+        self.assertEqual(queue.empty(), True, 'More than one item in queue')
+        self.assertEqual(article['id'], 10, 'Article ID wrong')
+        self.assertEqual(article['source'], u'AccessibleComputing', 'Computer accessibility')
+
