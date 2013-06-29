@@ -12,7 +12,12 @@ class ResolveThreadTest(unittest.TestCase):
         thread.start()
         thread.join()
 
-        self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
+        self.assertEqual(queue.empty(), False, 'No item in queue')
+        article = queue.get()
+        self.assertEqual(queue.empty(), True, 'More than one item in queue')
+        self.assertEqual(article['id'], 12, 'Article ID wrong')
+        self.assertEqual(article['source'], u'Anarchism', 'Title is wrong')
+        self.assertEqual(article['target'], u'', 'Target article wrong')
 
     def test_redirect(self):
         queue = Queue.Queue()
@@ -24,5 +29,6 @@ class ResolveThreadTest(unittest.TestCase):
         article = queue.get()
         self.assertEqual(queue.empty(), True, 'More than one item in queue')
         self.assertEqual(article['id'], 10, 'Article ID wrong')
-        self.assertEqual(article['source'], u'AccessibleComputing', 'Computer accessibility')
+        self.assertEqual(article['source'], u'AccessibleComputing', 'Source article wrong')
+        self.assertEqual(article['target'], u'Computer accessibility', 'Target article wrong')
 

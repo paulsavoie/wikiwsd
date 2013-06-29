@@ -2,7 +2,7 @@
 '''
 This file holds the code to read articles from the Wikipedia 
 Dump file in order to prepare the database for it and store
-the redirections
+the redirections and articles for lookup
 
 Author: Paul Laufer
 Date: Jun 2013
@@ -23,7 +23,7 @@ class Resolver(xml.sax.handler.ContentHandler):
         """constructor
 
         Arguments:
-            redirect_queue --- a queue to push the read articles to
+            redirect_queue --- a queue to push the read article infos to
         """
         self._queue = redirect_queue
         self._reset_redirect()
@@ -58,7 +58,7 @@ class Resolver(xml.sax.handler.ContentHandler):
             self._id_done = True
         if name == 'page':
             self._article_counter += 1
-            if len(self._redirect['source']) > 0 and self._redirect['source'].find(u':') == -1 and len(self._redirect['target']):
+            if len(self._redirect['source']) > 0 and self._redirect['source'].find(u':') == -1:
                 try:
                     self._redirect['id'] = long(self._redirect['id'])
                     self._queue.put(self._redirect)
@@ -74,7 +74,7 @@ class ResolveThread(threading.Thread):
 
     Arguments:
         xml_path --- the path to the wikipedia dump file
-        redirect_queue --- the queue that the read articles will be added to
+        redirect_queue --- the queue that the read article infos will be added to
     """
     def __init__(self, xml_path, redirect_queue):
         threading.Thread.__init__(self)
