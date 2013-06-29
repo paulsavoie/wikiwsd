@@ -4,14 +4,14 @@
 import time
 import MySQLdb as mysqldb
 from termidentifier import TermIdentifier
-from meaningfinder import MeaningFinder
-from commonnessretriever import CommonnessRetriever 
-from relatednesscalculator import RelatednessCalculator
-from decider import Decider
-from outputter import HTMLOutputter
-from mysqlconnector import MySQLConnector 
+from wsd import MeaningFinder
+from wsd import CommonnessRetriever 
+from wsd import RelatednessCalculator
+from wsd import Decider
+from wsd import HTMLOutputter
+from wsd import MySQLConnector 
 
-class WordSenseDisambiguator():
+class MainProgram():
     def __init__(self, db_connector, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html'):
         self._db_connector = db_connector
         self._input_file = input_file
@@ -42,7 +42,7 @@ class WordSenseDisambiguator():
 if __name__ == '__main__':
     try:
         dbConnector = MySQLConnector('localhost')
-        prog = WordSenseDisambiguator(db_connector=dbConnector)
+        prog = MainProgram(db_connector=dbConnector)
         time.clock()
         prog.run()
         total = round(time.clock())
