@@ -2,7 +2,10 @@ class DBConnector():
     def __init__(self):
         pass
 
-    def get_article(self, title):
+    def get_article_by_title(self, title):
+        raise NotImplementedError('Method not implemented')
+
+    def get_article_by_id(self, id):
         raise NotImplementedError('Method not implemented')
 
     def resolve_redirect(self, name):

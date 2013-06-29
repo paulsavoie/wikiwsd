@@ -8,9 +8,22 @@ class MySQLConnector(DBConnector):
         self.__cursor = self.__db_connection.cursor()
         self.__lock = threading.Lock()
 
-    def get_article(self, title):
+    def get_article_by_title(self, title):
         self.__lock.acquire()
         self.__cursor.execute('SELECT id, title, articleincount FROM articles WHERE title=%s;', title)
+        result = self.__cursor.fetchone()
+        self.__lock.release()
+        if result == None:
+            return None
+        return {
+            'id': result[0],
+            'title': result[1],
+            'articleincount': int(result[2])
+        }
+
+    def get_article_by_id(self, id):
+        self.__lock.acquire()
+        self.__cursor.execute('SELECT id, title, articleincount FROM articles WHERE id=%s;', id)
         result = self.__cursor.fetchone()
         self.__lock.release()
         if result == None:
@@ -54,7 +67,7 @@ class MySQLConnector(DBConnector):
             meanings.append({
                 'id': row[0],
                 'name': row[1],
-                'occurrences': row[2],
+                'occurrences': int(row[2]),
                 'articleincount': int(row[3])
             })
         return meanings

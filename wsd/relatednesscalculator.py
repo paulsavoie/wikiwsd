@@ -9,7 +9,7 @@ class RelatednessCalculator:
         a_total_in = float(m1['articleincount'])
         b_total_in = float(m2['articleincount'])
 
-        if a_total_in == 0.0 or b_total_in == 0.0:
+        if round(a_total_in) == 0 or round(b_total_in) == 0:
             return 0.0
 
         common_in = self.__commonness_retriever.retrieve_commonness(m1, m2)

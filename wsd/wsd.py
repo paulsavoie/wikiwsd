@@ -20,6 +20,7 @@ class WordSenseDisambiguator():
     def run(self):
         f = open(self._input_file, 'r')
         text = f.read()
+        text = text.replace('&nbsp;', ' ')
         f.close()
 
         termIdentifier = TermIdentifier(self._db_connector)

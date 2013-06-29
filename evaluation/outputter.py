@@ -4,6 +4,13 @@ class EvaluationOutputter():
     def __init__(self):
         pass
 
+    def __normalize_term(self, term):
+        tokens = ['(', ')', '[', ']', "'", '"', '.', ',']
+        for token in tokens:
+            term = term.replace(token, '')
+        return term.lower()
+
+
     def output(self, tokens):
         
         total_links = 0.0
@@ -14,7 +21,9 @@ class EvaluationOutputter():
                 meanings = token['disambiguations']
                 if token['finalIndex'] >= 0 and token['finalIndex'] < len(meanings):
                     final_meaning = meanings[token['finalIndex']]['meaning']
-                    if final_meaning == token['original']:
+                    actual = self.__normalize_term(final_meaning)
+                    expected = self.__normalize_term(token['original'])
+                    if actual == expected:
                         total_correct += 1.0
                         logging.info('CORRECT got %s' % final_meaning.encode('ascii', 'ignore'))
                     else:

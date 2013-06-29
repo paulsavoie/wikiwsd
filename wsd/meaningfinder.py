@@ -42,16 +42,17 @@ class MeaningFinder:
                     # add to list
                     #for row in rows:
                     for meaning in meanings:
-                        #percentage = float(row[2]) / float(total)
-                        percentage = float(meaning['occurrences'])  / float(total)
-                        if percentage >= 0.01: # TODO: threshold
-                            #word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0], 'articleincount': int(row[3]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
-                            word['disambiguations'].append({ 'percentage': percentage, 'meaning': meaning['name'], 'id': meaning['id'], 'articleincount': meaning['articleincount'], 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
+                        if float(meaning['occurrences']) > 0 and total > 0:
+                            #percentage = float(row[2]) / float(total)
+                            percentage = float(meaning['occurrences'])  / float(total)
+                            if percentage >= 0.01: # TODO: threshold
+                                #word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0], 'articleincount': int(row[3]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
+                                word['disambiguations'].append({ 'percentage': percentage, 'meaning': meaning['name'], 'id': meaning['id'], 'articleincount': meaning['articleincount'], 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
 
                     # if no disambiguation, check if entry exists as article
                     #cur.execute('SELECT id, articles.articleincount FROM articles WHERE title = %s;', word['token'])
                     #row = cur.fetchone()
-                    article = self.__db_connector.get_article(word['token'])
+                    article = self.__db_connector.get_article_by_title(word['token'])
                     if article != None:
                         # check if already in list
                         already_found = False
