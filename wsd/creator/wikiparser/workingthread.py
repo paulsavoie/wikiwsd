@@ -1,5 +1,12 @@
-"""A thread wrapper for the parser
-"""
+# -*- coding: utf-8 -*-
+'''
+This file contains the wrapper class that starts
+the parsing process of the read wikipedia articles
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
 
 import time
 import threading
@@ -8,9 +15,19 @@ from wikiparser import WikiParser
 import logging
 
 class WorkingThread(threading.Thread):
-    def __init__(self, article_queue, client, database):
+    '''Thread wrapper to parse separate articles from the queue 
+    '''
+
+    '''constructor
+
+    Arguments:
+        article_queue --- the queue with the read articles
+        client --- the mongodb client instance
+        db_name --- the name of the database to use
+    '''
+    def __init__(self, article_queue, client, db_name):
         threading.Thread.__init__(self)
-        self._parser = WikiParser(client, database)
+        self._parser = WikiParser(client, db_name)
         self._queue = article_queue
         self._client = client
         self._end = False
@@ -27,5 +44,7 @@ class WorkingThread(threading.Thread):
                 pass
         self._client.end_request()
 
+    '''ends the thread 
+    '''
     def end(self):
         self._end = True

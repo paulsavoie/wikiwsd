@@ -7,4 +7,6 @@ def suite():
     suite.addTest(unittest.makeSuite(PrepareThreadTest, 'test'))
     suite.addTest(unittest.makeSuite(ReaderTest, 'test'))
     suite.addTest(unittest.makeSuite(WikiParserTest, 'test'))
+    suite.addTest(unittest.makeSuite(ReadingThreadTest, 'test'))
+    suite.addTest(unittest.makeSuite(WorkingThreadTest, 'test'))
     return suite

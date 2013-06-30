@@ -153,7 +153,6 @@ class WikiParser():
             if target_article == None:
                 logging.error('could not find article "%s" for meaning update' % (disambiguation[1].encode('ascii', 'ignore')))
             elif target_article['id'] != article['id']: # prevent self-links
-                #self._db.meanings.update( { "string": disambiguation[0] }, { "$push": { "targets": { 'id': target_article['id'], 'title': target_article['title'] } } }, upsert=True )
                 self._db.meanings.update( { 'string': disambiguation[0] }, 
                     { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'], 'count': 0 } } }, upsert=True)
                 self._db.meanings.update( { 'string': disambiguation[0] }, 
