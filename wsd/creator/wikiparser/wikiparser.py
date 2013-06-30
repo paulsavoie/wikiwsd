@@ -61,6 +61,7 @@ class WikiParser():
             line = line.strip()
 
             # remove hyphens
+            line = line.replace("'''", "")
             line = line.replace("''", "")
 
             if len(line) > 4:
