@@ -60,7 +60,7 @@ class PrepareThread(threading.Thread):
                 else:
                     self._redirect_bulk.append( { "source": source_name, "target": target_name })
 
-                if len(self._article_bulk) > 30 or len(self._redirect_bulk) > 30:
+                if len(self._article_bulk) >= 10 or len(self._redirect_bulk) >= 10:
                     self._save_bulks()
 
                 self._queue.task_done()
