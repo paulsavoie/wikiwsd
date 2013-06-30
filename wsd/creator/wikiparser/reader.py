@@ -1,5 +1,13 @@
-"""An xml parser that adds wikipedia articles to a queue
-"""
+# -*- coding: utf-8 -*-
+'''
+This file holds the code to read articles from the Wikipedia 
+Dump file in order to create the database entries necessary
+for disambiguation
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
 
 import time
 import xml.sax
@@ -7,6 +15,14 @@ import Queue
 import logging
 
 class Reader(xml.sax.handler.ContentHandler):
+    """A SAX Content handler that reads articles from the Wikipedia dump file
+    """
+
+    """constructor
+
+    Arguments:
+        article_queue --- the queue that the articles will be put to
+    """
     def __init__(self, article_queue):
         self._reset_article()
         self._current_tag = u''
@@ -49,17 +65,3 @@ class Reader(xml.sax.handler.ContentHandler):
                 except ValueError:
                     logging.error('Article "%s" could not be parsed, as %d is not a valid integer id' % (self._article['title'].encode('ascii', 'ignore'), self._article['id']))
             self._reset_article()
-
-
-if __name__ == '__main__':
-    time.clock()
-    queue = Queue.Queue()
-    reader = Reader(queue)
-    xml.sax.parse('../data/training.xml', reader)
-    counter = 1
-    while not queue.empty():
-        article = queue.get()
-        print '%08d: %r' % (counter, article['title'])
-        counter += 1
-    print time.clock()
-    print counter
