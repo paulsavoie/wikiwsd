@@ -144,20 +144,21 @@ class WikiParser():
             target_article = self.__resolve_article(link)
             if target_article == None:
                 logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
-            else:
-                self._db.articles.update( { "title": target_article['title'] }, { "$push": { "articles_link_here" : { "article": target_article['id'], "incount": links[link] } } } )
+            elif target_article['id'] != article['id']: # prevent self-links
+                self._db.articles.update( { "title": target_article['title'] }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": links[link] } } } )
 
         # insert meanings
-        meanings_insert = []
         for disambiguation in disambiguations:
             target_article = self.__resolve_article(disambiguation[1])
             if target_article == None:
                 logging.error('could not find article "%s" for meaning update' % (disambiguation[1].encode('ascii', 'ignore')))
-            else:
+            elif target_article['id'] != article['id']: # prevent self-links
                 #self._db.meanings.update( { "string": disambiguation[0] }, { "$push": { "targets": { 'id': target_article['id'], 'title': target_article['title'] } } }, upsert=True )
                 self._db.meanings.update( { 'string': disambiguation[0] }, 
-                    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'], 'count': 0 } } , 
-                      '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
+                    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'], 'count': 0 } } }, upsert=True)
+                self._db.meanings.update( { 'string': disambiguation[0] }, 
+                    { '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
+
 
     def __resolve_article(self, title):
         if title in self._article_cache:

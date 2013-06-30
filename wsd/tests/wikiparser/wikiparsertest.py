@@ -27,21 +27,21 @@ class WikiParserTest(unittest.TestCase):
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[target_name|link]].'}
         parser.parse_article(article)
 
-        meaning = { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } , 
-                      '$inc': { 'targets.12345.count' : 1 } }
-
         self.assertEqual(self._articles.update_called, 1)
         self.assertEqual(self._articles.find_one_called, 1)
         self.assertEqual(self._redirects.update_called, 0)
         self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 1)
+        self.assertEqual(self._meanings.update_called, 2)
         self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 1)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for meanings update')
-        self.assertEqual(self._meanings.updates[0][1], meaning, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
+        self.assertEqual(len(self._meanings.updates), 2)
+        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
+        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for first meanings update')
+        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for second meanings update')
+        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
+        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
+        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
         self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "article": 12345, 'incount': 1 } } }, 'Wrong value for articles update')
+        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
         self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
 
     def test_single_redirect(self):
@@ -59,14 +59,17 @@ class WikiParserTest(unittest.TestCase):
         self.assertEqual(self._articles.find_one_called, 2)
         self.assertEqual(self._redirects.update_called, 0)
         self.assertEqual(self._redirects.find_one_called, 1)
-        self.assertEqual(self._meanings.update_called, 1)
+        self.assertEqual(self._meanings.update_called, 2)
         self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 1)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for meanings update')
-        self.assertEqual(self._meanings.updates[0][1], meaning, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
+        self.assertEqual(len(self._meanings.updates), 2)
+        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
+        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for first meanings update')
+        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for second meanings update')
+        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
+        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
+        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
         self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "article": 12345, 'incount': 1 } } }, 'Wrong value for articles update')
+        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
         self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
 
     def test_anchor_link(self):
@@ -74,21 +77,21 @@ class WikiParserTest(unittest.TestCase):
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[target_name#anchor-name|link]].'}
         parser.parse_article(article)
 
-        meaning = { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } , 
-                      '$inc': { 'targets.12345.count' : 1 } }
-
         self.assertEqual(self._articles.update_called, 1)
         self.assertEqual(self._articles.find_one_called, 1)
         self.assertEqual(self._redirects.update_called, 0)
         self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 1)
+        self.assertEqual(self._meanings.update_called, 2)
         self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 1)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for meanings update')
-        self.assertEqual(self._meanings.updates[0][1], meaning, 'Wrong value for meanings update')
+        self.assertEqual(len(self._meanings.updates), 2)
+        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
+        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for meanings update')
         self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
+        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
+        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for meanings update')
+        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for meanings update')
         self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "article": 12345, 'incount': 1 } } }, 'Wrong value for articles update')
+        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
         self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
 
     def test_language_link(self):
@@ -114,14 +117,17 @@ class WikiParserTest(unittest.TestCase):
         self.assertEqual(self._articles.find_one_called, 1)
         self.assertEqual(self._redirects.update_called, 0)
         self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 1)
+        self.assertEqual(self._meanings.update_called, 2)
         self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 1)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link to an article' }, 'Wrong selector for meanings update')
-        self.assertEqual(self._meanings.updates[0][1], meaning, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
+        self.assertEqual(len(self._meanings.updates), 2)
+        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link to an article' }, 'Wrong selector for first meanings update')
+        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'link to an article', 'count': 0 } } }, 'Wrong value for first meanings update')
+        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for first meanings update')
+        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link to an article' }, 'Wrong selector for second meanings update')
+        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
+        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
         self.assertEqual(self._articles.updates[0][0], { 'title': 'link to an article' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "article": 12345, 'incount': 1 } } }, 'Wrong value for articles update')
+        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
         self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
 
     def test_spaces_in_target(self):
@@ -136,15 +142,29 @@ class WikiParserTest(unittest.TestCase):
         self.assertEqual(self._articles.find_one_called, 1)
         self.assertEqual(self._redirects.update_called, 0)
         self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 1)
+        self.assertEqual(self._meanings.update_called, 2)
         self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 1)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for meanings update')
-        self.assertEqual(self._meanings.updates[0][1], meaning, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
+        self.assertEqual(len(self._meanings.updates), 2)
+        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
+        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'another article', 'count': 0 } } }, 'Wrong value for first meanings update')
+        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for first meanings update')
+        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
+        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
+        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
         self.assertEqual(self._articles.updates[0][0], { 'title': 'another article' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "article": 12345, 'incount': 1 } } }, 'Wrong value for articles update')
+        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
         self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+
+    def test_own_link(self):
+        parser = WikiParser(self._client, 'myDB')
+        parser.parse_article({ 'id': 12345, 'title': 'myArticle', 'text': u'[[link]]'})
+
+        self.assertEqual(self._articles.update_called, 0, 'Articles were updated without a link')
+        self.assertEqual(self._articles.find_one_called, 1, 'Articles were searched without a link')
+        self.assertEqual(self._redirects.update_called, 0, 'Redirects were updated without a link')
+        self.assertEqual(self._redirects.find_one_called, 0, 'Redirects were searched without a link')
+        self.assertEqual(self._meanings.update_called, 0, 'Meanings were updated without a link')
+        self.assertEqual(self._meanings.find_one_called, 0, 'Meanings were searched without a link')
 
 class MockMongoDB():
     def __init__(self, articles, redirects, meanings):
