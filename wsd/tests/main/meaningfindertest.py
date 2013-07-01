@@ -121,6 +121,50 @@ class MeaningFinderTest(unittest.TestCase):
         self.assertEqual(terms[0]['disambiguations'][1]['articleincount'], 3)
         self.assertEqual(terms[0]['disambiguations'][1]['percentage'], 1.0)
 
+    def test_multiple_terms(self):
+        connector = MockDBConnector()
+        connector.meanings = {
+            'myNoun': [{
+                'occurrences': 1,
+                'name': 'meaning1',
+                'id': 1,
+                'articleincount': 2
+            }]
+        }
+        terms = [
+            { 'token': 'myNoun', 'isNoun': True, 'disambiguations': [] },
+            { 'token': 'myNoun2', 'isNoun': True, 'disambiguations': [] }
+        ]
+        finder = MeaningFinder(connector)
+        finder.find_meanings(terms)
+
+        self.assertEqual(connector.retrieve_meanings_called, 2)
+        self.assertEqual(connector.get_article_by_title_called, 2)
+        self.assertEqual(len(terms[0]['disambiguations']), 1)
+        self.assertEqual(len(terms[1]['disambiguations']), 0)
+
+    def test_same_term(self):
+        connector = MockDBConnector()
+        connector.meanings = {
+            'myNoun': [{
+                'occurrences': 1,
+                'name': 'meaning1',
+                'id': 1,
+                'articleincount': 2
+            }]
+        }
+        terms = [
+            { 'token': 'myNoun', 'isNoun': True, 'disambiguations': [] },
+            { 'token': 'myNoun', 'isNoun': True, 'disambiguations': [] }
+        ]
+        finder = MeaningFinder(connector)
+        finder.find_meanings(terms)
+
+        self.assertEqual(connector.retrieve_meanings_called, 1)
+        self.assertEqual(connector.get_article_by_title_called, 1)
+        self.assertEqual(len(terms[0]['disambiguations']), 1)
+        self.assertEqual(len(terms[1]['disambiguations']), 1)
+
 class MockDBConnector():
     def __init__(self):
         self.meanings = {}
