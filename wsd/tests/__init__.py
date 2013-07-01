@@ -7,4 +7,5 @@ from wsd.tests.wikiparser.workingthreadtest import WorkingThreadTest
 from wsd.tests.main.termidentifiertest import TermIdentifierTest
 from wsd.tests.main.meaningfindertest import MeaningFinderTest 
 from wsd.tests.main.commonnessretrievertest import CommonnessRetrieverTest 
+from wsd.tests.main.relatednesscalculatortest import RelatednessCalculatorTest
 from suite import suite
