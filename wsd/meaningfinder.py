@@ -87,7 +87,7 @@ class MeaningFinder:
                         # check if already in list
                         already_found = False
                         for dis in word['disambiguations']:
-                            if dis['id'] == article['title']: #row[0]:
+                            if dis['id'] == article['id']: #row[0]:
                                 already_found = True
                         if not already_found:
                             #word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0], 'articleincount': int(row[1]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })

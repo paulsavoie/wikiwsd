@@ -3,7 +3,7 @@
 
 import time
 import MySQLdb as mysqldb
-from termidentifier import TermIdentifier
+from wsd import TermIdentifier
 from wsd import MeaningFinder
 from wsd import CommonnessRetriever 
 from wsd import RelatednessCalculator
@@ -12,7 +12,7 @@ from wsd import HTMLOutputter
 from wsd import MySQLConnector 
 
 class MainProgram():
-    def __init__(self, db_connector, input_file='../data/simpleinput.txt', output_file='../data/simpleoutput.html'):
+    def __init__(self, db_connector, input_file='data/simpleinput.txt', output_file='data/simpleoutput.html'):
         self._db_connector = db_connector
         self._input_file = input_file
         self._output_file = output_file
