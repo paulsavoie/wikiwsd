@@ -1,10 +1,40 @@
-import MySQLdb as mysqldb
+# -*- coding: utf-8 -*-
+'''
+This file contains the code to retrieve meanings
+for terms from the database
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
+
 import logging
 
 class MeaningFinder:
-    def __init__(self, db_connector):
-        self.__db_connector = db_connector
+    '''the MeaningFinder class allows the retrieval of meanings
+       for a term from the database
+    '''
 
+    '''constructor
+
+    Arguments:
+        db_connector --- a database connector (instance of wsd.DBConnector)
+    '''
+    def __init__(self, db_connector):
+        self._db_connector = db_connector
+
+    '''retrieves meanings and stores them in the disambiguations field as dictionary:
+        - percentage --- the percentage as floating point of the commonness of this meaning
+        - meaning --- the name of the meaning as string
+        - id --- the id of the referenced wikipedia article of this meaning
+        - articleincount --- the number of articles linking to this meaning (article)
+
+    Arguments:
+        words --- a list of dictionary entries containing the following fields:
+            - token --- the token itself
+            - isNoun --- boolean wheter this term can be disambiguated
+            - disambiguations --- a list to which all retrieved meanings are added
+    '''
     def find_meanings(self, words):
         disambiguations = {}
 
@@ -27,7 +57,7 @@ class MeaningFinder:
                     # select disambiguations
                     #cur.execute('SELECT COUNT(*) AS `occurrences`, `string`, `meaning` FROM `disambiguations` WHERE `string` = %s GROUP BY `string`, `meaning` ORDER BY `occurrences` DESC;', 
                     #    word['token'])
-                    meanings = self.__db_connector.retrieve_meanings(word['token'])
+                    meanings = self._db_connector.retrieve_meanings(word['token'])
                     #cur.execute('SELECT target_article_id, articles.title, SUM(occurrences) as occurrences, articles.articleincount FROM disambiguations LEFT JOIN articles ON articles.id = disambiguations.target_article_id WHERE string = %s GROUP BY target_article_id ORDER BY occurrences DESC;',
                     #    word['token'])
                     #rows = cur.fetchall()
@@ -52,7 +82,7 @@ class MeaningFinder:
                     # if no disambiguation, check if entry exists as article
                     #cur.execute('SELECT id, articles.articleincount FROM articles WHERE title = %s;', word['token'])
                     #row = cur.fetchone()
-                    article = self.__db_connector.get_article_by_title(word['token'])
+                    article = self._db_connector.get_article_by_title(word['token'])
                     if article != None:
                         # check if already in list
                         already_found = False

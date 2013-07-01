@@ -5,4 +5,5 @@ from wsd.tests.wikiparser.wikiparsertest import WikiParserTest
 from wsd.tests.wikiparser.readingthreadtest import ReadingThreadTest
 from wsd.tests.wikiparser.workingthreadtest import WorkingThreadTest
 from wsd.tests.main.termidentifiertest import TermIdentifierTest
+from wsd.tests.main.meaningfindertest import MeaningFinderTest 
 from suite import suite
