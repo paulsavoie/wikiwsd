@@ -11,4 +11,5 @@ def suite():
     suite.addTest(unittest.makeSuite(WorkingThreadTest, 'test'))
     suite.addTest(unittest.makeSuite(TermIdentifierTest, 'test'))
     suite.addTest(unittest.makeSuite(MeaningFinderTest, 'test'))
+    suite.addTest(unittest.makeSuite(CommonnessRetrieverTest, 'test'))
     return suite
