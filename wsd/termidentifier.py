@@ -1,11 +1,42 @@
+# -*- coding: utf-8 -*-
+'''
+This file contains the code to identify terms within
+a text which can be disambiguated
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
+
 import nltk
 import MySQLdb as mysqldb
 
 class TermIdentifier:
+    '''class that handles the determination of tokens within a text
+       which can be disambiguated
+    '''
+
+    '''constructor
+
+    Arguments:
+        db_connector --- the databaseconnecor (wsd.DBConnector instance)
+    '''
     def __init__(self, db_connector):
         self.__sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
         self.__db_connector = db_connector
 
+    '''identifies terms within a text for disambiguation
+       returns a list of dictionaries for each term containing the fields:
+            - token --- holds the actual term
+            - isNoun --- boolean wheter the term can be disambiguated
+            - index --- the index of the term 
+            - tag --- the pos tag of the term
+            - length --- the length of the term (how many words/tokens)
+            - disambiguations --- if isNoun is True, an empty list for adding disambiguations
+
+    Arguments:
+        text --- the text to be analyzed
+    '''
     def identify_terms(self, text):
         sentences = self.__sent_detector.tokenize(text.strip())
         terms = []

@@ -9,4 +9,5 @@ def suite():
     suite.addTest(unittest.makeSuite(WikiParserTest, 'test'))
     suite.addTest(unittest.makeSuite(ReadingThreadTest, 'test'))
     suite.addTest(unittest.makeSuite(WorkingThreadTest, 'test'))
+    suite.addTest(unittest.makeSuite(TermIdentifierTest, 'test'))
     return suite
