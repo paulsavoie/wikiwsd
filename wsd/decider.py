@@ -1,9 +1,40 @@
+# -*- coding: utf-8 -*-
+'''
+This file contains the algorithm which selects the
+best meaning for each term to be disambiguated
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
+
 import logging
 
 class Decider:
-    def __init__(self, relatedness_calculator):
-        self.__relatedness_calculator = relatedness_calculator
+    '''class to decide for a specific term
+    '''
 
+    '''constructor
+
+    Arguments:
+        relatedness_calculator --- instance of RelatednessCalculator 
+    '''
+    def __init__(self, relatedness_calculator):
+        self._relatedness_calculator = relatedness_calculator
+
+    '''decides for a meaning for each word to be disambiguated
+       the resultant index of the best disambiguation will be stored in the field
+       'finalIndex' of each term (default to -1 if no disambiguation possible)
+
+    Arguments:
+        words --- a list of dictionaries with the following fields:
+            - isNoun --- boolean whether the word shall be disambiguated
+            - token --- the actual terms of the words
+            - disambiguations --- a list of dictionaries holding the possible meanings with fields
+                - meaning --- the textual representation of the meaning
+                - id --- the id of the wikipedia article it references
+                - articleincount --- the number of articles that link to the meaning
+    '''
     def decide(self, words):
         # extract nouns
         nouns = []
@@ -13,6 +44,10 @@ class Decider:
                 word['numCmp'] = 0
                 word['finalIndex'] = -1
                 word['termIndex'] = index
+                for disambiguation in word['disambiguations']:
+                    disambiguation['cumulativeRelatedness'] = 0.0
+                    disambiguation['overallMatch'] = 0.0
+                    disambiguation['averageRelatedness'] = 0.0
                 index += 1
                 nouns.append(word)
 
@@ -51,7 +86,7 @@ class Decider:
                                 # compare every disambiguation to every other one
                                 for disambiguation in noun['disambiguations']:
                                     #print 'retrieving relatedness between %s and %s' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'))
-                                    relatedness = self.__relatedness_calculator.calculate_relatedness(disambiguation, disambiguation2)
+                                    relatedness = self._relatedness_calculator.calculate_relatedness(disambiguation, disambiguation2)
                                     #print '\t: relatedness of %s to %s: %f' % (disambiguation['meaning'].encode('ascii', 'ignore'), disambiguation2['meaning'].encode('ascii', 'ignore'), relatedness)
                                     
                                     disambiguation['cumulativeRelatedness'] += (relatedness / float(len(noun2_disambiguations))) # if only one, it counts more

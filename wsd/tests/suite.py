@@ -13,4 +13,5 @@ def suite():
     suite.addTest(unittest.makeSuite(MeaningFinderTest, 'test'))
     suite.addTest(unittest.makeSuite(CommonnessRetrieverTest, 'test'))
     suite.addTest(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
+    suite.addTest(unittest.makeSuite(DeciderTest, 'test'))
     return suite
