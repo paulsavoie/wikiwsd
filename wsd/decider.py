@@ -55,7 +55,7 @@ class Decider:
         num_finalized = 0
         while (num_finalized != len(nouns)):
             next_noun_index = self._find_next_noun_index(nouns)
-            logging.info('%d%% DONE' % (float(num_finalized) / float(len(nouns)) * 100.0))
+            logging.info('%d of %d words disambiguated | %d%% DONE' % (num_finalized, len(nouns), float(num_finalized) / float(len(nouns)) * 100.0))
             if next_noun_index == -1:
                 logging.error('No next noun was found!')
             else:
@@ -68,7 +68,7 @@ class Decider:
                     num_finalized += 1
                 else:
                     start = next_noun_index-3
-                    end = next_noun_index+3
+                    end = next_noun_index+3 # TODO: should be +4 (end is not included)
                     if end > len(nouns):
                         end = len(nouns)
                         start = end - 7
@@ -87,36 +87,46 @@ class Decider:
                                 neighbour_disambiguations = nouns[index]['disambiguations']
                             for neighbour_disambiguation in neighbour_disambiguations:
                                 # compare every disambiguation to every other one
-                                best_direct_match = '' # JUST FOR DEBUGGING
-                                best_direct_match_value = 0.0
+   
                                 for disambiguation in nouns[next_noun_index]['disambiguations']:
                                     relatedness = self._relatedness_calculator.calculate_relatedness(disambiguation, neighbour_disambiguation)
-                                    if best_direct_match_value < relatedness:
-                                        best_direct_match = disambiguation['meaning']
-                                        best_direct_match_value = relatedness
+
                                     #if len(neighbour_disambiguations) == 1: 
                                     #    relatedness *= 2.0
                                     disambiguation['cumulativeRelatedness'] += (relatedness / float(len(neighbour_disambiguations))) # if only one, it counts more
-
                             # normalize relatedness
-                            total_relatedness = 0.0
-                            for disambiguation in nouns[next_noun_index]['disambiguations']:
-                                total_relatedness += disambiguation['cumulativeRelatedness']
+                            #total_relatedness = 0.0
+                            #for disambiguation in nouns[next_noun_index]['disambiguations']:
+                            #    total_relatedness += disambiguation['cumulativeRelatedness']
 
-                            for disambiguation in nouns[next_noun_index]['disambiguations']:
-                                if total_relatedness == 0.0:
-                                    normalizedCumulative = 0.0
-                                else:
-                                    normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
-                                disambiguation['averageRelatedness'] = normalizedCumulative
-                                disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
+                            #for disambiguation in nouns[next_noun_index]['disambiguations']:
+                            #    if total_relatedness == 0.0:
+                            #        normalizedCumulative = 0.0
+                            #    else:
+                            #        normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
+                            #    disambiguation['averageRelatedness'] = normalizedCumulative
+                            #    disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
 
-                            #nouns[next_noun_index]['numCmp'] += 1 # noun compared to one more neighbour
+                            nouns[next_noun_index]['numCmp'] += 1 # noun compared to one more neighbour
 
                             # JUST FOR DEBUGGING REASONS
                             disambiguations_tmp = list(nouns[next_noun_index]['disambiguations'])
-                            sorted_tmp = sorted(disambiguations_tmp, key=lambda dis: -dis['averageRelatedness'])
-                            logging.info('\tbest match (%f): %s | average (%f): %s' % (best_direct_match_value, best_direct_match, sorted_tmp[0]['averageRelatedness'], sorted_tmp[0]['meaning'].encode('ascii', 'ignore')))
+                            sorted_tmp = sorted(disambiguations_tmp, key=lambda dis: -dis['cumulativeRelatedness'])
+                            logging.info('\tcumulative (%f): %s' % (sorted_tmp[0]['cumulativeRelatedness'], sorted_tmp[0]['meaning'].encode('ascii', 'ignore')))
+                            if len(sorted_tmp) > 1:
+                                logging.info('\tcumulative 2nd (%f): %s' % (sorted_tmp[1]['cumulativeRelatedness'], sorted_tmp[1]['meaning'].encode('ascii', 'ignore')))
+
+                    numCmp = nouns[next_noun_index]['numCmp']
+                    if numCmp != 0:
+                        # normalize relatedness
+                        total_relatedness = 0.0
+                        for disambiguation in nouns[next_noun_index]['disambiguations']:
+                            total_relatedness += disambiguation['cumulativeRelatedness']
+
+                        for disambiguation in nouns[next_noun_index]['disambiguations']:
+                            disambiguation['averageRelatedness'] = disambiguation['cumulativeRelatedness'] / total_relatedness #float(numCmp)
+                            disambiguation['overallMatch'] = disambiguation['averageRelatedness'] * disambiguation['percentage']
+
 
                     # take the best match
                     sorted_disambiguations = sorted(nouns[next_noun_index]['disambiguations'], key=lambda dis: -dis['overallMatch'])

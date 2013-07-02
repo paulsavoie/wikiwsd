@@ -5,7 +5,7 @@ class EvaluationOutputter():
         pass
 
     def __normalize_term(self, term):
-        tokens = ['(', ')', '[', ']', "'", '"', '.', ',']
+        tokens = ['(', ')', '[', ']', "'", '"', '.', ',', '_']
         for token in tokens:
             term = term.replace(token, '')
         return term.lower()

@@ -62,6 +62,8 @@ class WikiTermIdentifier():
                     for word in words:
                         if word.find('</ref>') != -1 or word.find('/>') != -1: # watch out - could be other tag closing 
                             in_ref = False
+                            if word.find('<ref') != -1:
+                                word = word[:word.find('<ref')]
                             if word.find('</ref>') != -1:
                                 word = word[word.find('</ref>')+6:]
                             else:
@@ -120,11 +122,12 @@ class WikiTermIdentifier():
                                         current_link_target += word[:separator_index]
                                         current_link_token = word[separator_index+1:]
                                         if len(current_link_token) > 0:
-                                            current_link_token += u' '
+                                            if not end_link:
+                                                current_link_token += postfix + u' '
                                     else:
-                                        if in_target:
-                                            current_link_target += word + u' '
-                                        current_link_token += word + u' '
+                                        if in_target and not end_link:
+                                            current_link_target += word + postfix + u' '
+                                        current_link_token += word + postfix + u' '
                             if end_link:
                                 if len(current_link_target) > 0 and not invalid_link:
                                     
@@ -147,7 +150,7 @@ class WikiTermIdentifier():
                                         #if current_link_token != current_link_target:
                                         # always add disambiguation
                                         #disambiguations.append((current_link_token, current_link_target))
-                                        terms.append({'token': current_link_token + postfix, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start), 'disambiguations': [], 'original': current_link_target })
+                                        terms.append({'token': current_link_token, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start), 'disambiguations': [], 'original': current_link_target })
 
                                 # clean up and prepare for next link
                                 in_link = False
