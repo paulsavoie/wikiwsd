@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+'''
+This file contains the code which allows to easily build
+the database of the disambiguation library - by executing
+it, a command-line interface is presented to the user to
+enter the necessary configuration values
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
+
 from wsd.creator import DBSetup, Creator
 import sys
 import os
@@ -6,6 +18,9 @@ import logging
 
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
 
+'''requests the configuration from the user through the command-line 
+and starts the building process
+'''
 def build():
     print '-' * 80
     print '- This is the interactive build program which guides you'

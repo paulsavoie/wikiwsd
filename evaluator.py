@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+'''
+This file contains the code which allows to easily evaluate
+the database of the disambiguation library - by executing
+it, a command-line interface is presented to the user to
+enter the necessary configuration values
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
+
 from evaluation import Evaluator, SampleReader
 import sys
 import os
@@ -7,6 +19,9 @@ import logging
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
 SAMPLE_FILE = 'samples.json'
 
+'''requests the required values from the user through the command-line
+and starts the evaluation process
+'''
 def evaluate():
     print '-' * 80
     print '- This is the interactive evaluation program'
