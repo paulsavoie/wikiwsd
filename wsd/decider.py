@@ -62,6 +62,7 @@ class Decider:
                 if len(nouns[next_noun_index]['disambiguations']) == 1: # if only one meaning, take it
                     nouns[next_noun_index]['finalIndex'] = 0
                     num_finalized += 1
+                    logging.info('Only meaning for %s was selected: %s' % (nouns[next_noun_index]['token'], nouns[next_noun_index]['disambiguations'][0]['meaning']))
                 elif len(nouns[next_noun_index]['disambiguations']) == 0: # just continue
                     logging.error('noun %s does not have any disambiguations' % nouns[next_noun_index]['token'])
                     num_finalized += 1
@@ -97,18 +98,18 @@ class Decider:
                                     #    relatedness *= 2.0
                                     disambiguation['cumulativeRelatedness'] += (relatedness / float(len(neighbour_disambiguations))) # if only one, it counts more
 
-                                # normalize relatedness
-                                total_relatedness = 0.0
-                                for disambiguation in nouns[next_noun_index]['disambiguations']:
-                                    total_relatedness += disambiguation['cumulativeRelatedness']
+                            # normalize relatedness
+                            total_relatedness = 0.0
+                            for disambiguation in nouns[next_noun_index]['disambiguations']:
+                                total_relatedness += disambiguation['cumulativeRelatedness']
 
-                                for disambiguation in nouns[next_noun_index]['disambiguations']:
-                                    if total_relatedness == 0.0:
-                                        normalizedCumulative = 0.0
-                                    else:
-                                        normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
-                                    disambiguation['averageRelatedness'] = normalizedCumulative
-                                    disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
+                            for disambiguation in nouns[next_noun_index]['disambiguations']:
+                                if total_relatedness == 0.0:
+                                    normalizedCumulative = 0.0
+                                else:
+                                    normalizedCumulative = disambiguation['cumulativeRelatedness'] / total_relatedness
+                                disambiguation['averageRelatedness'] = normalizedCumulative
+                                disambiguation['overallMatch'] = normalizedCumulative * disambiguation['percentage']
 
                             #nouns[next_noun_index]['numCmp'] += 1 # noun compared to one more neighbour
 

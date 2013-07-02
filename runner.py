@@ -1,5 +1,12 @@
-"""The main program
-"""
+# -*- coding: utf-8 -*-
+'''
+This file contains the code which allows the easy usage
+of the disambiguation library
+
+Author: Paul Laufer
+Date: Jun 2013
+
+'''
 
 import time
 import logging
@@ -15,11 +22,24 @@ from wsd import MySQLConnector
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
 
 class MainProgram():
+    '''this class glues together the different parts of the wsd library to model
+    the whole disambiguation process
+    '''
+
+    '''constructor
+
+    Arguments:
+        db_connector --- the database connector (an instance of wsd.DBConnector)
+        input_file --- the path to the text file to be disambiguated
+        output_file --- the path of the html output file containing the disambiguation 
+    '''
     def __init__(self, db_connector, input_file='data/simpleinput.txt', output_file='data/simpleoutput.html'):
         self._db_connector = db_connector
         self._input_file = input_file
         self._output_file = output_file
 
+    '''runs the actual disambiguation process
+    '''
     def run(self):
         f = open(self._input_file, 'r')
         text = f.read()
