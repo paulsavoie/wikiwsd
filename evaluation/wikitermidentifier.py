@@ -76,6 +76,8 @@ class WikiTermIdentifier():
 
                         postfix = ''
                         prefix = ''
+                        if word.find(']]') != -1:
+                            word = word[:word.find(']]')+2]
                         while len(word) > 0 and (word[-1] == '.' or word[-1] == ',' or word[-1] == '!' or word[-1] == ')' or word[-1] == '"' or word[-1] == ':'):
                             postfix = word[-1] + postfix
                             word = word[:-1]
@@ -94,7 +96,7 @@ class WikiTermIdentifier():
                             elif not in_link and not end_link:
                                 # ignore links within the word
                                 word = word.replace('[[', '')
-                                word = word.replace(']]', '')
+                                #word = word.replace(']]', '')
                                 terms.append({'token': prefix + word + postfix, 'isNoun': False , 'index': token_index, 'length': 1 })
 
 
@@ -107,7 +109,7 @@ class WikiTermIdentifier():
                                 else:
                                     # strip word if end of link already
                                     if word.find(']]') != -1:
-                                        postfix += word[word.find(']]')+2:]
+                                        #postfix += word[word.find(']]')+2:]
                                         word = word[:word.find(']]')]
                                         # ignore several links in the same word
                                         word = word.replace('[[', '')
@@ -119,15 +121,21 @@ class WikiTermIdentifier():
                                     if separator_index != -1:
                                     #if len(word) == 1 and word[0] == '|':
                                         in_target = False
-                                        current_link_target += word[:separator_index]
+                                        current_link_target += prefix + word[:separator_index] + postfix
                                         current_link_token = word[separator_index+1:]
                                         if len(current_link_token) > 0:
                                             if not end_link:
                                                 current_link_token += postfix + u' '
                                     else:
-                                        if in_target and not end_link:
-                                            current_link_target += word + postfix + u' '
-                                        current_link_token += word + postfix + u' '
+                                        if in_target:
+                                            current_link_target += prefix + word 
+                                            if not end_link:
+                                                current_link_target += postfix 
+                                            current_link_target += u' '
+                                        current_link_token += word
+                                        if not end_link:
+                                            current_link_token += postfix 
+                                        current_link_token += u' '
                             if end_link:
                                 if len(current_link_target) > 0 and not invalid_link:
                                     

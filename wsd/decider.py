@@ -135,7 +135,10 @@ class Decider:
                         if  nouns[next_noun_index]['disambiguations'][tmp_index]['id'] == sorted_disambiguations[0]['id']:
                             nouns[next_noun_index]['finalIndex'] = tmp_index 
                             num_finalized += 1 
+                            logging.info('deciding for %s, rel: %d%%, comm: %d%%, total: %d%%' % (sorted_disambiguations[0]['meaning'], round(sorted_disambiguations[0]['averageRelatedness']*100), round(sorted_disambiguations[0]['percentage']*100), round(sorted_disambiguations[0]['overallMatch']*100)))
                         tmp_index = tmp_index + 1
+                    if len(sorted_disambiguations) > 1:
+                        logging.info('2nd choice would be %s, rel: %d%%, comm: %d%%, total: %d%%' % (sorted_disambiguations[1]['meaning'], round(sorted_disambiguations[1]['averageRelatedness']*100), round(sorted_disambiguations[1]['percentage']*100), round(sorted_disambiguations[1]['overallMatch']*100)))
 
         return
 
