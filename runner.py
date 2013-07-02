@@ -2,6 +2,7 @@
 """
 
 import time
+import logging
 import MySQLdb as mysqldb
 from wsd import TermIdentifier
 from wsd import MeaningFinder
@@ -10,6 +11,8 @@ from wsd import RelatednessCalculator
 from wsd import Decider
 from wsd import HTMLOutputter
 from wsd import MySQLConnector 
+
+LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
 
 class MainProgram():
     def __init__(self, db_connector, input_file='data/simpleinput.txt', output_file='data/simpleoutput.html'):
@@ -42,6 +45,7 @@ class MainProgram():
 if __name__ == '__main__':
     try:
         dbConnector = MySQLConnector('localhost')
+        logging.basicConfig(filename='running.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
         prog = MainProgram(db_connector=dbConnector)
         time.clock()
         prog.run()
