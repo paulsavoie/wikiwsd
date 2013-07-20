@@ -64,7 +64,7 @@ class WikiParser():
             line = line.replace("'''", "")
             line = line.replace("''", "")
 
-            if len(line) > 4:
+            if len(line) > 4 and line[0:2] != ' |':
                 # do not consider lines only holding links # TODO: is that correct?
                 #if line[0] != '[' and line[-1] != ']' and line[0] != '{' and line[-1] != '}':
 
@@ -83,7 +83,7 @@ class WikiParser():
                         # we are in a link
                         if in_link:
                             # links to files, categories or other languages are not considered
-                            if word.find(':') != -1 or word in self._INCORRECT_TOKENS:
+                            if (word.find(':') != -1 and (word.find(']]') == -1 or word.find(':') < word.find(']]'))) or word in self._INCORRECT_TOKENS:
                                 end_link = True
                                 word = u''
                             else:
@@ -97,7 +97,7 @@ class WikiParser():
                                 if separator_index != -1:
                                 #if len(word) == 1 and word[0] == '|':
                                     in_target = False
-                                    current_link_target += word[:separator_index]
+                                    current_link_target += word[0:separator_index]
                                     current_link_token = word[separator_index+1:]
                                     if len(current_link_token) > 0:
                                         current_link_token += u' '
@@ -136,28 +136,35 @@ class WikiParser():
 
         # insert into db
         # find current article
-        #source_article = self.__resolve_article(article['title'])
+        #source_article = self.__resolve_article(article['title']) 
 
         # insert links
 
+        link_counter = 0
         for link in links:
+            link_count = links[link]
+            link = link.lower()
             target_article = self.__resolve_article(link)
             if target_article == None:
                 logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
             elif target_article['id'] != article['id']: # prevent self-links
-                self._db.articles.update( { "title": target_article['title'] }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": links[link] } } } )
+                link_counter += 1
+                self._db.articles.update( { "title": target_article['title'].lower() }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": link_count } } } )
 
         # insert meanings
+        meaning_counter = 0
         for disambiguation in disambiguations:
-            target_article = self.__resolve_article(disambiguation[1])
+            target_article = self.__resolve_article(disambiguation[1].lower())
             if target_article == None:
-                logging.error('could not find article "%s" for meaning update' % (disambiguation[1].encode('ascii', 'ignore')))
+                logging.error('could not find article "%s" for meaning update' % (disambiguation[1].lower().encode('ascii', 'ignore')))
             elif target_article['id'] != article['id']: # prevent self-links
-                self._db.meanings.update( { 'string': disambiguation[0] }, 
-                    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'], 'count': 0 } } }, upsert=True)
-                self._db.meanings.update( { 'string': disambiguation[0] }, 
+                meaning_counter += 1
+                self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
+                    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'].lower(), 'count': 0 } } }, upsert=True)
+                self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
                     { '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
 
+        logging.info('finished article %s, %d links and %d meanings updated' % (article['title'].encode('ascii', 'ignore'), link_counter, meaning_counter)
 
     def __resolve_article(self, title):
         if title in self._article_cache:
