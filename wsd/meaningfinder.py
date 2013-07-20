@@ -75,7 +75,7 @@ class MeaningFinder:
                         if float(meaning['occurrences']) > 0 and total > 0:
                             #percentage = float(row[2]) / float(total)
                             percentage = float(meaning['occurrences'])  / float(total)
-                            if percentage >= 0.01: # TODO: threshold
+                            if percentage >= 0.02: # threshold taken from paper
                                 #word['disambiguations'].append({ 'percentage': percentage, 'meaning': row[1], 'id': row[0], 'articleincount': int(row[3]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
                                 word['disambiguations'].append({ 'percentage': percentage, 'meaning': meaning['name'], 'id': meaning['id'], 'articleincount': meaning['articleincount'], 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
 
