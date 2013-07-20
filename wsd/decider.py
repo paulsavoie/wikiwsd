@@ -123,9 +123,10 @@ class Decider:
                         for disambiguation in nouns[next_noun_index]['disambiguations']:
                             total_relatedness += disambiguation['cumulativeRelatedness']
 
-                        for disambiguation in nouns[next_noun_index]['disambiguations']:
-                            disambiguation['averageRelatedness'] = disambiguation['cumulativeRelatedness'] / total_relatedness #float(numCmp)
-                            disambiguation['overallMatch'] = disambiguation['averageRelatedness'] * disambiguation['percentage']
+                        if total_relatedness != 0.0:
+                            for disambiguation in nouns[next_noun_index]['disambiguations']:
+                                disambiguation['averageRelatedness'] = disambiguation['cumulativeRelatedness'] / total_relatedness #float(numCmp)
+                                disambiguation['overallMatch'] = (disambiguation['averageRelatedness'] + disambiguation['percentage']) / 2.0 # take average
 
 
                     # take the best match
