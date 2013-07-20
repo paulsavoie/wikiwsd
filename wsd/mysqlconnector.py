@@ -7,6 +7,7 @@ class MySQLConnector(DBConnector):
         self.__db_connection = mysqldb.connect(host, user, passwd, database, charset='utf8', use_unicode=True)
         self.__cursor = self.__db_connection.cursor()
         self.__lock = threading.Lock()
+        self.__link_cache = {}
 
     def get_article_by_title(self, title):
         self.__lock.acquire()
@@ -47,9 +48,23 @@ class MySQLConnector(DBConnector):
 
     def retrieve_number_of_common_articles(self, id1, id2):
         self.__lock.acquire()
-        self.__cursor.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM links WHERE target_article_id=%s OR target_article_id=%s GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp;', (id1, id2))
-        result = self.__cursor.fetchone()
+        if id1 not in self.__link_cache:
+            self.__cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id1))
+            self.__link_cache[id1] = self.__cursor.fetchall()
+        if id2 not in self.__link_cache:
+            self.__cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id2))
+            self.__link_cache[id2] = self.__cursor.fetchall()
+
+        # find common articles
+        counter = 0
+        for source1 in self.__link_cache[id1]:
+            for source2 in self.__link_cache[id2]:
+                if source1 == source2:
+                    counter += 1
+        #self.__cursor.execute('SELECT COUNT(*) FROM (SELECT COUNT(source_article_id), source_article_id FROM links WHERE target_article_id=%s OR target_article_id=%s GROUP BY source_article_id HAVING COUNT(source_article_id) > 1) AS tmp;', (id1, id2))
+        #result = self.__cursor.fetchone()
         self.__lock.release()
+        return counter
         num = -1.0
         if result != None:
             num = float(result[0])
