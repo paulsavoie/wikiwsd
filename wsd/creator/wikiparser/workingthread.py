@@ -25,15 +25,15 @@ class WorkingThread(threading.Thread):
         client --- the mongodb client instance
         db_name --- the name of the database to use
     '''
-    def __init__(self, article_queue, client, db_name):
+    def __init__(self, article_queue, db_connection):
         threading.Thread.__init__(self)
-        self._parser = WikiParser(client, db_name)
+        self._parser = WikiParser(db_connection)
         self._queue = article_queue
-        self._client = client
+        #self._client = client
         self._end = False
 
     def run(self):
-        self._client.start_request()
+        #self._client.start_request()
         while not self._end:
             try:
                 article = self._queue.get(True, 2)
@@ -42,7 +42,7 @@ class WorkingThread(threading.Thread):
                 self._queue.task_done()
             except Queue.Empty:
                 pass
-        self._client.end_request()
+        #self._client.end_request()
 
     '''ends the thread 
     '''

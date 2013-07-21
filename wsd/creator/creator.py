@@ -10,7 +10,7 @@ Date: Jun 2013
 
 import time
 import Queue
-from pymongo import MongoClient
+import MySQLdb as mysqldb
 from wikiparser import WorkingThread
 from wikiparser import ReadingThread
 from preparation import ResolveThread
@@ -33,19 +33,20 @@ class Creator():
     def __init__(self, xml_path, max_queue_size=20, num_threads=1, 
             db_host='localhost', db_port=27017, action='learn'):
         self._queue = Queue.Queue(maxsize=max_queue_size)
-        client = MongoClient(db_host, db_port, auto_start_request=True)
+        cursor = db_connection.cursor()
+        #client = MongoClient(db_host, db_port, auto_start_request=True)
         if action == 'learn':
             self._reading_thread = ReadingThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                #client = MongoClient(db_host, db_port)
-                self._worker_threads.append(WorkingThread(self._queue, client ,'wikiwsd'))
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
+                self._worker_threads.append(WorkingThread(self._queue, con))
         elif action == 'prepare':
             self._reading_thread = ResolveThread(xml_path, self._queue)
             self._worker_threads = []
             for i in range (0, num_threads):
-                #client = MongoClient(db_host, db_port)
-                self._worker_threads.append(PrepareThread(self._queue, client, 'wikiwsd'))
+                con = mysqldb.connect(db_host, db_user, db_pass, 'wikiwsd3', charset='utf8', use_unicode=True)
+                self._worker_threads.append(PrepareThread(self._queue, con))
 
     '''starts the building process of the database
     '''

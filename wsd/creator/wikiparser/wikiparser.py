@@ -11,6 +11,7 @@ Date: Jun 2013
 
 import nltk.data
 from nltk.tokenize import *
+from wsd.evaluation import WikiTermIdentifier
 import re
 import pymongo
 import logging
@@ -25,9 +26,8 @@ class WikiParser():
         client --- the mongodb database client to use 
         db_name --- the name of the database to use
     """
-    def __init__(self, client, db_name):
-        self._client = client
-        self._db = client[db_name]
+    def __init__(self, db_connection):
+        self._db_connection = db_connection
         self._sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
         self._word_tokenizer = WhitespaceTokenizer() #WordPunctTokenizer()
         self._article_cache = {}
@@ -139,32 +139,42 @@ class WikiParser():
         #source_article = self.__resolve_article(article['title']) 
 
         # insert links
+        if self._db_connection:
+            try:
+                cur = self._db_connection.cursor()
+                link_counter = 0
+                for link in links:
+                    link_count = links[link]
+                    link = link.lower()
+                    target_article = self.__resolve_article(link)
+                    if target_article == None:
+                        logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
+                    elif target_article['id'] != article['id']: # prevent self-links
+                        link_counter += 1
+                        cur.execute('INSERT INTO links(source_article_id, target_article_id, count) VALUES(%s, %s, %s);',
+                            (article['id'], target_article['id'], link_count))
+                        cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_id)
+                        #self._db.articles.update( { "title": target_article['title'].lower() }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": link_count } } } )
 
-        link_counter = 0
-        for link in links:
-            link_count = links[link]
-            link = link.lower()
-            target_article = self.__resolve_article(link)
-            if target_article == None:
-                logging.error('could not find article "%s" for link update' % (link.encode('ascii', 'ignore')))
-            elif target_article['id'] != article['id']: # prevent self-links
-                link_counter += 1
-                self._db.articles.update( { "title": target_article['title'].lower() }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": link_count } } } )
+                # insert meanings
+                meaning_counter = 0
+                for disambiguation in disambiguations:
+                    target_article = self.__resolve_article(disambiguation[1].lower())
+                    if target_article == None:
+                        logging.error('could not find article "%s" for meaning update' % (disambiguation[1].lower().encode('ascii', 'ignore')))
+                    elif target_article['id'] != article['id']: # prevent self-links
+                        meaning_counter += 1
+                        cur.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
+                            (disambiguation[0].lower(), target_article_id))
+                        #self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
+                        #    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'].lower(), 'count': 0 } } }, upsert=True)
+                        #self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
+                        #    { '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
 
-        # insert meanings
-        meaning_counter = 0
-        for disambiguation in disambiguations:
-            target_article = self.__resolve_article(disambiguation[1].lower())
-            if target_article == None:
-                logging.error('could not find article "%s" for meaning update' % (disambiguation[1].lower().encode('ascii', 'ignore')))
-            elif target_article['id'] != article['id']: # prevent self-links
-                meaning_counter += 1
-                self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
-                    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'].lower(), 'count': 0 } } }, upsert=True)
-                self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
-                    { '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
-
-        logging.info('finished article %s, %d links and %d meanings updated' % (article['title'].encode('ascii', 'ignore'), link_counter, meaning_counter)
+                logging.info('finished article %s, %d links and %d meanings updated' % (article['title'].encode('ascii', 'ignore'), link_counter, meaning_counter)
+            except mysqldb.Error, e:
+                logging.error("Error in article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id']))
+                logging.error("Error %d: %s" % (e.args[0],e.args[1]))
 
     def __resolve_article(self, title):
         if title in self._article_cache:
