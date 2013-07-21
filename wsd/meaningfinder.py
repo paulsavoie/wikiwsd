@@ -82,16 +82,16 @@ class MeaningFinder:
                     # if no disambiguation, check if entry exists as article
                     #cur.execute('SELECT id, articles.articleincount FROM articles WHERE title = %s;', word['token'])
                     #row = cur.fetchone()
-                    article = self._db_connector.get_article_by_title(word['token'])
-                    if article != None:
-                        # check if already in list
-                        already_found = False
-                        for dis in word['disambiguations']:
-                            if dis['id'] == article['id']: #row[0]:
-                                already_found = True
-                        if not already_found:
-                            #word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0], 'articleincount': int(row[1]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
-                            word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': article['id'], 'articleincount': article['articleincount'], 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
+                    #article = self._db_connector.get_article_by_title(word['token'])
+                    #if article != None:
+                    #    # check if already in list
+                    #    already_found = False
+                    #    for dis in word['disambiguations']:
+                    #        if dis['id'] == article['id']: #row[0]:
+                    #            already_found = True
+                    #    if not already_found:
+                    #        #word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': row[0], 'articleincount': int(row[1]), 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
+                    #        word['disambiguations'].append({ 'percentage': 1.0, 'meaning': word['token'], 'id': article['id'], 'articleincount': article['articleincount'], 'cumulativeRelatedness': 0.0, 'overallMatch': 0.0, 'averageRelatedness': 0.0 })
 
                     disambiguations[word['token']] = word['disambiguations']
 
