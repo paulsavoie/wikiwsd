@@ -5,10 +5,7 @@ from wsd.creator.preparation import PrepareThread
 
 class PrepareThreadTest(unittest.TestCase):
     def setUp(self):
-        self._articles = MockMongoTable()
-        self._redirects = MockMongoTable()
-        db = MockMongoDB(self._articles, self._redirects)
-        self._client = MockMongoClient( databases={ 'myDB': db })
+        self._connection = MySQLMockConnection()
 
     def test_single_article(self):
         queue = Queue.Queue()
@@ -16,19 +13,16 @@ class PrepareThreadTest(unittest.TestCase):
         # add entries to queue
         queue.put( { 'id': 1, 'source': 'mySource', 'target': '' } )
 
-        thread = PrepareThread(queue, self._client, 'myDB')
+        thread = PrepareThread(queue, self._connection)
         thread.start()
         time.sleep(0.1)
         thread.end()
         thread.join()
 
         self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertEqual(self._redirects.entries, [])
-        self.assertEqual(self._redirects.insert_called, 0)
-        self.assertEqual(self._articles.entries, [ { 'id': 1, 'title': 'mySource', 'articles_link_here': [] } ])
-        self.assertEqual(self._articles.insert_called, 1)
+        self.assertEqual(len(self._connection.cur.queries), 1)
+        self.assertEqual(self._connection.cur.queries[0], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(1, NOW(), mysource, 0);')
+        self.assertEqual(self._connection.commit_called, 1)
 
     def test_single_redirect(self):
         queue = Queue.Queue()
@@ -36,19 +30,16 @@ class PrepareThreadTest(unittest.TestCase):
         # add entries to queue
         queue.put( { 'id': 1, 'source': 'mySource', 'target': 'myTarget' } )
 
-        thread = PrepareThread(queue, self._client, 'myDB')
+        thread = PrepareThread(queue, self._connection)
         thread.start()
         time.sleep(0.1)
         thread.end()
         thread.join()
 
         self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertEqual(self._redirects.entries, [{ 'source': 'mySource', 'target': 'myTarget' }])
-        self.assertEqual(self._redirects.insert_called, 1)
-        self.assertEqual(self._articles.entries, [])
-        self.assertEqual(self._articles.insert_called, 0)
+        self.assertEqual(len(self._connection.cur.queries), 1)
+        self.assertEqual(self._connection.cur.queries[0], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource, mytarget);')
+        self.assertEqual(self._connection.commit_called, 1)
 
     def test_multiple_articles(self):
         queue = Queue.Queue()
@@ -66,20 +57,26 @@ class PrepareThreadTest(unittest.TestCase):
         queue.put( { 'id': 10, 'source': 'mySource10', 'target': '' } )
         queue.put( { 'id': 11, 'source': 'mySource11', 'target': '' } )
 
-        thread = PrepareThread(queue, self._client, 'myDB')
+        thread = PrepareThread(queue, self._connection)
         thread.start()
         time.sleep(0.1)
         thread.end()
         thread.join()
 
         self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertEqual(self._redirects.insert_called, 0)
-        self.assertEqual(self._redirects.entries, [])
-        self.assertEqual(len(self._articles.entries), 11)
-        self.assertEqual(self._articles.insert_called, 2)
-        self.assertEqual(self._articles.entries[10], { 'id': 11, 'title': 'mySource11', 'articles_link_here': []})
+        self.assertEqual(len(self._connection.cur.queries), 11)
+        self.assertEqual(self._connection.cur.queries[0], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(1, NOW(), mysource01, 0);')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(2, NOW(), mysource02, 0);')
+        self.assertEqual(self._connection.cur.queries[2], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(3, NOW(), mysource03, 0);')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(4, NOW(), mysource04, 0);')
+        self.assertEqual(self._connection.cur.queries[4], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(5, NOW(), mysource05, 0);')
+        self.assertEqual(self._connection.cur.queries[5], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(6, NOW(), mysource06, 0);')
+        self.assertEqual(self._connection.cur.queries[6], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(7, NOW(), mysource07, 0);')
+        self.assertEqual(self._connection.cur.queries[7], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(8, NOW(), mysource08, 0);')
+        self.assertEqual(self._connection.cur.queries[8], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(9, NOW(), mysource09, 0);')
+        self.assertEqual(self._connection.cur.queries[9], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(10, NOW(), mysource10, 0);')
+        self.assertEqual(self._connection.cur.queries[10], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(11, NOW(), mysource11, 0);')
+        self.assertEqual(self._connection.commit_called, 11)
 
     def test_multiple_redirects(self):
         queue = Queue.Queue()
@@ -97,21 +94,26 @@ class PrepareThreadTest(unittest.TestCase):
         queue.put( { 'id': 10, 'source': 'mySource10', 'target': 'myTarget10' } )
         queue.put( { 'id': 11, 'source': 'mySource11', 'target': 'myTarget11' } )
 
-        thread = PrepareThread(queue, self._client, 'myDB')
+        thread = PrepareThread(queue, self._connection)
         thread.start()
         time.sleep(0.1)
         thread.end()
         thread.join()
 
         self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertEqual(self._redirects.insert_called, 2)
-        self.assertEqual(len(self._redirects.entries), 11)
-        self.assertEqual(self._articles.entries, [])
-        self.assertEqual(self._articles.insert_called, 0)
-        self.assertEqual(self._redirects.insert_called, 2)
-        self.assertEqual(self._redirects.entries[10], { 'source': 'mySource11', 'target': 'myTarget11'})
+        self.assertEqual(len(self._connection.cur.queries), 11)
+        self.assertEqual(self._connection.cur.queries[0], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource01, mytarget01);')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource02, mytarget02);')
+        self.assertEqual(self._connection.cur.queries[2], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource03, mytarget03);')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource04, mytarget04);')
+        self.assertEqual(self._connection.cur.queries[4], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource05, mytarget05);')
+        self.assertEqual(self._connection.cur.queries[5], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource06, mytarget06);')
+        self.assertEqual(self._connection.cur.queries[6], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource07, mytarget07);')
+        self.assertEqual(self._connection.cur.queries[7], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource08, mytarget08);')
+        self.assertEqual(self._connection.cur.queries[8], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource09, mytarget09);')
+        self.assertEqual(self._connection.cur.queries[9], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource10, mytarget10);')
+        self.assertEqual(self._connection.cur.queries[10], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource11, mytarget11);')
+        self.assertEqual(self._connection.commit_called, 11)
 
     def test_mixed(self):
         queue = Queue.Queue()
@@ -129,53 +131,51 @@ class PrepareThreadTest(unittest.TestCase):
         queue.put( { 'id': 10, 'source': 'mySource10', 'target': 'myTarget10' } )
         queue.put( { 'id': 11, 'source': 'mySource11', 'target': '' } )
 
-        thread = PrepareThread(queue, self._client, 'myDB')
+        thread = PrepareThread(queue, self._connection)
         thread.start()
         time.sleep(0.1)
         thread.end()
         thread.join()
 
         self.assertEqual(queue.empty(), True, 'Unexpected item in queue')
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertEqual(self._redirects.insert_called, 1)
-        self.assertEqual(self._articles.insert_called, 1)
-        self.assertEqual(len(self._redirects.entries), 5)
-        self.assertEqual(len(self._articles.entries), 6)
-        self.assertEqual(self._redirects.entries[4], { 'source': 'mySource10', 'target': 'myTarget10' } )
-        self.assertEqual(self._articles.entries[5], { 'id': 11, 'title': 'mySource11', 'articles_link_here': []})
+        self.assertEqual(len(self._connection.cur.queries), 11)
+        self.assertEqual(self._connection.cur.queries[0], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(1, NOW(), mysource01, 0);')
+        self.assertEqual(self._connection.cur.queries[2], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(3, NOW(), mysource03, 0);')
+        self.assertEqual(self._connection.cur.queries[4], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(5, NOW(), mysource05, 0);')
+        self.assertEqual(self._connection.cur.queries[6], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(7, NOW(), mysource07, 0);')
+        self.assertEqual(self._connection.cur.queries[8], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(9, NOW(), mysource09, 0);')
+        self.assertEqual(self._connection.cur.queries[10], 'INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(11, NOW(), mysource11, 0);')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource02, mytarget02);')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource04, mytarget04);')
+        self.assertEqual(self._connection.cur.queries[5], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource06, mytarget06);')
+        self.assertEqual(self._connection.cur.queries[7], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource08, mytarget08);')
+        self.assertEqual(self._connection.cur.queries[9], 'INSERT INTO redirects(source_article_name, target_article_name) VALUES(mysource10, mytarget10);')
+        self.assertEqual(self._connection.commit_called, 11)
 
-class MockMongoDB():
-    def __init__(self, articles, redirects):
-        self.articles = articles
-        self.redirects = redirects
-
-class MockMongoClient():
-    def __init__(self, databases={}):
-        self.start_request_called = 0
-        self.end_request_called = 0
-        self._databases = databases
-
-    def start_request(self):
-        self.start_request_called += 1
-
-    def end_request(self):
-        self.end_request_called += 1
-
-    def __getitem__(self, k):
-        if k in self._databases:
-            return self._databases[k]
-        raise AttributeError
-
-class MockMongoTable():
+class MySQLMockCursor():
     def __init__(self):
-        self.entries = []
-        self.insert_called = 0
+        self.queries = []
+        self.return_vals = {}
 
-    def insert(self, entry, w=1):
-        self.insert_called += 1
-        if type( entry ) == list:
-            for e in entry:
-                self.entries.append(e)
-        else:
-            self.entries.append(entry)
+    def execute(self, *args):
+        query = args[0]
+        arguments = args[1]
+        index = 0
+        while (query.find('%s') != -1):
+            query = query.replace('%s', str(arguments[index]), 1)
+            index += 1
+        self.queries.append(query)
+        if (query in self.return_vals):
+            return self.return_vals[query]
+        return None
+
+class MySQLMockConnection():
+    def __init__(self):
+        self.cur = MySQLMockCursor()
+        self.commit_called = 0
+
+    def cursor(self):
+        return self.cur
+
+    def commit(self):
+        self.commit_called += 1

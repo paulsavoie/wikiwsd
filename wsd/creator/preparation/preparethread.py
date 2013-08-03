@@ -13,6 +13,7 @@ import threading
 import Queue
 import pymongo
 import logging
+import MySQLdb as mysqldb
 
 class PrepareThread(threading.Thread):
     """Thread which inserts the information into the mongodb database
@@ -22,8 +23,7 @@ class PrepareThread(threading.Thread):
 
     Arguments:
         redirect_queue --- the queue holding the article information
-        client --- a mongodb client instance used for connection
-        db_name --- the database name into which the data shall be written
+        db_connection --- a mysql database connection instance
     """
     def __init__(self, redirect_queue, db_connection):
         threading.Thread.__init__(self)
@@ -58,9 +58,9 @@ class PrepareThread(threading.Thread):
                 if len(target_name) == 0: # make an insert into articles
                     cur.execute('INSERT INTO articles(id, lastparsed, title, articleincount) VALUES(%s, NOW(), %s, %s);', 
                             (article_id, source_name.lower(), 0))
-                        self._db_connection.commit()
+                    self._db_connection.commit()
                 else:
-                    cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', (source_name, target_name))
+                    cur.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);', (source_name.lower(), target_name.lower()))
                     self._db_connection.commit()
 
                 #if len(target_name) == 0:

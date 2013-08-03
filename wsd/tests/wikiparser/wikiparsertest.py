@@ -5,203 +5,130 @@ from wsd.creator.wikiparser import WikiParser
 
 class WikiParserTest(unittest.TestCase):
     def setUp(self):
-        self._articles = MockMongoTable('articles')
-        self._redirects = MockMongoTable('redirects')
-        self._meanings = MockMongoTable('meanings')
-        db = MockMongoDB(self._articles, self._redirects, self._meanings)
-        self._client = MockMongoClient( databases={ 'myDB': db })
+        self._connection = MySQLMockConnection()
 
     def test_empty_article(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         parser.parse_article({ 'id': 1, 'title': 'myArticle', 'text': u''})
 
-        self.assertEqual(self._articles.update_called, 0, 'Articles were updated without a link')
-        self.assertEqual(self._articles.find_one_called, 0, 'Articles were searched without a link')
-        self.assertEqual(self._redirects.update_called, 0, 'Redirects were updated without a link')
-        self.assertEqual(self._redirects.find_one_called, 0, 'Redirects were searched without a link')
-        self.assertEqual(self._meanings.update_called, 0, 'Meanings were updated without a link')
-        self.assertEqual(self._meanings.find_one_called, 0, 'Meanings were searched without a link')
+        self.assertEqual(len(self._connection.cur.queries), 0)
 
     def test_single_link(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[target_name|link]].'}
+
+        self._connection.cur.return_vals['SELECT id, title, articleincount FROM articles WHERE title=target_name;'] = (2, 'myTarget', 1)
+
         parser.parse_article(article)
 
-        self.assertEqual(self._articles.update_called, 1)
-        self.assertEqual(self._articles.find_one_called, 1)
-        self.assertEqual(self._redirects.update_called, 0)
-        self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 2)
-        self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 2)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
-        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for first meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
-        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
-        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
-        self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+        self.assertEqual(len(self._connection.cur.queries), 4)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=target_name;')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(1, 2, 1);')
+        self.assertEqual(self._connection.cur.queries[2], 'UPDATE articles SET articleincount=articleincount+1 WHERE id=2;')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(link, 2, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;')
 
     def test_single_redirect(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[redirect_name|link]].'}
-        redirect = { 'source': u'redirect_name', 'target': u'target_name' }
-        self._redirects.redirects[u'redirect_name'] = redirect
-        self._articles.redirects[u'redirect_name'] = None # article does not exist
+        self._connection.cur.return_vals['SELECT id, title, articleincount FROM articles WHERE title=target_name;'] = (2, 'myTarget', 1)
+        self._connection.cur.return_vals['SELECT target_article_name FROM redirects WHERE source_article_name=redirect_name;'] = ['target_name']
+        
         parser.parse_article(article)
 
-        meaning = { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } , 
-                      '$inc': { 'targets.12345.count' : 1 } }
-
-        self.assertEqual(self._articles.update_called, 1)
-        self.assertEqual(self._articles.find_one_called, 2)
-        self.assertEqual(self._redirects.update_called, 0)
-        self.assertEqual(self._redirects.find_one_called, 1)
-        self.assertEqual(self._meanings.update_called, 2)
-        self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 2)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
-        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for first meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
-        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
-        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
-        self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+        self.assertEqual(len(self._connection.cur.queries), 6)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=redirect_name;')
+        self.assertEqual(self._connection.cur.queries[1], 'SELECT target_article_name FROM redirects WHERE source_article_name=redirect_name;')
+        self.assertEqual(self._connection.cur.queries[2], 'SELECT id, title, articleincount FROM articles WHERE title=target_name;')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(1, 2, 1);')
+        self.assertEqual(self._connection.cur.queries[4], 'UPDATE articles SET articleincount=articleincount+1 WHERE id=2;')
+        self.assertEqual(self._connection.cur.queries[5], 'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(link, 2, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;')
 
     def test_anchor_link(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[target_name#anchor-name|link]].'}
+        self._connection.cur.return_vals['SELECT id, title, articleincount FROM articles WHERE title=target_name;'] = (2, 'myTarget', 1)
+
         parser.parse_article(article)
 
-        self.assertEqual(self._articles.update_called, 1)
-        self.assertEqual(self._articles.find_one_called, 1)
-        self.assertEqual(self._redirects.update_called, 0)
-        self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 2)
-        self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 2)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
-        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'target_name', 'count': 0 } } }, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for meanings update')
-        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
-        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for meanings update')
-        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for meanings update')
-        self.assertEqual(self._articles.updates[0][0], { 'title': 'target_name' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
-        self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+        self.assertEqual(len(self._connection.cur.queries), 4)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=target_name;')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(1, 2, 1);')
+        self.assertEqual(self._connection.cur.queries[2], 'UPDATE articles SET articleincount=articleincount+1 WHERE id=2;')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(link, 2, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;')
 
     def test_language_link(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         parser.parse_article({ 'id': 1, 'title': 'myArticle', 'text': u'[[sk:Anarchizmus]]'})
 
-        self.assertEqual(self._articles.update_called, 0, 'Articles were updated without a link')
-        self.assertEqual(self._articles.find_one_called, 0, 'Articles were searched without a link')
-        self.assertEqual(self._redirects.update_called, 0, 'Redirects were updated without a link')
-        self.assertEqual(self._redirects.find_one_called, 0, 'Redirects were searched without a link')
-        self.assertEqual(self._meanings.update_called, 0, 'Meanings were updated without a link')
-        self.assertEqual(self._meanings.find_one_called, 0, 'Meanings were searched without a link')
+        self.assertEqual(len(self._connection.cur.queries), 0)
 
     def test_spaces_in_link(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[link to an article]].'}
+        self._connection.cur.return_vals['SELECT id, title, articleincount FROM articles WHERE title=link to an article;'] = (2, 'myTarget', 1)
+
         parser.parse_article(article)
 
-        meaning = { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'link to an article', 'count': 0 } } , 
-                      '$inc': { 'targets.12345.count' : 1 } }
-
-        self.assertEqual(self._articles.update_called, 1)
-        self.assertEqual(self._articles.find_one_called, 1)
-        self.assertEqual(self._redirects.update_called, 0)
-        self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 2)
-        self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 2)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link to an article' }, 'Wrong selector for first meanings update')
-        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'link to an article', 'count': 0 } } }, 'Wrong value for first meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for first meanings update')
-        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link to an article' }, 'Wrong selector for second meanings update')
-        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
-        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._articles.updates[0][0], { 'title': 'link to an article' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
-        self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+        self.assertEqual(len(self._connection.cur.queries), 4)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=link to an article;')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(1, 2, 1);')
+        self.assertEqual(self._connection.cur.queries[2], 'UPDATE articles SET articleincount=articleincount+1 WHERE id=2;')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(link to an article, 2, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;')
 
     def test_spaces_in_target(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         article = { 'id': 1, 'title': 'myArticle', 'text': u'This is a [[another article|link]].'}
+        self._connection.cur.return_vals['SELECT id, title, articleincount FROM articles WHERE title=another article;'] = (2, 'myTarget', 1)
         parser.parse_article(article)
 
-        meaning = { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'another article', 'count': 0 } } , 
-                      '$inc': { 'targets.12345.count' : 1 } }
-
-        self.assertEqual(self._articles.update_called, 1)
-        self.assertEqual(self._articles.find_one_called, 1)
-        self.assertEqual(self._redirects.update_called, 0)
-        self.assertEqual(self._redirects.find_one_called, 0)
-        self.assertEqual(self._meanings.update_called, 2)
-        self.assertEqual(self._meanings.find_one_called, 0)
-        self.assertEqual(len(self._meanings.updates), 2)
-        self.assertEqual(self._meanings.updates[0][0], { 'string': 'link' }, 'Wrong selector for first meanings update')
-        self.assertEqual(self._meanings.updates[0][1], { '$setOnInsert': { 'targets.12345': { 'id': 12345, 'title': 'another article', 'count': 0 } } }, 'Wrong value for first meanings update')
-        self.assertEqual(self._meanings.updates[0][2], True, 'Upsert not set for first meanings update')
-        self.assertEqual(self._meanings.updates[1][0], { 'string': 'link' }, 'Wrong selector for second meanings update')
-        self.assertEqual(self._meanings.updates[1][1], { '$inc': { 'targets.12345.count' : 1 } }, 'Wrong value for second meanings update')
-        self.assertEqual(self._meanings.updates[1][2], True, 'Upsert not set for second meanings update')
-        self.assertEqual(self._articles.updates[0][0], { 'title': 'another article' }, 'Wrong selector for articles update')
-        self.assertEqual(self._articles.updates[0][1], { '$push': { "articles_link_here" : { "id": 1, 'incount': 1 } } }, 'Wrong value for articles update')
-        self.assertEqual(self._articles.updates[0][2], False, 'Upsert not set for articles update')
+        self.assertEqual(len(self._connection.cur.queries), 4)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=another article;')
+        self.assertEqual(self._connection.cur.queries[1], 'INSERT INTO links(source_article_id, target_article_id, count) VALUES(1, 2, 1);')
+        self.assertEqual(self._connection.cur.queries[2], 'UPDATE articles SET articleincount=articleincount+1 WHERE id=2;')
+        self.assertEqual(self._connection.cur.queries[3], 'INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(link, 2, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;')
 
     def test_own_link(self):
-        parser = WikiParser(self._client, 'myDB')
+        parser = WikiParser(self._connection)
         parser.parse_article({ 'id': 12345, 'title': 'myArticle', 'text': u'[[link]]'})
 
-        self.assertEqual(self._articles.update_called, 0, 'Articles were updated without a link')
-        self.assertEqual(self._articles.find_one_called, 1, 'Articles were searched without a link')
-        self.assertEqual(self._redirects.update_called, 0, 'Redirects were updated without a link')
-        self.assertEqual(self._redirects.find_one_called, 0, 'Redirects were searched without a link')
-        self.assertEqual(self._meanings.update_called, 0, 'Meanings were updated without a link')
-        self.assertEqual(self._meanings.find_one_called, 0, 'Meanings were searched without a link')
+        self.assertEqual(len(self._connection.cur.queries), 2)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=link;')
+        self.assertEqual(self._connection.cur.queries[1], 'SELECT target_article_name FROM redirects WHERE source_article_name=link;')
 
-class MockMongoDB():
-    def __init__(self, articles, redirects, meanings):
-        self.articles = articles
-        self.redirects = redirects
-        self.meanings = meanings
 
-class MockMongoClient():
-    def __init__(self, databases={}):
-        self._databases = databases
+class MySQLMockCursor():
+    def __init__(self):
+        self.queries = []
+        self.return_vals = {}
+        self._last_query = None
 
-    def __getitem__(self, k):
-        if k in self._databases:
-            return self._databases[k]
-        raise AttributeError
+    def execute(self, *args):
+        query = args[0]
+        arguments = args[1]
+        if isinstance(arguments, basestring) or isinstance(arguments, int):
+            arguments = [arguments]
+        index = 0
+        while (query.find('%s') != -1):
+            query = query.replace('%s', str(arguments[index]), 1)
+            index += 1
+        self.queries.append(query)
+        self._last_query = query
+        return None
 
-class MockMongoTable():
-    def __init__(self, name):
-        self.name = name
-        self.updates = []
-        self.redirects = {}
-        self.update_called = 0
-        self.find_one_called = 0
+    def fetchone(self):
+        if self._last_query in self.return_vals:
+            return self.return_vals[self._last_query]
+        return None
 
-    def update(self, selector, update, upsert=False):
-        self.update_called += 1
-        self.updates.append((selector, update, upsert))
 
-    def find_one(self, selector):
-        self.find_one_called += 1
-        if self.name == 'articles':
-            if selector['title'] in self.redirects:
-                return None
-            else:
-                return {
-                    'id': 12345,
-                    'title': selector['title']
-                }
-        elif self.name == 'redirects':
-            return self.redirects[selector['source']]
+class MySQLMockConnection():
+    def __init__(self):
+        self.cur = MySQLMockCursor()
+        self.commit_called = 0
+
+    def cursor(self):
+        return self.cur
+
+    def commit(self):
+        self.commit_called += 1
+

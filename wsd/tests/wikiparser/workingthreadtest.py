@@ -5,15 +5,11 @@ from wsd.creator.wikiparser import WorkingThread
 
 class WorkingThreadTest(unittest.TestCase):
     def setUp(self):
-        self._articles = MockMongoTable()
-        self._redirects = MockMongoTable()
-        self._meanings = MockMongoTable()
-        db = MockMongoDB(self._articles, self._redirects, self._meanings)
-        self._client = MockMongoClient( databases={ 'myDB': db })
+        self._connection = MySQLMockConnection()
 
     def test_queue(self):
         queue = Queue.Queue()
-        thread = WorkingThread(queue, self._client, 'myDB')
+        thread = WorkingThread(queue, self._connection)
         thread.start()
         queue.put({ 'id': 123, 'title': 'myTitle', 'text': u''})
         time.sleep(0.01)
@@ -24,50 +20,49 @@ class WorkingThreadTest(unittest.TestCase):
 
     def test_processed(self):
         queue = Queue.Queue()
-        thread = WorkingThread(queue, self._client, 'myDB')
+        thread = WorkingThread(queue, self._connection)
         thread.start()
         queue.put({ 'id': 123, 'title': 'myTitle', 'text': u'[[a link]]'})
         time.sleep(0.01)
         thread.end()
         thread.join()
 
-        self.assertEqual(self._client.start_request_called, 1)
-        self.assertEqual(self._client.end_request_called, 1)
-        self.assertNotEqual(self._articles.update_called, 0)
-        self.assertNotEqual(self._meanings.update_called, 0)
+        self.assertEqual(len(self._connection.cur.queries), 2)
+        self.assertEqual(self._connection.cur.queries[0], 'SELECT id, title, articleincount FROM articles WHERE title=a link;')
+        self.assertEqual(self._connection.cur.queries[1], 'SELECT target_article_name FROM redirects WHERE source_article_name=a link;')
 
-class MockMongoDB():
-    def __init__(self, articles, redirects, meanings):
-        self.articles = articles
-        self.redirects = redirects
-        self.meanings = meanings
-
-class MockMongoClient():
-    def __init__(self, databases={}):
-        self.start_request_called = 0
-        self.end_request_called = 0
-        self._databases = databases
-
-    def start_request(self):
-        self.start_request_called += 1
-
-    def end_request(self):
-        self.end_request_called += 1
-
-    def __getitem__(self, k):
-        if k in self._databases:
-            return self._databases[k]
-        raise AttributeError
-
-class MockMongoTable():
+class MySQLMockCursor():
     def __init__(self):
-        self.update_called = 0
+        self.queries = []
+        self.return_vals = {}
+        self._last_query = None
 
-    def update(self, selector, update, upsert=False):
-        self.update_called += 1
+    def execute(self, *args):
+        query = args[0]
+        arguments = args[1]
+        if isinstance(arguments, basestring) or isinstance(arguments, int):
+            arguments = [arguments]
+        index = 0
+        while (query.find('%s') != -1):
+            query = query.replace('%s', str(arguments[index]), 1)
+            index += 1
+        self.queries.append(query)
+        self._last_query = query
+        return None
 
-    def find_one(self, selector):
-        return {
-            'id': 12345,
-            'title': selector['title']
-        }
+    def fetchone(self):
+        if self._last_query in self.return_vals:
+            return self.return_vals[self._last_query]
+        return None
+
+
+class MySQLMockConnection():
+    def __init__(self):
+        self.cur = MySQLMockCursor()
+        self.commit_called = 0
+
+    def cursor(self):
+        return self.cur
+
+    def commit(self):
+        self.commit_called += 1

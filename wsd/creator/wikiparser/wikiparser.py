@@ -11,7 +11,7 @@ Date: Jun 2013
 
 import nltk.data
 from nltk.tokenize import *
-from wsd.evaluation import WikiTermIdentifier
+import MySQLdb as mysqldb
 import re
 import pymongo
 import logging
@@ -153,7 +153,7 @@ class WikiParser():
                         link_counter += 1
                         cur.execute('INSERT INTO links(source_article_id, target_article_id, count) VALUES(%s, %s, %s);',
                             (article['id'], target_article['id'], link_count))
-                        cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_id)
+                        cur.execute('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article['id'])
                         #self._db.articles.update( { "title": target_article['title'].lower() }, { "$push": { "articles_link_here" : { "id": article['id'], "incount": link_count } } } )
 
                 # insert meanings
@@ -165,13 +165,14 @@ class WikiParser():
                     elif target_article['id'] != article['id']: # prevent self-links
                         meaning_counter += 1
                         cur.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
-                            (disambiguation[0].lower(), target_article_id))
+                            (disambiguation[0].lower(), target_article['id']))
                         #self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
                         #    { '$setOnInsert': { 'targets.%d' % target_article['id'] : { 'id': target_article['id'], 'title': target_article['title'].lower(), 'count': 0 } } }, upsert=True)
                         #self._db.meanings.update( { 'string': disambiguation[0].lower() }, 
                         #    { '$inc': { 'targets.%d.count' % target_article['id']: 1 } }, upsert=True)
 
-                logging.info('finished article %s, %d links and %d meanings updated' % (article['title'].encode('ascii', 'ignore'), link_counter, meaning_counter)
+                self._db_connection.commit()
+                logging.info('finished article %s, %d links and %d meanings updated' % (article['title'].encode('ascii', 'ignore'), link_counter, meaning_counter))
             except mysqldb.Error, e:
                 logging.error("Error in article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id']))
                 logging.error("Error %d: %s" % (e.args[0],e.args[1]))
@@ -179,10 +180,30 @@ class WikiParser():
     def __resolve_article(self, title):
         if title in self._article_cache:
             return self._article_cache[title]
-        article = self._db.articles.find_one( { "title": title } )
-        if article == None:
-            redirection_name = self._db.redirects.find_one( { "source" : title })
-            if redirection_name != None:
-                article = self._db.articles.find_one( { "title": redirection_name["target"] } )
+        article = None
+        cur = self._db_connection.cursor()
+        cur.execute('SELECT id, title, articleincount FROM articles WHERE title=%s;', (title))
+        sample = cur.fetchone()
+        if sample == None:
+            cur.execute('SELECT target_article_name FROM redirects WHERE source_article_name=%s;', (title))
+            redirect = cur.fetchone()
+            if redirect != None:
+                cur.execute('SELECT id, title, articleincount FROM articles WHERE title=%s;', (redirect[0]))
+                sample = cur.fetchone()
+        if sample != None:
+            article = {
+                'id': sample[0],
+                'title': sample[1],
+                'articleincount': sample[2]
+            }
+        self._article_cache[title] = article
+        if article != None and title != article['title']:
+            self._article_cache[article['title']] = article
+        return article
+        #article = self._db.articles.find_one( { "title": title } )
+        #if article == None:
+            #redirection_name = self._db.redirects.find_one( { "source" : title })
+            #if redirection_name != None:
+                #article = self._db.articles.find_one( { "title": redirection_name["target"] } )
         self._article_cache[title] = article
         return article

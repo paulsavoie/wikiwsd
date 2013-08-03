@@ -22,7 +22,6 @@ class MeaningFinderTest(unittest.TestCase):
         finder.find_meanings(terms)
 
         self.assertEqual(connector.retrieve_meanings_called, 1)
-        self.assertEqual(connector.get_article_by_title_called, 1)
         self.assertEqual(len(terms[0]['disambiguations']), 1)
         self.assertEqual(terms[0]['disambiguations'][0]['id'], 1)
         self.assertEqual(terms[0]['disambiguations'][0]['meaning'], 'meaning1')
@@ -47,7 +46,6 @@ class MeaningFinderTest(unittest.TestCase):
         finder.find_meanings(terms)
 
         self.assertEqual(connector.retrieve_meanings_called, 1)
-        self.assertEqual(connector.get_article_by_title_called, 1)
         self.assertEqual(len(terms[0]['disambiguations']), 0)
         self.assertEqual(len(terms[1]['disambiguations']), 1)
 
@@ -73,7 +71,6 @@ class MeaningFinderTest(unittest.TestCase):
         finder.find_meanings(terms)
 
         self.assertEqual(connector.retrieve_meanings_called, 1)
-        self.assertEqual(connector.get_article_by_title_called, 1)
         self.assertEqual(len(terms[0]['disambiguations']), 2)
         self.assertEqual(terms[0]['disambiguations'][0]['id'], 1)
         self.assertEqual(terms[0]['disambiguations'][0]['meaning'], 'meaning1')
@@ -83,43 +80,6 @@ class MeaningFinderTest(unittest.TestCase):
         self.assertEqual(terms[0]['disambiguations'][1]['meaning'], 'meaning2')
         self.assertEqual(terms[0]['disambiguations'][1]['articleincount'], 3)
         self.assertEqual(terms[0]['disambiguations'][1]['percentage'], 0.75)
-
-    def test_direct_title(self):
-        connector = MockDBConnector()
-        connector.meanings = {
-            'myNoun': [{
-                'occurrences': 1,
-                'name': 'meaning1',
-                'id': 1,
-                'articleincount': 2
-            }]
-        }
-        connector.articles = {
-            'myNoun': {
-                'id': 2,
-                'articleincount': 3,
-                'title': 'myNoun'
-            }
-        }
-        terms = [
-            { 'token': 'myNoun', 'isNoun': True, 'disambiguations': [] }
-        ]
-        finder = MeaningFinder(connector)
-        finder.find_meanings(terms)
-
-        # TODO: percentage is not correctly tested in this example
-
-        self.assertEqual(connector.retrieve_meanings_called, 1)
-        self.assertEqual(connector.get_article_by_title_called, 1)
-        self.assertEqual(len(terms[0]['disambiguations']), 2)
-        self.assertEqual(terms[0]['disambiguations'][0]['id'], 1)
-        self.assertEqual(terms[0]['disambiguations'][0]['meaning'], 'meaning1')
-        self.assertEqual(terms[0]['disambiguations'][0]['articleincount'], 2)
-        self.assertEqual(terms[0]['disambiguations'][0]['percentage'], 1.0)
-        self.assertEqual(terms[0]['disambiguations'][1]['id'], 2)
-        self.assertEqual(terms[0]['disambiguations'][1]['meaning'], 'myNoun')
-        self.assertEqual(terms[0]['disambiguations'][1]['articleincount'], 3)
-        self.assertEqual(terms[0]['disambiguations'][1]['percentage'], 1.0)
 
     def test_multiple_terms(self):
         connector = MockDBConnector()
@@ -139,7 +99,6 @@ class MeaningFinderTest(unittest.TestCase):
         finder.find_meanings(terms)
 
         self.assertEqual(connector.retrieve_meanings_called, 2)
-        self.assertEqual(connector.get_article_by_title_called, 2)
         self.assertEqual(len(terms[0]['disambiguations']), 1)
         self.assertEqual(len(terms[1]['disambiguations']), 0)
 
@@ -161,7 +120,6 @@ class MeaningFinderTest(unittest.TestCase):
         finder.find_meanings(terms)
 
         self.assertEqual(connector.retrieve_meanings_called, 1)
-        self.assertEqual(connector.get_article_by_title_called, 1)
         self.assertEqual(len(terms[0]['disambiguations']), 1)
         self.assertEqual(len(terms[1]['disambiguations']), 1)
 
