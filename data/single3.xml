@@ -1,0 +1,652 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.8/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.8/ http://www.mediawiki.org/xml/export-0.8.xsd" version="0.8" xml:lang="en">
+  <siteinfo>
+    <sitename>Wikipedia</sitename>
+    <base>http://en.wikipedia.org/wiki/Main_Page</base>
+    <generator>MediaWiki 1.21wmf6</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">Wikipedia</namespace>
+      <namespace key="5" case="first-letter">Wikipedia talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+      <namespace key="100" case="first-letter">Portal</namespace>
+      <namespace key="101" case="first-letter">Portal talk</namespace>
+      <namespace key="108" case="first-letter">Book</namespace>
+      <namespace key="109" case="first-letter">Book talk</namespace>
+      <namespace key="446" case="first-letter">Education Program</namespace>
+      <namespace key="447" case="first-letter">Education Program talk</namespace>
+      <namespace key="710" case="first-letter">TimedText</namespace>
+      <namespace key="711" case="first-letter">TimedText talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Angola</title>
+    <ns>0</ns>
+    <id>701</id>
+    <revision>
+      <id>530880524</id>
+      <parentid>530874641</parentid>
+      <timestamp>2013-01-02T07:09:48Z</timestamp>
+      <contributor>
+        <username>Chrisrus</username>
+        <id>4635357</id>
+      </contributor>
+      <comment>/* Religion */ wtf?</comment>
+      <text xml:space="preserve">{{other uses}}
+{{pp-move-indef}}
+{{Use dmy dates|date=July 2012}}
+{{Infobox country
+|conventional_long_name = Republic of Angola
+|native_name = &lt;!--
+ --&gt;&lt;hr/&gt;&lt;div style=&quot;padding:0.2em 0 0.1em;line-height:1.0em;&quot;&gt;''República de Angola''&lt;br/&gt;{{resize|75%|{{nobold|([[Portuguese language|Portuguese]])}}}}&lt;/div&gt;&lt;!--
+ --&gt;&lt;hr/&gt;&lt;div style=&quot;padding-top:0.1em;line-height:1.0em;&quot;&gt;''Repubilika ya Ngola''&lt;br/&gt;{{resize|75%|{{nobold|([[Kongo language|Kikongo]]{{\}}[[North Mbundu language|Kimbundu]]{{\}}[[South Mbundu language|Umbundu]])}}}}&lt;/div&gt;
+|common_name = Angola
+|image_flag = &lt;!---DO NOT ADD the proposed flag; you WILL be reverted and warned!---&gt; Flag of Angola.svg
+|image_coat = Coat of arms of Angola.svg
+|symbol_type = Insignia
+|national_motto = |national_anthem = {{unbulleted list |{{native phrase|pt|[[Angola Avante|Angola Avante!]]}} |{{small|Forward Angola!}}}}
+|image_map = Angola (orthographic projection).svg
+|capital = [[Luanda]]
+|latd=8 |latm=50 |latNS=S |longd=13 |longm=20 |longEW=E
+|largest_city = capital
+|official_languages = [[Portuguese language|Portuguese]]
+|national_languages = {{unbulleted list |[[Kongo language|Kikongo]] |[[Chokwe language|Chokwe]] |[[South Mbundu language|Umbundu]] |[[North Mbundu language|Kimbundu]] |[[Ganguela language|Ganguela]] |[[Kwanyama dialect|Kwanyama]] }}
+|regional_languages = |languages_type = |languages = 
+|ethnic_groups = {{unbulleted list |36% [[Ovimbundu]] |25% [[Northern Mbundu people|Ambundu]] |13% [[Bakongo]] |22% other African |2% [[Mestico|Mestiço]] |1% [[Chinese people|Chinese]] |1% [[Europe]]an}}
+|ethnic_groups_year = 2000
+|demonym = Angolan
+|government_type = [[Unitary state|Unitary]] [[Presidential system|presidential]] [[republic]]
+|leader_title1 = [[President of Angola|President]]
+|leader_name1 = {{nowrap|[[José Eduardo dos Santos]]}}
+|leader_title2 = [[Vice President of Angola|Vice President]]
+|leader_name2 = [[Manuel Vicente]]
+|legislature = [[National Assembly (Angola)|National Assembly]]
+|sovereignty_type = [[Angolan War of Independence|Independence]]
+|established_event1 = from [[Portugal]]
+|established_date1 = 11 November 1975
+|area_rank = 23rd
+|area_magnitude = 1 E12
+|area_km2 = 1246700
+|area_sq_mi = 481354
+|percent_water = negligible
+|population_estimate = 18,498,000&lt;ref name=&quot;unpop&quot;/&gt;&lt;ref&gt;[http://www.google.com/publicdata/explore?ds=n4ff2muj8bh2a_&amp;ctype=l&amp;strail=false&amp;nselm=h&amp;met_y=POP&amp;hl=en&amp;dl=en#ctype=l&amp;strail=false&amp;nselm=h&amp;met_y=POP&amp;fdim_y=scenario:1&amp;scale_y=lin&amp;ind_y=false&amp;rdim=world&amp;idim=country:AO&amp;hl=en&amp;dl=en Population Forecast to 2060 by International Futures hosted by Google Public Data Explorer]&lt;/ref&gt;
+|population_estimate_rank = 
+|population_estimate_year = 2009
+|population_census = 
+|population_census_year = 
+|population_density_km2 = 14.8
+|population_density_sq_mi = 38.4
+|population_density_rank = 199th
+|GDP_PPP = $115.679 billion&lt;ref name=imf2&gt;{{cite web |url=http://www.imf.org/external/pubs/ft/weo/2012/01/weodata/weorept.aspx?sy=2009&amp;ey=2012&amp;scsm=1&amp;ssd=1&amp;sort=country&amp;ds=.&amp;br=1&amp;c=614&amp;s=NGDPD%2CNGDPDPC%2CPPPGDP%2CPPPPC%2CLP&amp;grp=0&amp;a=&amp;pr.x=53&amp;pr.y=7 |title=Angola |publisher=International Monetary Fund |accessdate=17 April 2012}}&lt;/ref&gt;
+|GDP_PPP_rank = 64th
+|GDP_PPP_year = 2011
+|GDP_PPP_per_capita = $5,894&lt;ref name=imf2/&gt;
+|GDP_PPP_per_capita_rank = 107th
+|GDP_nominal = $100.948 billion&lt;ref name=imf2/&gt;
+|GDP_nominal_rank = 61st
+|GDP_nominal_year = 2011
+|GDP_nominal_per_capita = $5,144&lt;ref name=imf2/&gt;
+|GDP_nominal_per_capita_rank = 91st
+|Gini = 59&lt;ref name=&quot;wb-gini&quot;&gt;{{cite web |url=http://data.worldbank.org/indicator/SI.POV.GINI/ |title=Gini Index |publisher=World Bank |accessdate=2 March 2011}}&lt;/ref&gt;
+|Gini_rank = 
+|Gini_year = 2000
+|Gini_category = &lt;span style=&quot;color:#e0584e;white-space:nowrap;&quot;&gt;high&lt;/span&gt;
+|HDI = {{nowrap|{{increase}} 0.486}}
+|HDI_rank = 148th
+|HDI_year = 2011
+|HDI_category = &lt;span style=&quot;color:#e0584e;white-space:nowrap;&quot;&gt;low&lt;/span&gt;
+|currency = [[Angolan kwanza|Kwanza]]
+|currency_code = AOA
+|time_zone = [[West Africa Time|WAT]]
+|utc_offset = +1
+|time_zone_DST = not observed
+|utc_offset_DST = +1
+|drives_on = right
+|cctld = [[.ao]]
+|iso3166code =
+|calling_code = [[+244]]
+|footnote_a = &lt;!--Orphaned: [[Kongo language|Kikongo]], [[Kimbundu]] and [[Umbundu]] languages.--&gt;
+}}
+
+'''Angola''', officially the '''Republic of Angola''' ({{lang-pt|República de Angola}}, {{IPA-pt|ʁɨˈpublikɐ dɨ ɐ̃ˈɡɔla|pron}};&lt;ref&gt;This is the pronunciation in Portugal; in Angola it is pronounced as it is written&lt;/ref&gt; [[Kikongo]], [[Kimbundu]], [[Umbundu]]: ''Repubilika ya Ngola''), is a country in [[Southern Africa]] bordered by [[Namibia]] on the south, the [[Democratic Republic of the Congo]] on the north, and [[Zambia]] on the east; its west coast is on the [[Atlantic Ocean]] with [[Luanda]] as its capital city. The [[Enclave and exclave|exclave]] province of [[Cabinda Province|Cabinda]] has borders with the [[Republic of the Congo]] and the Democratic Republic of the Congo.
+
+The Portuguese were present in some—mostly coastal—points of the territory of what is now Angola, from the 16th to the 19th century, interacting in diverse ways with the peoples that lived there. In the 19th century they slowly and hesitantly began to establish themselves in the interior. Angola as a [[Portuguese West Africa|Portuguese colony]] encompassing the present territory was not established before the end of the 19th century, and &quot;effective occupation&quot;, as required by the [[Berlin Conference (1884)]] was achieved only by the 1920s. Independence was achieved in 1975, after a protracted liberation war. After independence, Angola was the scene of an intense [[Angolan Civil War|civil war from 1975 to 2002]]. The country has vast mineral and petroleum reserves, and its economy has on average grown at a two-digit pace since the 1990s, especially since the end of the civil war. In spite of this, standards of living remain low for the majority of the population, and [[life expectancy]] and [[infant mortality|infant mortality rates]] in Angola are among the worst-ranked in the world.&lt;ref&gt;{{en icon}} [https://www.cia.gov/library/publications/the-world-factbook/rankorder/2102rank.html Life expectancy at birth] www.cia.gov (2009)&lt;/ref&gt; Angola is considered to be economically disparate, with the majority of the nation's wealth concentrated in a disproportionately small sector of the population. 
+
+Angola is a member state of the [[African Union]], the [[Community of Portuguese Language Countries]], the [[Latin Union]] and the [[Southern African Development Community]].
+
+==Etymology==&lt;!--linked--&gt;
+The name &quot;Angola&quot; comes from the [[Portuguese language|Portuguese]] colonial name ''[[Angola (Portugal)|Reino de Angola]]'', appearing as early as [[Dias de Novais]]'s 1571 charter.&lt;ref&gt;Heywood, Linda M. &amp; Thornton, John K. ''[http://books.google.com.hk/books?id=S42CypbRTlQC&amp;pg=PA82 Central Africans, Atlantic Creoles, and the foundation of the Americas, 1585–1660],'' p. 82. Cambridge University Press, 2007.&lt;/ref&gt; The [[toponym]] was derived by the Portuguese from the title ''[[List of Ngolas of Ndongo|ngola]]'' held by the kings of [[Kingdom of Ndongo|Ndongo]]. Ndongo was a kingdom in the highlands between the [[Kwanza River|Kwanza]] and [[Lukala River]]s nominally tributary to the [[Kingdom of Kongo|king of Kongo]] but which was seeking greater independence during the 16th century.
+
+== History ==
+{{Main|History of Angola}}
+
+=== Early migrations and political units ===
+[[Khoisan]] [[hunter-gatherer]]s are the earliest known modern human inhabitants of the area. They were largely absorbed and/or replaced by [[Bantu peoples]] during the [[Bantu expansion|Bantu migrations]], though small numbers remain in parts of southern Angola to the present day. The Bantu came from the north, probably from somewhere near the present-day [[Cameroon|Republic of Cameroon]]. When they reached what is now Angola, they encountered the Khoisan, Bushmen and other groups considerably less technologically advanced than themselves, whom they easily dominated with their superior knowledge of metal-working, ceramics and agriculture. The establishment of the Bantu took many centuries and gave rise to various groups who took on different ethnic characteristics.
+
+During this period of time, the Bantu established a number of political units (&quot;kingdoms&quot;, &quot;empires&quot;) in most parts of what today is Angola. The best known of these is the [[Kingdom of the Kongo]] that had its centre in the northwest of contemporary Angola, but included important regions in the west of present day [[Democratic Republic of the Congo]] and [[Republic of Congo]] as well as in southern [[Gabon]]. It established trade routes with other trading cities and civilizations up and down the coast of southwestern and West Africa and even with the [[Great Zimbabwe]] [[Mutapa Empire]], but engaged in little or no transoceanic trade.&lt;ref name=&quot;The Story of Africa&quot;&gt;{{cite web|url=http://www.bbc.co.uk/worldservice/specials/1624_story_of_africa/page45.shtml |title=The Story of Africa |publisher=BBC |accessdate=27 June 2010}}&lt;/ref&gt;
+
+=== Portuguese presence on the coast ===
+[[File:Bay of Luanda.jpg|thumb|left|280px|View from [[Ilha de Luanda]] to the bay of Luanda, Angola's capital city and economic and commercial hub, 2008.]]
+{{Main|Colonial history of Angola|Angola (Portugal)}}
+
+The geographical areas now designated as Angola entered into contact with the Portuguese in the late 15th century, concretely in 1483, when Portugal established relations with the [[Kingdom of Kongo|Kongo]] State, which stretched from modern [[Gabon]] in the north to the [[Kwanza River]] in the south. In this context, they established a small trade post at the port of Mpinda, in [[Soyo]]. The [[Portugal|Portuguese]] explorer [[Paulo Dias de Novais]] founded [[Luanda]] in 1575 as &quot;São Paulo de Loanda&quot;, with a hundred families of settlers and four hundred soldiers. [[Benguela]], a Portuguese fort from 1587 which became a town in 1617, was another important early settlement they founded and ruled. The Portuguese would establish several settlements, forts and trading posts along the coastal strip of current-day Angola, which relied on [[Slavery in Angola|slave trade]], commerce in raw materials, and exchange of goods for survival. The [[African slave trade]] provided a large number of black slaves to Europeans and their African agents. For example, in what is now Angola, the [[Imbangala]] economy was heavily focused on the slave trade.&lt;ref name=&quot;a&quot;&gt;{{cite book|last=Boahen|first=Adu Boahen|title=Topics In West African History|page=110|isbn=0-582-64502-6}}&lt;/ref&gt;&lt;ref name=b&gt;{{cite web|author=Kwaku Person-Lynn|url=http://www.africawithin.com/kwaku/afrikan_involvement.htm|title=Afrikan Involvement In Atlantic Slave Trade|accessdate=25 November 2007|archiveurl = http://web.archive.org/web/20071214124402/http%3A//www.africawithin.com/kwaku/afrikan_involvement.htm |archivedate = 14 December 2007|deadurl=yes}}&lt;/ref&gt;
+[[File:Queen Nzinga 1657.png|thumb|[[Queen Nzinga]] in peace negotiations with the Portuguese governor in [[Luanda]], 1657.]]
+European traders would export manufactured goods to the coast of Africa where they would be exchanged for slaves. Within the [[Portuguese Empire]], most black African slaves were traded to Portuguese merchants who bought them to sell as cheap labour for use on Brazilian agricultural plantations. This trade would last until the first half of the 19th century. According to John Iliffe, &quot;Portuguese records of Angola from the 16th century show that a great [[famine]] occurred on average every seventy years; accompanied by epidemic disease, it might kill one-third or one-half of the population, destroying the demographic growth of a generation and forcing colonists back into the river valleys&quot;.&lt;ref&gt;John Iliffe (2007) [http://books.google.com/books?id=bNGN2URP_rUC&amp;pg=&amp;dq&amp;hl=en#v=onepage&amp;q=&amp;f=false ''Africans: the history of a continent'']. Cambridge University Press. p.68. ISBN 0-521-68297-5&lt;/ref&gt;
+
+The Portuguese gradually took control of the coastal strip during the 16th century by a series of treaties and wars, forming the Portuguese colony of Angola. Taking advantage of the [[Portuguese Restoration War]], the Dutch occupied Luanda from 1641 to 1648, where they allied with local peoples, consolidating their colonial rule against the remaining Portuguese resistance. In 1648, a fleet under the command of [[Salvador de Sá]] retook Luanda for Portugal and initiated a conquest of the lost territories, which restored Portugal to its former possessions by 1650. Treaties regulated relations with [[Kingdom of Kongo|Kongo]] in 1649 and Njinga's Kingdom of [[Matamba]] and [[Ndongo]] in 1656. The conquest of [[Pungo Andongo]] in 1671 was the last major Portuguese expansion from Luanda outwards, as attempts to invade Kongo in 1670 and Matamba in 1681 failed. Portugal also expanded its territory behind the colony of Benguela to some extent, but until the 19th century the inroads from Luanda and Benguela were very limited, and Portugal had neither the intention nor the means to carry out a large scale territorial occupation and colonization.
+
+=== Delimitation and occupation of Angola ===
+[[File:Embarque tropas para angola 1.jpg|thumb|Portuguese troops heading for Angola, during [[German campaign in Angola|World War I]].]]
+The process resulted in few gains until the 1880s. Development of the hinterland began after the [[Berlin Conference]] in 1885 fixed the colony's borders, and British and Portuguese investment fostered mining, railways, and agriculture based on various forced labour systems. Full Portuguese administrative control of the hinterland did not occur until the beginning of the 20th century. In 1951, the colony was designated as an overseas province, called [[Overseas Province of Angola]]. Portugal had a presence in Angola for nearly five hundred years, and the population's initial reaction to calls for independence was scarce. More overtly political organisations first appeared in the 1950s and began to make organised demands for self-determination, especially in international forums such as the [[Non-Aligned Movement]].
+
+The [[Estado Novo (Portugal)|Portuguese regime]], meanwhile, refused to accede to the demands for [[independence]], provoking an armed conflict that started in 1961 when black guerrillas attacked both white and black civilians in cross-border operations in northeastern Angola. The war came to be known as the [[Portuguese Colonial War|Colonial War]]. In this struggle, the principal protagonists were the MPLA ([[Popular Movement for the Liberation of Angola]]), founded in 1956, the FNLA ([[National Front for the Liberation of Angola]]), which appeared in 1961, and UNITA ([[National Union for the Total Independence of Angola]]), founded in 1966. After many years of conflict that lead to the weakening of all the insurgent parties, Angola gained its independence on 11 November 1975, after the [[Carnation Revolution|1974 coup d'état]] in Lisbon, Portugal, which overthrew the Portuguese regime headed by [[Marcelo Caetano]].
+
+Portugal's [[Movimento das Forças Armadas|new revolutionary leaders]] began in 1974 a process of political change at home and accepted its former colonies' independence abroad. In Angola, a fight for the conquest of power broke out immediately between the three nationalist movements. The events prompted a mass exodus of Portuguese citizens, creating up to 300 000 destitute Portuguese [[refugee]]s—the ''[[White African#Portuguese in Africa|retornados]]''.&lt;ref&gt;[http://www.time.com/time/magazine/article/0,9171,913229-1,00.html Dismantling the Portuguese Empire], [[Time Magazine]] (Monday, 7 July 1975)&lt;/ref&gt;
+The new Portuguese government tried to mediate an understanding between the three competing movements, and succeeded in agreeing, on paper, to form a common government, but in the end none of them respected the commitments made, and the issue was resolved by military force.
+
+=== Independence and civil war ===
+{{Main|Angolan War of Independence|Angolan Civil War}}
+{{Further|1980s in Angola|1990s in Angola}}
+After independence in November 1975, Angola faced a devastating [[Angolan Civil War|civil war]] which lasted several decades and claimed millions of lives and produced many [[refugee]]s.&lt;ref name=&quot;Norrie MacQueen&quot;&gt;[http://links.jstor.org/sici?sici=0001-9909(199804)97%3A387%3C276%3ATDOPAM%3E2.0.CO%3B2-C The Decolonization of Portuguese Africa: Metropolitan Revolution and the Dissolution of Empire by Norrie MacQueen – Mozambique since Independence: Confronting Leviathan by Margaret Hall, Tom Young – Author of Review: Stuart A. Notholt African Affairs, Vol. 97, No. 387 (Apr., 1998), pp. 276–278], [[JSTOR]]&lt;/ref&gt; Following [[Alvor Agreement|negotiations held in Portugal]], itself under severe social and political turmoil and uncertainty due to the [[Carnation Revolution|April 1974 revolution]], Angola's three main guerrilla groups agreed to establish a transitional government in January 1975.
+
+Within two months, however, the [[FNLA]], [[MPLA]] and [[UNITA]] were fighting each other and the country was well on its way to being divided into zones controlled by rival armed political groups. The superpowers were quickly drawn into the conflict, which became a flash point for the [[Cold War]]. The [[United States]], [[Zaire]] (today's [[Democratic Republic of the Congo|DRC]]) and [[South Africa]] supported the FNLA and UNITA.&lt;ref&gt;{{cite web|url=http://www.informationclearinghouse.info/article4068.htm |title=Americas Third World War: How 6 million People Were killed in CIA secret wars against third world countries |publisher=Informationclearinghouse.info |date=16 November 1981 |accessdate=27 June 2010| archiveurl= http://web.archive.org/web/20100629015838/http://www.informationclearinghouse.info/article4068.htm| archivedate= 29 June 2010 &lt;!--DASHBot--&gt;| deadurl= no}}&lt;/ref&gt;&lt;ref&gt;{{cite web|url=http://www.youtube.com/watch?v=c35COXObeo8 |title=CIA &amp; Angolan Revolution 1975 Part 1 |publisher=YouTube |accessdate=27 June 2010}}&lt;/ref&gt; The [[Soviet Union]] and [[Cuba]] supported the MPLA.
+
+In the beginning of the Civil War, most of the half million Portuguese that lived in Angola and accounted for the majority of the skilled work in the public administration, agriculture, industries and trade fled the country leaving its once prosperous and growing economy to a state of bankruptcy.&lt;ref&gt;{{cite news|url=http://www.economist.com/node/12079340?story_id=12079340 |title= The Economist: Flight from Angola | date=16 August 1975}}&lt;/ref&gt;
+
+During most of this period, 1975–1990, the MPLA organised and maintained a socialist regime. Despite the ongoing civil war, the model functioned to a certain degree, although it was foreseeable that it would eventually fail in face of UNITA opposition.&lt;ref&gt;M.R. Bhagavan, ''Angola's Political Economy 1975–1985'', Uppsala: Nordiska Afrikainstitutet, 1986.&lt;/ref&gt;
+
+=== Ceasefire with UNITA ===
+{{Main|2000s in Angola}}
+On 22 March 2002, after the MPLA regime came to terms with the USA, [[Jonas Savimbi]], the leader of [[UNITA]], was killed in combat with government troops. A cease-fire was reached by the two factions shortly afterwards.&lt;ref&gt;{{cite web |url= https://www.cia.gov/library/publications/the-world-factbook/geos/ao.html|title= Introduction:Angola|author= |date= |work= |publisher= |accessdate=1 June 2012}}&lt;/ref&gt; UNITA gave up its armed wing and assumed the role of major opposition party, although in the knowledge that in the present regime a legitimate democratic election is impossible. Although the political situation of the country began to stabilize, President Dos Santos has so far refused to institute regular democratic processes, UNITA head officials being given senior positions in top level companies. Among Angola's major problems are a serious humanitarian crisis (a result of the prolonged war), the abundance of [[minefield]]s, the continuation of the political, and to a much lesser degree, military activities in favour of the independence of the northern [[exclave]] of [[Cabinda (province)|Cabinda]], carried out in the context of the protracted [[Cabinda Conflict]] by the [[Frente para a Libertação do Enclave de Cabinda]], but most of all, the dilapidation of the country's rich mineral resources by the regime. While most of the internally displaced have now settled around the capital, in the so-called &quot;Musseques&quot;, the general situation for Angolans remains desperate.&lt;ref&gt;Lari (2004), Human Rights Watch (2005)&lt;/ref&gt;
+
+== Politics ==
+[[File:Embassy of Angola (Washington, D.C.).JPG|thumb|Embassy of Angola in Washington, D.C.]]
+{{Main|Politics of Angola}}
+{{See also|List of political parties in Angola||Foreign relations of Angola|List of diplomatic missions of Angola}}
+
+Angola's motto is ''Virtus Unita Fortior'', a [[Latin]] phrase meaning &quot;Virtue is stronger when united&quot;. The executive branch of the government is composed of the President, the Vice-Presidents and the Council of Ministers. For decades, political power has been concentrated in the Presidency.
+
+Governors of the 18 provinces are appointed by the president. The Constitutional Law of 1992 establishes the broad outlines of government structure and delineates the rights and duties of citizens. The legal system is based on Portuguese and customary law but is weak and fragmented, and courts operate in only 12 of more than 140 municipalities. A Supreme Court serves as the appellate tribunal; a Constitutional Court with powers of judicial review has not been constituted until 2010, despite statutory authorization.
+
+After the end of the Civil War the regime came under pressure from within as well as from the international environment, to become more democratic and less authoritarian. Its reaction was to operate a number of changes without substantially changing its character.&lt;ref&gt;See Didier Péclard (ed.), ''L'Angola dans la paix: Autoritarisme et reconversions'', special issue of ''Politique africains'' (Paris), 110, 2008.&lt;/ref&gt;
+
+[[Angolan legislative election, 2008|Parliamentary elections]] held on 5 September 2008, announced MPLA as the winning party with 81% of votes. The closest opposition party was UNITA with 10%. These elections were the first since 1992 and were described as only partly free but certainly not as fair.&lt;ref&gt;{{cite web|author=Anton Bösl |url=http://www.kas.de/proj/home/pub/8/2/year-2008/dokument_id-15323/index.html |title=Angola´s Parliamentary Elections in 2008, Publications, Namibia Office, Konrad-Adenauer-Stiftung e.V |publisher=Kas.de |date=26 February 2009 |accessdate=27 June 2010}}&lt;/ref&gt; A White Book on the elections in 2008 lists all irregularities surrounding the Parliamentary elections of 2008.&lt;ref&gt;{{cite web|url=http://www.kas.de/proj/home/pub/8/2/year-2009/dokument_id-17396/index.html |title=Angola – White Book on the 2009 elections, Publications, Namibia Office, Konrad-Adenauer-Stiftung e.V |publisher=Kas.de |date=16 September 2009 |accessdate=27 June 2010}}&lt;/ref&gt;
+
+Angola scored poorly on the 2008 [[Ibrahim Index of African Governance]]. It was ranked 44 from 48 [[sub-Saharan Africa]]n countries, scoring particularly badly in the areas of Participation and Human Rights, Sustainable Economic Opportunity and Human Development. The Ibrahim Index uses a number of different variables to compile its list which reflects the state of governance in Africa.&lt;ref&gt;{{cite web|url=http://www.moibrahimfoundation.org/ |title=Mo Ibrahim Foundation |publisher=Mo Ibrahim Foundation |accessdate=27 June 2010| archiveurl= http://web.archive.org/web/20100722010615/http://www.moibrahimfoundation.org/| archivedate= 22 July 2010 &lt;!--DASHBot--&gt;| deadurl= no}}&lt;/ref&gt;
+
+The new constitution, adopted in 2010, further sharpened the authoritarian character of the regime. In the future, there will be no presidential elections: the president and the vice-president of the political party which comes out strongest in the parliamentary elections become automatically president and vice-president of Angola.&lt;ref&gt;In this manner, [[José Eduardo dos Santos]] is now finally in a legal situation. As he had obtained a relative, but not the absolute majority of votes in the 1992 presidential election, a second round—opposing him to [[Jonas Savimbi]]—was constitutionally necessary to make his election effective, but he preferred never to hold this second round.&lt;/ref&gt; Through a variety of mechanisms, the state president controls all the other organs of the state, so that the principle of the division of power is not maintained. As a consequence, Angola has no longer a presidential system, in the sense of the systems existing e.g. in the USA or in France. In terms of the classifications used in constitutional law, its regime falls now in the same category as the &quot;caesarist&quot; monarchy of [[Napoléon Bonaparte]] in France, [[António de Oliveira Salazar]]'s &quot;corporatist&quot; system established by the Portuguese constitution of 1933, the Brazilian military dictatorship based on the constitution of 1967/69, or several authoritarian regimes in contemporary Africa.&lt;ref&gt;See Jorge Miranda, ''A Constituição de Angola de 2010'', published in the academic journal ''O Direito'' (Lisbon), vol. 142, 2010 – 1 (June).&lt;/ref&gt;
+
+== Military ==
+[[File:Tazua.jpg|thumb|250px|Tazua Falls, Rio Cuango. One of Angola's richest sources of gem [[diamonds]].]]
+{{Main|Angolan Armed Forces}}
+The Angolan Armed Forces (AAF) is headed by a Chief of Staff who reports to the Minister of Defense. There are three divisions—the Army (Exército), Navy (Marinha de Guerra, MGA), and [[National Air Force of Angola|National Air Force]] (Força Aérea Nacional, FAN). Total manpower is about 110,000.{{citation needed|date=September 2012}} Its equipment includes [[Russia]]n-manufactured fighters, bombers, and transport planes. There are also Brazilian-made EMB-312 Tucano for training role, Czech-made L-39 for training and bombing role, Czech Zlin for training role and a variety of western made aircraft such as C-212\Aviocar, Sud Aviation Alouette III, etc. A small number of AAF personnel are stationed in the [[Democratic Republic of the Congo]] (Kinshasa) and the [[Republic of the Congo]] (Brazzaville).
+
+== Police ==
+The National Police departments are: Public Order, Criminal Investigation, Traffic and Transport, Investigation and Inspection of Economic Activities, Taxation and Frontier Supervision, Riot Police and the Rapid Intervention Police. The National Police are in the process of standing up an air wing, which will provide helicopter support for police operations. The National Police are also developing their criminal investigation and forensic capabilities. The National Police has an estimated 6,000 patrol officers, 2,500 Taxation and Frontier Supervision officers, 182 criminal investigators and 100 financial crimes detectives and around 90 Economic Activity Inspectors.{{citation needed|date=September 2012}}
+
+The National Police have implemented a modernization and development plan to increase the capabilities and efficiency of the total force. In addition to administrative reorganization; modernization projects include procurement of new vehicles, aircraft and equipment, construction of new police stations and forensic laboratories, restructured training programs and the replacement of AKM rifles with 9&amp;nbsp;mm UZIs for police officers in urban areas.
+
+== Administrative divisions ==
+[[File:Angola Provinces numbered 300px.png|thumb|Map of Angola with the provinces numbered]]
+{{Main|Provinces of Angola|Municipalities of Angola|Communes of Angola}}
+Angola is divided into [[Provinces of Angola|eighteen provinces]] (''províncias'') and [[Municipalities of Angola|163 municipalities]].&lt;ref&gt;{{cite web|url=http://www.angola.org.uk/facts_government.htm|title=Virtual Angola Facts and Statistics|accessdate=30 October 2007|archiveurl = http://web.archive.org/web/20071011135238/http%3A//www.angola.org.uk/facts_government.htm |archivedate = 11 October 2007|deadurl=yes}}&lt;/ref&gt; The provinces are:
+&lt;table&gt;&lt;td&gt;&lt;ol&gt;
+&lt;li&gt;[[Bengo (province)|Bengo]]&lt;/li&gt;
+&lt;li&gt;[[Benguela Province|Benguela]]&lt;/li&gt;
+&lt;li&gt;[[Bié (province)|Bié]]&lt;/li&gt;
+&lt;li&gt;[[Cabinda (province)|Cabinda]]&lt;/li&gt;
+&lt;li&gt;[[Cuando Cubango]]&lt;/li&gt;
+&lt;li&gt;[[Cuanza Norte]]&lt;/li&gt;
+&lt;li&gt;[[Cuanza Sul]]&lt;/li&gt;
+&lt;li&gt;[[Cunene (province)|Cunene]]&lt;/li&gt;
+&lt;li&gt;[[Huambo Province|Huambo]]&lt;/li&gt;
+&lt;/ol&gt;&lt;/td&gt;&lt;td&gt;&lt;ol start=10&gt;
+&lt;li&gt;[[Huila Province|Huila]]&lt;/li&gt;
+&lt;li&gt;[[Luanda Province|Luanda]]&lt;/li&gt;
+&lt;li&gt;[[Lunda Norte]]&lt;/li&gt;
+&lt;li&gt;[[Lunda Sul]]&lt;/li&gt;
+&lt;li&gt;[[Malanje Province|Malanje]]&lt;/li&gt;
+&lt;li&gt;[[Moxico (province)|Moxico]]&lt;/li&gt;
+&lt;li&gt;[[Namibe Province|Namibe]]&lt;/li&gt;
+&lt;li&gt;[[Uíge Province|Uíge]]&lt;/li&gt;
+&lt;li&gt;[[Zaire Province|Zaire]]&lt;/li&gt;
+&lt;/ol&gt;&lt;/td&gt;&lt;/table&gt;
+
+=== Exclave of Cabinda ===
+{{Main|Cabinda (province)|l1=Cabinda|Republic of Cabinda}}
+With an area of approximately {{convert|7283|km2|sqmi}}, the Northern Angolan province of Cabinda is unique in being separated from the rest of the country by a strip, some {{convert|60|km}} wide, of the [[Democratic Republic of Congo]] (DRC) along the lower [[Congo river]]. Cabinda borders the [[Congo Republic]] to the north and north-northeast and the DRC to the east and south. The town of Cabinda is the chief population center.
+
+According to a 1995 census, Cabinda had an estimated population of 600,000, approximately 400,000 of whom live in neighboring countries. Population estimates are, however, highly unreliable. Consisting largely of tropical forest, Cabinda produces hardwoods, coffee, cocoa, crude rubber and palm oil. The product for which it is best known, however, is its oil, which has given it the nickname, &quot;the Kuwait of Africa&quot;. Cabinda's petroleum production from its considerable offshore reserves now accounts for more than half of Angola's output.&lt;ref&gt;{{cite web|title=Angola profile|url=http://www.bbc.co.uk/news/world-africa-13036732}}&lt;/ref&gt; Most of the oil along its coast was discovered under [[Portuguese Africa|Portuguese rule]] by the Cabinda Gulf Oil Company (CABGOC) from 1968 onwards.
+
+Ever since [[Portugal]] handed over sovereignty of its former overseas province of Angola to the local independence groups (MPLA, UNITA, and FNLA), the territory of Cabinda has been a focus of separatist guerrilla actions opposing the [[Government of Angola]] (which has employed its military forces, the FAA—Forças Armadas Angolanas) and Cabindan separatists. The Cabindan separatists, FLEC-FAC, announced a virtual Federal Republic of Cabinda under the Presidency of N'Zita Henriques Tiago. One of the characteristics of the Cabindan independence movement is its constant fragmentation, into smaller and smaller factions.
+
+== Transport ==
+[[File:Marginal of Luanda.JPG|thumb|250px|Avenida 4 de Fevereiro with the bay of Luanda.]]
+{{Main|Transport in Angola}}
+Transport in Angola consists of:
+* Three separate railway systems totalling 2,761&amp;nbsp;km (1,715&amp;nbsp;mi)
+* {{convert|76626|km|0|abbr=on}} of highway of which {{convert|19156|km|0|abbr=on}} is paved
+* 1,295 navigable inland waterways
+* Eight major [[sea port]]s
+* 243 airports, of which 32 are paved.
+
+Travel on highways outside of towns and cities in Angola (and in some cases within) is often not best advised for those without four-by-four vehicles. While a reasonable road infrastructure has existed within Angola, time and the war have taken their toll on the road surfaces, leaving many severely potholed, littered with broken asphalt. In many areas drivers have established alternate tracks to avoid the worst parts of the surface, although careful attention must be paid to the presence or absence of landmine warning markers by the side of the road. The Angolan government has contracted the restoration of many of the country's roads. The road between Lubango and Namibe, for example, was completed recently with funding from the European Union, and is comparable to many European main routes. Progress to complete the road infrastructure is likely to take some decades, but substantial efforts are already being made in the right directions.
+
+== Geography ==
+[[File:Beach of Coatinha in Benguela, Angola.jpg|thumb|220px|left|Coatinha beach in [[Benguela]], Angola]]
+[[File:Miradouro da Lua (Angola).jpg|thumb|220px|Miradouro da Lua (watchpoint of the moon), situated at the coast 40&amp;nbsp;kilometers south of Luanda, Angola]]
+{{Main|Geography of Angola}}
+
+At {{convert|481321|sqmi|km2}},&lt;ref&gt;[https://www.cia.gov/library/publications/the-world-factbook/rankorder/2147rank.html CIA – The World Factbook – Country Comparison :: Area]&lt;/ref&gt; Angola is the world's twenty-third largest country (after [[Niger]]). It is comparable in size to [[Mali]] and is nearly twice the size of the US state of Texas, or five times the area of the United Kingdom. It lies mostly between latitudes [[4th parallel south|4°]] and [[18th parallel south|18°S]], and longitudes [[12th meridian east|12°]] and [[24th meridian east|24°E]].
+
+Angola is bordered by [[Namibia]] to the south, [[Zambia]] to the east, the [[Democratic Republic of the Congo]] to the north-east, and the [[South Atlantic Ocean]] to the west. The [[exclave]] of [[Cabinda (province)|Cabinda]] also borders the [[Republic of the Congo]] to the north. Angola's capital, [[Luanda]], lies on the Atlantic coast in the northwest of the country.
+
+== Climate ==
+{{Main|Climate of Angola}}
+Angola's average temperature on the coast is {{convert|60|F|C}} in the winter and {{convert|70|F|C}} in the summer. It has two seasons; dry season (May to October) and hot rainy season (November to April).
+
+== Economy ==
+[[File:New housing development area.jpg|thumb|Recently finished new development area in Luanda Sul, 2009]]
+{{Main|Economy of Angola}}
+
+Angola has a rich subsoil heritage, from diamonds, oil, gold, copper, as well as a rich wildlife (dramatically impoverished during the civil war), forest, and fossils. Since independence, oil and diamonds have been the most important economic resource. Smallholder and plantation agriculture have dramatically dropped because of the [[Angolan Civil War]], but have begun to recover after 2002. The transformation industry that had come into existence in the late colonial period collapsed at independence, because of the exodus of most of the ethnic Portuguese population, but has begun to reemerge (with updated technologies), partly because of the influx of new Portuguese entrepreneurs. Similar developments can be verified in the service sector.
+
+Overall, Angola's economy has undergone a period of transformation in recent years, moving from the disarray caused by a quarter century of civil war to being the fastest growing economy in Africa and one of the fastest in the world, with an average GDP growth of 20 percent between 2005 and 2007.&lt;ref&gt;[http://www.mfw4a.org/angola/angola-financial-sector-profile.html]&lt;/ref&gt; In the period 2001–2010, Angola had the world's highest [[annual average GDP growth]], at 11.1 percent. In 2004, China's [[Eximbank]] approved a $2&amp;nbsp;billion line of credit to Angola. The loan is being used to rebuild Angola's infrastructure, and has also limited the influence of the [[International Monetary Fund]] in the country.&lt;ref&gt;{{cite web |url=http://www.pinr.com/report.php?ac=view_report&amp;report_id=460&amp;language_id=1 |title=The Increasing Importance of African Oil |work=Power and Interest Report |date=20 March 2006}}{{dead link|date=September 2010}}&lt;/ref&gt;
+
+The Economist reported in 2008 that diamonds and oil make up 60 percent of Angola's economy, almost all of the country's revenue and are its dominant exports.&lt;ref&gt;[[The Economist]]. 30 August 2008 edition. U.S. Edition. Page 46. Article on Angola, &quot;marches toward riches and democracy?&quot;.&lt;/ref&gt; Growth is almost entirely driven by rising [[Extraction of petroleum|oil production]] which surpassed {{convert|1.4|Moilbbl/d|m3/d}} in late 2005 and was expected to grow to {{convert|2|Moilbbl/d|m3/d}} by 2007. Control of the [[Petroleum industry|oil industry]] is consolidated in [[Sonangol Group]], a conglomerate which is owned by the Angolan government. In December 2006, Angola was admitted as a member of [[OPEC]].&lt;ref&gt;{{cite news|title=Angola: Country Admitted As Opec Member |url=http://allafrica.com/stories/200612140990.html |date=14 December 2006 |publisher=Angola Press Agency}}&lt;/ref&gt; The economy grew 18% in 2005, 26% in 2006 and 17.6% in 2007. However, due to the global recession the economy contracted an estimated −0.3% in 2009.&lt;ref&gt;https://www.cia.gov/library/publications/the-world-factbook/geos/ao.html retrieved 24 October 2010&lt;/ref&gt; The security brought about by the 2002 peace settlement has led to the resettlement of 4&amp;nbsp;million displaced persons, thus resulting in large-scale increases in agriculture production.
+
+[[File:Fornos de blocos Uige.JPG|thumb|250px|Ovens to produce clay block bricks in Angola]]
+Although the country's economy has developed very significantly since achieving political stability in 2002, mainly thanks to the fast-rising earnings of the oil sector, Angola faces huge social and economic problems. These are in part a result of the almost continual state of conflict from 1961 onwards, although the highest level of destruction and socio-economic damage took place after the 1975 independence, during the long years of [[Angolan civil war|civil war]]. However, high poverty rates and blatant social inequality are chiefly the outcome of a combination of a persistent political authoritarianism, of &quot;neo-patrimonial&quot; practices at all levels of the political, administrative, military, and economic apparatuses, and of [[Corruption in Angola|a pervasive corruption]].&lt;ref&gt;Anti-corruption watchdog [[Transparency International]] rates Angola one of the 10 most corrupt countries in the world.&lt;/ref&gt; The main beneficiary of this situation is a social segment constituted since 1975, but mainly during the last decades, around the political, administrative, economic, and military power holders, which has accumulated (and continues accumulating) enormous wealth.&lt;ref&gt;This process is well analyzed by authors like Christine Messiant, Tony Hodges and others. For an eloquent illustrating, see now the Angolan magazine ''Infra-Estruturas África'' 7/2010.&lt;/ref&gt; &quot;Secondary beneficiaries&quot; are the middle strata which are about to become social classes. However, overall almost half the population has to be considered as poor, but in this respect there are dramatic differences between the countryside and the cities (where by now slightly more than 50% of the people live). 
+[[File:Offshore platform on move to final destination, Ilha de Luanda.JPG|thumb|left|Offshore platform on move to final destination to the [[oilfield]]s off the Angola coast, June 2010]]
+An inquiry carried out in 2008 by the Angolan Instituto Nacional de Estatística has it that in the rural areas roughly 58% must be classified as &quot;poor&quot;, according to UN norms, but in the urban areas only 19%, while the overall rate is 37%.&lt;ref&gt;See ''Angola Exame'' of 12/11/2010, online http://www.exameangola.com/pt/?det=16943&amp;id=2000&amp;mid=.&lt;/ref&gt; In the cities, a majority of families, well beyond those officially classified as poor, have to adopt a variety of survival strategies.&lt;ref&gt;See Cristina Udelsmann Rodrigues, ''O Trabalho Dignifica o Homem: Estratégias de Sobrevivência em Luanda'', Lisbon: Colibri: 2006.&lt;/ref&gt; At the same time, in urban areas social inequality is most evident, and assumes extreme forms in the capital, Luanda.&lt;ref&gt;As an excellent illustration see ''Luanda: A vida na cidade dos extremos'', in: ''Visão'', 11 November 2010.&lt;/ref&gt; In the [[Human Development Index]] Angola constantly ranks in the bottom group.&lt;ref&gt;The HDI 2010 lists Angola in the 146th position among 169 countries—one position below that of Haiti. See [http://www.undp.org/publications/hdr2010/en/HDR_2010_EN_Table1.pdf ''Human Development Index and its components.'']&lt;/ref&gt;
+
+According to [[The Heritage Foundation]], a conservative American [[think tank]], oil production from Angola has increased so significantly that Angola now is China's biggest supplier of oil.&lt;ref&gt;{{cite web|last=Alt |first=Robert |url=http://www.heritage.org/research/africa/HL1006.CFM |title=Into Africa: China's Grab for Influence and Oil |publisher=Heritage.org |accessdate=27 June 2010}}&lt;/ref&gt; Growing oil revenues have also created opportunities for [[Corruption in Angola|corruption]]: according to a recent [[Human Rights Watch]] report, 32 billion US dollars disappeared from government accounts from 2007 to 2010.&lt;ref&gt;{{cite web |accessdate=22 December 2011 |url=http://www.hrw.org/news/2011/12/20/angola-explain-missing-government-funds |title=Angola: Explain Missing Government Funds |publisher=Human Rights Watch |date=20 December 2011}}&lt;/ref&gt;
+
+Before independence in 1975, [[Angola (Portugal)|Angola]] was a breadbasket of southern Africa and a major exporter of [[bananas]], [[coffee]] and [[sisal]], but [[Angolan Civil War|three decades of civil war]] (1975–2002) destroyed the fertile countryside, leaving it littered with landmines and driving millions into the cities. The country now depends on expensive food imports, mainly from South Africa and [[Portugal]], while more than 90 percent of farming is done at family and subsistence level. Thousands of Angolan small-scale farmers are trapped in poverty.&lt;ref&gt;Louise Redvers, [http://ipsnews.net/africa/nota.asp?idnews=47123 POVERTY-ANGOLA: Inter Press Service News Agency – NGOs Sceptical of Govt's Rural Development Plans] retrieved 6 June 2009&lt;/ref&gt;
+
+The enormous differences between the regions pose a serious structural problem in the Angolan economy. This is best illustrated by the fact that about one third of the economic activities is concentrated in Luanda and the neighbouring Bengo province, while several areas of the interior are characterized by stagnation and even regression.&lt;ref&gt;See Manuel Alves da Rocha, ''Desigualdades e assimetrias regionais em Angola: Os factores da competitividade territorial'', Luanda: Centro de Estudos e Investigação Científica da Universidade Católica de Angola, 2010.&lt;/ref&gt;
+
+One of the economic consequences of the social and regional disparities is a sharp increase in Angolan private investments abroad. The small fringe of Angolan society where most of the accumulation takes place seeks to spread its assets, for reasons of security and profit. For the time being, the biggest share of these investments is concentrated in Portugal where the [[Angolans in Portugal|Angolan presence]] (including that of the family of the state president) in banks as well as in the domais of energy, telecommunications, and mass media has become notable, as has the acquisition of vinyards and orchards as well as of touristic enterprises.&lt;ref&gt;See &quot;A força do kwanza&quot;, ''Visão'' (Lisbon), 993, 15 May 2012, pp. 50–54&lt;/ref&gt;
+
+== Demographics ==
+{{Main|Demographics of Angola}}
+[[File:Angola Map.jpg|thumb|250px|left|&lt;center&gt;Map of Angola&lt;/center&gt;]]
+Angola's population is estimated to be 18,498,000 (2009).&lt;ref name=unpop&gt;{{cite journal | url=http://www.un.org/esa/population/publications/wpp2008/wpp2008_text_tables.pdf | title=World Population Prospects, Table A.1| version=2008 revision | format=PDF | publisher=United Nations | author=Department of Economic and Social Affairs
+Population Division | year=2009 | accessdate=12 March 2009| archiveurl= http://web.archive.org/web/20090318041906/http://www.un.org/esa/population/publications/wpp2008/wpp2008_text_tables.pdf| archivedate= 18 March 2009 &lt;!--DASHBot--&gt;| deadurl= no}}&lt;/ref&gt; It is composed of [[Ovimbundu]] (language [[Umbundu]]) 37%, [[Northern Mbundu people|Ambundu]] (language [[Kimbundu]]) 25%, [[Bakongo]] 13%, and 32% other ethnic groups (including the [[Ovambo people|Ovambo]], the [[Ganguela]] and the [[Xindonga]]) as well as about 2% ''mestiços'' (mixed European and African) and 1% European&lt;ref&gt;See ethnic map and [https://www.cia.gov/library/publications/the-world-factbook/geos/ao.html CIA – The World Factbook – Angola]&lt;/ref&gt; The Ambundu and Ovimbundu nations combined form a majority of the population, at 62%.&lt;ref&gt;As no reliable census data exist at this stage (2011), all these numbers are rough estimates only, subject to adjustments and updates.&lt;/ref&gt; The population is forecast to grow to over 47 million people to 2060, nearly tripling the estimated 16 to 18 million in 2011.&lt;ref&gt;[http://www.google.com/publicdata/explore?ds=n4ff2muj8bh2a_&amp;ctype=l&amp;strail=false&amp;nselm=h&amp;met_y=GDP&amp;hl=en&amp;dl=en#ctype=l&amp;strail=false&amp;nselm=h&amp;met_y=POP&amp;fdim_y=scenario:1&amp;scale_y=lin&amp;ind_y=false&amp;rdim=world&amp;idim=country:AO&amp;hl=en&amp;dl=en Forecast provided] by [[International Futures]] and hosted by Google's [[Public Data Explorer]]&lt;/ref&gt; The last official census was taken in 1970, and showed the total population as being 5.6 million.&lt;ref&gt;&quot;[http://www.nationalarchives.gov.uk/ERORecords/HO/421/2/ind/ang4.htm ANGOLA – The National Archives]&quot;&lt;/ref&gt; The first post-independence census is to be held in 2014.
+
+It is estimated that Angola was host to 12,100 refugees and 2,900 asylum seekers by the end of 2007. 11,400 of those refugees were originally from the Democratic Republic of Congo (Congo-Kinshasa) who arrived in the 1970s.&lt;ref&gt;[U.S. Committee for Refugees and Immigrants. &quot;World Refugee Survey 2008&quot;. Available Online at: http://www.refugees.org/countryreports.aspx?id=2117. pp.37]&lt;/ref&gt; As of 2008 there were an estimated 400,000 [[Democratic Republic of the Congo|DRC]] migrant workers,&lt;ref&gt;[http://www.unhcr.org/refworld/country,,USCRI,,COD,456d621e2,485f50c0c,0.html World Refugee Survey 2008 – Angola], UNHCR. NB: This figure is highly doubtful, as it makes no clear distinction between migrant workers, refugees, and immigrants.&lt;/ref&gt; at least 30,000 [[Portuguese Angolans|Portuguese]],&lt;ref&gt;[http://www.state.gov/r/pa/ei/bgn/6619.htm Angola], U.S. Department of State. NB: Estimations in 2011 put that number at 100,000, and add about 150,000 to 200,000 other Europeans and Latin Americans.&lt;/ref&gt; and more than 20,000 [[Chinese people in Angola|Chinese living in Angola]].&lt;ref&gt;[http://www.plusnews.org/Report.aspx?ReportId=81432 ANGOLA and reconstructing the country: Prevention made in China], PlusNews, 12 November 2008&lt;/ref&gt; Since 2003, more than 400,000 [[Democratic Republic of the Congo|Congolese]] migrants have been expelled from Angola.&lt;ref&gt;&quot;[http://www.ipsnews.net/2012/05/calls-for-angola-to-investigate-abuse-of-congolese-migrants/ Calls for Angola to Investigate Abuse of Congolese Migrants]&quot;. [[Inter Press Service]]. 21 May 2012&lt;/ref&gt; Prior to independence in 1975, Angola had a community of approximately 350,000 Portuguese;&lt;ref&gt;See the carefully researched article by Gerald Bender &amp; Stanley Yoder, ''Whites in Angola on the Eve of Independence. The Poitics of Numbers'', in: ''Africa Today'', 21 (4), 1974, pp. 23–27. [http://www.economist.com/world/mideast-africa/displayStory.cfm?story_id=12079340 Flight from Angola], ''The Economist '', 16 August 1975 puts the number at 500,000, but this is an estimate lacking appropriate sources.&lt;/ref&gt; currently, there are just under 100,000 who are registered with the consulates, and increasing due to the debt crisis in Portugal.&lt;ref&gt;{{cite news| url=http://www.guardian.co.uk/world/2011/dec/21/europe-migrants-crisis-irish-portuguese |location=London |work=The Guardian | first1=Helen | last1=Pidd | first2=Henry | last2=McDonald | first3=Helena | last3=Smith | first4=Tom | last4=Phillips | first5=Alison | last5=Rourke | title=Europeans migrate south as continent drifts deeper into crisis | date=21 December 2011}}&lt;/ref&gt;
+
+=== Languages ===
+{{Main|Languages of Angola}}
+The languages in Angola are those originally spoken by the different ethnic groups plus [[Portuguese language|Portuguese]] due to the country being a former Portuguese colony. The indigenous languages with the largest usage are [[Umbundu]], [[Kimbundu]], and [[Kikongo]], in that order. Portuguese is the official language of the country.
+
+Mastery of the official language is probably more extended in Angola than it is  elsewhere in Africa, and this certainly applies to its use in everyday life. Moreover, and above all, the proportion of native (or near native) speakers of the language of the former colonizer, turned official after independence, is no doubt considerably higher than in any other African country.{{Citation needed|date=January 2011}}
+[[File:Angola Population Pyramid 2012.png|thumb|right|[[Population pyramid]] of Angola in 2012 from [[International Futures]]]]
+[[File:IMG 4591 (2).JPG|thumb|Street scene with children, April 2009]]
+There are three intertwined historical reasons for this situation.
+#In the Portuguese “bridgeheads” [[Luanda]] and [[Benguela]], which existed on the coast of what today is Angola since the 15th and 16th century, respectively, Portuguese was spoken not only by the Portuguese and their ''mestiço'' descendents, but—especially in and around Luanda—by a significant number of Africans, although these always remained native speakers of their local African language.
+#Since the Portuguese conquest of the present territory of Angola, and especially since its “effective occupation” in the mid-1920s, schooling in Portuguese was slowly developed by the colonial state as well as by Catholic and Protestant missions. The rhythm of this expansion was considerably accelerated during the late colonial period, 1961–1974, so that by the end of the colonial period children all over the territory (with relatively few exceptions) had at least some access to the Portuguese language.&lt;ref&gt;An illustration is Franz-Wilhelm Heimer, ‘’Educação e sociedade nas áreas rurais de Angola: Resultados de um inquérito’’, vol. 2, ‘’Análise do universo agrícola’’ (survey report), Serviços de Planeamento e Integração Económica de Angola, Luanda, 1974&lt;/ref&gt;
+#In the same late colonial period, the legal discrimination of the black population was abolished, and the state apparatus in fields like health, education, social work, and rural development was enlarged. This entailed a significant increase in jobs for Africans, under the condition that they spoke Portuguese.
+
+As a consequence of all this, the African “lower middle class” which at that stage formed in Luanda and other cities began to often prevent their children from learning the local African language, in order to guarantee that they learned Portuguese as their native language. At the same time, the white and “mestiço” population, where some knowledge of African languages could previously often been found, neglected this aspect more and more, to the point of frequently ignoring it totally.
+After independence, these tendencies continued, and were even strengthened, under the rule of the MPLA which has its main social roots exactly in those social segments where the mastery of Portuguese as well as the proportion of native Portuguese speakers was highest. This became a political side issue, as FNLA as well as UNITA, given their regional constituencies, came out in favour of a greater attention to the African languages, and as the FNLA favoured French over Portuguese.
+
+The dynamics of the language situation, as described above, were additionally fostered by the massive migrations triggered by the Civil War. [[Ovimbundu]], the most populous ethnic group and the most affected by the war, appeared in great numbers in urban areas outside their areas, especially in Luanda and surroundings. At the same time, a majority of the [[Bakongo]] who had fled to the [[Democratic Republic of Congo]] in the early 1960s, or of their children and grandchildren, returned to Angola, but mostly did not settle in their original &quot;habitat&quot;, but in the cities—and again above all in Luanda. As a consequence, more than half the population is now living in the cities which, from the linguistic point of view, have become highly heterogeneous. This means, of course, that Portuguese as the overall language of communication is by now of paramount importance, and that the role of the African languages is steadily decreasing among the urban population—a trend which is beginning to spread into rural areas as well.
+
+The exact numbers of those fluent in Portuguese or who speak Portuguese as a first language are unknown, although a census is expected to be carried out in 2013.{{Citation needed|date=January 2011}} Quite a number of voices demand the recognition of “Angolan Portuguese” as a specific variant, comparable to those spoken in Portugal or in Brazil. However, while there exists a certain number of idiomatic particularities in everyday Portuguese, as spoken by Angolans, it remains to be seen whether or not the Angolan government comes to the conclusion that these particularities constitute a configuration that justifies the claim to be a new language variant.
+
+=== Religion ===
+[[File:Angola tribes 1970.jpg|thumb|Ethnic groups of Angola 1970]]
+{{Main|Religion in Angola}}
+
+There are about 1000 mostly Christian religious communities in Angola.&lt;ref&gt;See Fátima Viegas, ''Panorama das Religiões em Angola Independente (1975–2008)'', Ministério da Cultura/Instituto Nacional para os Assuntos Religiosos, Luanda 2008&lt;/ref&gt; While reliable statistics are nonexistent, estimates have it that more than half of the population are Roman Catholics, while about a quarter adhere to the Protestant churches introduced during the colonial period: the [[Congregationalist]]s mainly among the [[Ovimbundu]] of the Central Highlands and the coastal region to its West, the [[Methodists]] concentrating on the [[Kimbundu]] speaking strip from Luanda to Malanje, the [[Baptists]] almost exclusively among the [[Bakongo]] of the Northwest (now massively present in Luanda as well) and dispersed [[Adventists]], [[Reformed]] and [[Lutherans]].&lt;ref&gt;Benedict Schubert: ''Der Krieg und die Kirchen: Angola 1961–1991''. Exodus, Luzern/Switzerland, 1997; Lawrence W. Henderson, ''The Church in Angola: A river of many currents'', Cleveland: Pilgrim Press, 1989&lt;/ref&gt; In Luanda and region there subsists a nucleus of the &quot;[[syncretic]]&quot; [[Tocoists]] and in the northwest a sprinkling of  [[Kimbanguism]] can be found, spreading from the Congo/Zaire. Since independence, hundreds of [[Pentecostal]] and similar communities have sprung up in the cities, where by now about 50% of the population is living; several of these communities/churches are of Brazilian origin. The  Muslims, practically all of them immigrants from West African and other countries and belonging to the Sunnite branch, represent only about 1%; because of their diversity, they do not form a community.  In 2011, according to the Islamic Community of Angola (Comunidade Islâmica de Angola, COIA) there were more than 80 mosques serving about 500,000 Muslims in Angola, and the number was growing.&lt;ref&gt;''O Pais, ''[http://www.opais.net/pt/opais/?id=1657&amp;det=23057 Surgimento do Islão em Angola], 2 September 2011, Pg 18&lt;/ref&gt;
+
+In a study assessing nations' levels of religious regulation and persecution with scores ranging from 0 to 10 where 0 represented low levels of regulation or persecution, Angola was scored 0.8 on Government Regulation of Religion, 4.0 on Social Regulation of Religion, 0 on Government Favoritism of Religion and 0 on Religious Persecution.&lt;ref&gt;[http://www.thearda.com/internationalData/countries/Country_7_3.asp Angola: Religious Freedom Profile at the Association of Religion Data Archives] Brian J Grim and Roger Finke. &quot;International Religion Indexes: Government Regulation, Government Favoritism, and Social Regulation of Religion&quot;. Interdisciplinary Journal of Research on Religion. 2 (2006) Article 1: www.religjournal.com.&lt;/ref&gt;
+
+Foreign [[missionary|missionaries]] were very active prior to independence in 1975, although since the beginning of the anti-colonial fight in 1961 the Portuguese colonial authorities expelled a series of Protestant missionaries and closed mission stations based on the belief that the missionaries were inciting pro-independence sentiments. Missionaries have been able to return to the country since the early 1990s, although security conditions due to the civil war have prevented them until 2002 from restoring many of their former inland mission stations.&lt;ref&gt;{{cite web|url=http://www.state.gov/g/drl/rls/irf/2001/5511.htm |title=U.S. Department of State |publisher=State.gov |date=1 January 2004 |accessdate=27 June 2010| archiveurl= http://web.archive.org/web/20100528135031/http://www.state.gov/g/drl/rls/irf/2001/5511.htm| archivedate= 28 May 2010 &lt;!--DASHBot--&gt;| deadurl= no}}&lt;/ref&gt;
+
+The Roman Catholic and some major Protestant denominations mostly keep to themselves in contrast to the &quot;New Churches&quot; which actively proselytize. The Roman Catholic as well as some major Protestant denominations provide help for the poor in the form of crop seeds, farm animals, medical care and education.&lt;ref name=&quot;books.google.com&quot;&gt;{{Cite book |url=http://books.google.com/?id=DeVqVy21g9sC&amp;pg=PA40&amp;lpg=PA40&amp;dq=presbyterian+church+in+angola |title=Culture and customs of Angola |publisher=Greenwood Press |location=Westport, Conn. |accessdate=27 June 2010 |isbn=978-0-313-33147-3 |page=40 |year=2007}}&lt;/ref&gt;&lt;ref&gt;[http://foodsresourcebank.org/uploadedfiles/Designations%2520Public%2520View%252009-07-07lo.pdf]{{dead link|date=June 2010}}&lt;/ref&gt;&lt;ref&gt;{{cite web |url=http://www.pcusa.org/hunger/downloads/2005intgrants.pdf |title=International Grants 2005 |format=PDF |accessdate=27 June 2010}}&lt;/ref&gt;
+
+=== Largest cities ===
+
+{{Largest cities of Angola}}
+
+== Health ==
+{{Main|Health in Angola}}
+Epidemics of [[cholera]], [[malaria]], [[rabies]] and African [[hemorrhagic]] fevers like [[Marburg virus|Marburg hemorrhagic fever]], are common diseases in several parts of the country. Many regions in this country have high incidence rates of [[tuberculosis]] and high HIV prevalence rates. [[Dengue]], [[filariasis]], [[leishmaniasis]], and [[onchocerciasis]] (river blindness) are other diseases carried by insects that also occur in the region. Angola has one of the highest [[infant mortality rate]]s in the world and one of the world's lowest [[life expectancies]].  A 2007 survey concluded that low and deficient [[niacin]] status was common in Angola.&lt;ref&gt;{{cite journal |author=Seal AJ, Creeke PI, Dibari F, ''et al.'' |title=Low and deficient niacin status and pellagra are endemic in postwar Angola |journal=Am. J. Clin. Nutr. |volume=85 |issue=1 |pages=218–24 |year=2007 |month=January |pmid=17209199 |url=http://www.ajcn.org/cgi/pmidlookup?view=long&amp;pmid=17209199}}&lt;/ref&gt; [[Demographic and Health Surveys]] is currently conducting several surveys in Angola on malaria, domestic violence and more.&lt;ref name=&quot;Angola Surveys&quot;&gt;[http://www.measuredhs.com/countries/metadata.cfm?surv_id=344&amp;ctry_id=76&amp;SrvyTp=ctry&amp;cn=Angola Angola Surveys],&lt;/ref&gt;
+
+== Education ==
+[[File:Kuito class.jpg|thumb|right|Children in an outdoor classroom in [[Bié (province)|Bié]], Angola]]
+[[File:Lwena Moxico-Angola.jpg|thumb|right|Training center in [[Luena, Moxico Province|Luena]], [[Moxico Province]]]]
+{{Main|Education in Angola}}
+
+Although by law, education in Angola is compulsory and free for eight years, the government reports that a certain percentage of students are not attending school due to a lack of school buildings and teachers.&lt;ref name=ilab&gt;&quot;Botswana&quot;. [http://www.dol.gov/ilab/media/reports/iclp/tda2005/tda2005.pdf ''2005 Findings on the Worst Forms of Child Labor'']. [[Bureau of International Labor Affairs]], [[U.S. Department of Labor]] (2006). ''This article incorporates text from this source, which is in the [[public domain]]. {{dead link|date=September 2010}}&lt;/ref&gt; Students are often responsible for paying additional school-related expenses, including fees for books and supplies.&lt;ref name=ilab/&gt;
+
+In 1999, the gross primary enrollment rate was 74 percent and in 1998, the most recent year for which data are available, the net primary enrollment rate was 61 percent.&lt;ref name=ilab/&gt; Gross and net enrollment ratios are based on the number of students formally registered in primary school and therefore do not necessarily reflect actual school attendance.&lt;ref name=ilab/&gt; There continue to be significant disparities in enrollment between rural and urban areas. In 1995, 71.2 percent of children ages 7 to 14 years were attending school.&lt;ref name=ilab/&gt; It is reported that higher percentages of boys attend school than girls.&lt;ref name=ilab/&gt; During the [[Angolan Civil War]] (1975–2002), nearly half of all schools were reportedly looted and destroyed, leading to current problems with overcrowding.&lt;ref name=ilab/&gt;
+
+The Ministry of Education hired 20,000 new teachers in 2005, and continued to implement teacher trainings.&lt;ref name=ilab/&gt; Teachers tend to be underpaid, inadequately trained, and overworked (sometimes teaching two or three shifts a day).&lt;ref name=ilab/&gt; Some teachers may also reportedly demand payment or bribes directly from their students.&lt;ref name=ilab/&gt; Other factors, such as the presence of landmines, lack of resources and identity papers, and poor health also prevent children from regularly attending school.&lt;ref name=ilab/&gt; Although budgetary allocations for education were increased in 2004, the education system in Angola continues to be extremely under-funded.&lt;ref name=ilab/&gt;
+
+[[Literacy]] is quite low, with 67.4% of the population over the age of 15 able to read and write in Portuguese.&lt;ref&gt;CIA world factbook 2010&lt;/ref&gt; 82.9% of males and 54.2% of women are literate as of 2001.&lt;ref&gt;{{cite web|url=http://www.unicef.org/infobycountry/angola_statistics.html |title=Angola – Statistics |publisher=UNICEF |accessdate=27 June 2010| archiveurl= http://web.archive.org/web/20100613004722/http://www.unicef.org/infobycountry/angola_statistics.html| archivedate= 13 June 2010 &lt;!--DASHBot--&gt;| deadurl= no}}&lt;/ref&gt; Since independence from Portugal in 1975, a number of Angolan students continued to be admitted every year at high schools, [[polytechnical]] institutes, and universities in [[Portugal]], Brazil and [[Cuba]] through bilateral agreements; in general, these students belong to the Angolan elites.
+
+== Culture ==
+[[File:African Art, Yombe sculpture, Louvre.jpg|thumb|150px|[[Yombe people|Yombe]]-sculpture, 19th century]]
+{{Main|Culture of Angola}}
+{{see also|Music of Angola|Angolan cuisine}}
+
+[[Portugal]] has been present in [[Portuguese West Africa|Angola for 400&amp;nbsp;years]], occupied the territory in the 19th and early 20th century, and ruled over it for about 50 years. As a consequence, both countries share cultural aspects: language ([[Portuguese Language|Portuguese]]) and main religion (Roman Catholic Christianity). Of course, the &quot;[[Substratum|substrate]]&quot; of Angolan culture is African,  mostly [[Bantu people|Bantu]], while [[culture of Portugal|Portuguese culture]] has been imported. The diverse ethnic communities  – the [[Ovimbundu]], [[Northern Mbundu people|Ambundu]], [[Bakongo]], [[Chokwe language|Chokwe]], and other peoples – maintain to varying degrees their own cultural traits, traditions and languages, but in the cities, where slightly more than half of the population now lives, a mixed culture has been emerging since colonial times – in [[Luanda]] since its foundation in the 16th century. In this urban culture, the Portuguese heritage has become more and more dominant. An African influence is evident in music and dance, and is moulding the way in which Portuguese is spoken, but is almost disappearing from the vocabulary. This process is well reflected in contemporary Angolan literature, especially in the works of [[Pepetela]] and [[Ana Paula Ribeiro Tavares]].
+
+[[Leila Lopes (model)|Leila Lopes]], [[Miss Angola]] 2011, was crowned [[Miss Universe 2011]] in Brazil on 12 September 2011 making her the first Angolan to win the pageant.
+
+== Gallery ==
+&lt;gallery&gt;
+File:Church in Tombua, Namibe, Angola.JPG|Church in Tombua, Namibe province, January 2010
+File:ChokweWoman.jpg|Sculpture representing a female figure. Chokwe peoples, Angola, early 20th century. Wood, brass tacks, glass beads, plant fiber, oil patina.
+File:Black Stones Pungo Adongo.JPG|&quot;Black Stones&quot; of Pungo Adongo in Angola
+Image:Luanda4.jpg|A view of Luanda
+File:Kalandula waterfalls of the Lucala-River in Malange, Angola (2).JPG|Kalendula waterfalls of the Lucala river in Malange, 2009
+&lt;/gallery&gt;
+
+==See also==
+{{portal|Geography|Africa|Angola}}
+*[[Outline of Angola]]
+*[[Index of Angola-related articles]]
+
+{{clear}}
+
+== References ==
+{{reflist|colwidth=30em}}
+*Much of the material in this article comes from the [[CIA World Factbook]] 2000 and the 2003 U.S. Department of State website. The information given there is however, corrected and updated on the basis of the other sources indicated.
+
+== Further reading ==
+
+&lt;div style=&quot;font-size:97%;&quot;&gt;
+* ANGOLA LIVRO BRANCO SOBRE AS ELEIÇÕES DE 2008. http://www.kas.de/proj/home/pub/8/2/year-2009/dokument_id-17396/index.html
+* Le Billon, Philippe (2005). &quot;Aid in the Midst of Plenty: Oil Wealth, Misery and Advocacy in Angola&quot;. Disasters 29(1): 1–25.
+* Birmingham, David (2006) Empire in Africa: Angola and its Neighbors, Athens/Ohio: Ohio University Press
+* Bösl, Anton (2008). Angola's Parliamentary Elections in 2008. A Country on its Way to One-Party-Democracy, KAS Auslandsinformationen 10/2008. http://www.kas.de/wf/de/33.15186/
+* Cilliers, Jackie and Christian Dietrich, Eds. (2000). Angola's War Economy: The Role of Oil and Diamonds. Pretoria, South Africa, Institute for Security Studies.
+* Global Witness (1999). A Crude Awakening, The Role of Oil and Banking Industries in Angola's Civil War and the Plundering of State Assets. London, UK, Global Witness. http://www.globalwitness.org/media_library_detail.php/93/en/a_crude_awakening
+* Heimer, Franz-Wilhelm, The Decolonization Conflict in Angola, Geneva: Institut d'Études Internationales et du Développement, 1979
+* Hodges, Tony (2001). Angola from Afro-Stalinism to Petro-Diamond Capitalism. Oxford: James Currey.
+* Hodges, Tony (2004). Angola: The Anatomy of an Oil State. Oxford, UK and Indianapolis, US, The Fridtjol Nansen Institute &amp; The International African Institute in association with James Currey and Indiana University Press.
+* Holness, Marga. Apartheid's War Against Angola http://www.scribd.com/doc/29244604/Apartheid-s-War-Against-Angola-Marga-Holness
+* Human Rights Watch (2004). Some Transparency, No Accountability: The Use of Oil Revenues in Angola and Its Impact on Human Rights. New York, Human Rights Watch. http://www.hrw.org/reports/2004/angola0104/
+* Human Rights Watch (2005). Coming Home, Return and Reintegration in Angola. New York, Human Rights Watch. http://hrw.org/reports/2005/angola0305/
+* James, Walter (1992). A political history of the civil war in Angola, 1964–1990. New Brunswick, Transaction Publishers.
+* [[Ryszard Kapuściński|Kapuściński, Ryszard]]. Another Day of Life, Penguin, 1975. ISBN 978-0-14-118678-8. A Polish journalist's account of Portuguese withdrawal from Angola and the beginning of the civil war.
+* Kevlihan, R. (2003). &quot;Sanctions and humanitarian concerns: Ireland and Angola, 2001-2&quot;. Irish Studies in International Affairs 14: 95–106.
+* Lari, A. (2004). [http://www.iss.co.za/pubs/papers/85/Paper85.pdf Returning home to a normal life? The plight of displaced Angolans]. Pretoria, South Africa, Institute for Security Studies.
+* Lari, A. and R. Kevlihan (2004). [http://www.iss.co.za/pubs/ASR/13No4/FLari.pdf &quot;International Human Rights Protection in Situations of Conflict and Post-Conflict, A Case Study of Angola&quot;.] African Security Review 13(4): 29–41.
+* Le Billon, Philippe (2001). &quot;Angola's Political Economy of War: The Role of Oil and Diamonds&quot;. African Affairs (100): 55–80.
+* MacQueen, Norrie ''An Ill Wind? Rethinking the Angolan Crisis and the Portuguese Revolution, 1974–1976'', ''Itinerario: European Journal of Overseas History, 26/2, 2000, pp.&amp;nbsp;22–44
+* Médecins Sans Frontières (2002). [http://www.doctorswithoutborders.org/publications/reports/2002/angola1_10-2002.pdf Angola: Sacrifice of a People]. Luanda, Angola, MSF.
+* Mwakikagile, Godfrey ''Nyerere and Africa: End of an Era'', Third Edition, Pretoria, South Africa, 2006, on Angola in Chapter 11, &quot;American Involvement in Angola and Southern Africa: Nyerere's Response&quot;, pp.&amp;nbsp;324–346, ISBN 978-0-9802534-1-2.
+* Pinto Escoval (2004): &quot;Staatszerfall im südlichen Afrika. Das Beispiel Angola&quot;. Wissenschaftlicher Verlag Berlin
+* ''Much of the material in these articles comes from the [[CIA World Factbook]] 2000 and the 2003 U.S. Department of State website.''
+* {{cite book|last=Le Billon|first=P.|title=Fuelling War: Natural Resources and Armed Conflicts|publisher=[[Routledge]]|year=2006|month=March|isbn=978-0-415-37970-0}}
+* Pearce, Justin (2004). &quot;War, Peace and Diamonds in Angola: Popular perceptions of the diamond industry in the Lundas&quot;. African Security Review 13 (2), pp 51–64. http://www.iss.co.za/pubs/ASR/13No2/AW.pdf
+* Porto, João Gomes (2003). [http://www.iss.co.za/pubs/papers/77/Paper77.html Cabinda: Notes on a soon to be forgotten war]. Pretoria, South Africa, Institute for Security Studies.
+* Tvedten, Inge (1997). Angola, Struggle for Peace and Reconstruction. Boulder, Colorado, Westview Press.
+* Vines, Alex (1999). Angola Unravels: The Rise and Fall of the Lusaka Peace Process. New York and London, UK, Human Rights Watch.
+&lt;/div&gt;
+
+== External links ==
+{{Sister project links|voy=Angola|Angola}}
+{{Wikibooks|Wikijunior:Countries A-Z|Angola}}
+*{{pt icon}} {{official website|http://www.angola.gov.ao}}
+*{{CIA World Factbook link|ao|Angola}}
+*{{dmoz|Regional/Africa/Angola}}
+*[http://ucblibraries.colorado.edu/govpubs/for/angola.htm Angola] from ''UCB Libraries GovPubs''.
+*[http://www.bbc.co.uk/news/world-africa-13036732 Angola profile] from the [[BBC News]].
+*{{Wikiatlas|Angola}}
+*[http://www.ifs.du.edu/ifs/frm_CountryProfile.aspx?Country=AO Key Development Forecasts for Angola] from [[International Futures]].
+*[http://www.chekechambunda.org/Angola.htm National Language Mbunda]
+*[http://www.chekechambunda.org/Mbunda%20Origin.htm Mbunda Origin]
+*[http://www.studentpulse.com/articles/223/major-development-challenges-facing-the-republic-of-angola-completing-the-democratic-transition-and-making-government-work StudentPulse 2010 article on challenges facing Angola]
+*[http://www.bti-project.org/country-reports/esa/ago Bertelsmann Transformation Index 2012 - Angola Country Report]
+*[http://www.chathamhouse.org/sites/default/files/public/Research/Africa/0312pp_weimer.pdf] Markus Weimer, &quot;The Peace Dividend: Analysis of a Decade of Angolan Indicators, 2002–2012&quot;.
+
+
+{{Angola topics}}
+{{Countries of Africa}}
+{{Navboxes
+|title=International membership and history
+|list=
+{{Southern African Development Community}}
+{{African Union}}
+{{Community of Portuguese Language Countries |collapsed}}
+{{Latin Union}}
+{{South Atlantic Peace and Cooperation Zone}}
+{{Niger-Congo-speaking nations}}
+{{Portuguese overseas empire}}
+}}
+
+[[Category:Angola| ]]
+[[Category:Countries in Africa]]
+[[Category:Bantu countries and territories]]
+[[Category:Countries bordering the Atlantic Ocean]]
+[[Category:Former Portuguese colonies]]
+[[Category:Least developed countries]]
+[[Category:Member states of OPEC]]
+[[Category:Member states of the African Union]]
+[[Category:Member states of the Community of Portuguese Language Countries]]
+[[Category:Member states of the United Nations]]
+[[Category:Portuguese-speaking countries]]
+[[Category:Republics]]
+[[Category:States and territories established in 1975]]
+
+[[af:Angola]]
+[[als:Angola]]
+[[am:አንጎላ]]
+[[ang:Angola]]
+[[ar:أنجولا]]
+[[an:Angola]]
+[[roa-rup:Angola]]
+[[frp:Angola]]
+[[ast:Angola]]
+[[gn:Angola]]
+[[az:Anqola]]
+[[bm:Angola]]
+[[bn:অ্যাঙ্গোলা]]
+[[bjn:Angola]]
+[[zh-min-nan:Angola]]
+[[be:Ангола]]
+[[be-x-old:Ангола]]
+[[bcl:Angola]]
+[[bg:Ангола]]
+[[bo:ཨང་གོ་ལ།]]
+[[bs:Angola]]
+[[br:Angola]]
+[[bxr:Ангола]]
+[[ca:Angola]]
+[[cv:Ангола]]
+[[ceb:Angola]]
+[[cs:Angola]]
+[[sn:Angola]]
+[[tum:Angola]]
+[[co:Angola]]
+[[cy:Angola]]
+[[da:Angola]]
+[[pdc:Angola]]
+[[de:Angola]]
+[[dv:އެންގޯލާ]]
+[[nv:Angóola]]
+[[dsb:Angola]]
+[[et:Angola]]
+[[el:Ανγκόλα]]
+[[es:Angola]]
+[[eo:Angolo]]
+[[ext:Angola]]
+[[eu:Angola]]
+[[ee:Angola]]
+[[fa:آنگولا]]
+[[hif:Angola]]
+[[fo:Angola]]
+[[fr:Angola]]
+[[fy:Angoala]]
+[[ga:Angóla]]
+[[gv:Angoley]]
+[[gag:Angola]]
+[[gd:Angola]]
+[[gl:Angola]]
+[[ki:Angola]]
+[[hak:Ôn-kô-lâ]]
+[[xal:Анһлмудин Орн]]
+[[ko:앙골라]]
+[[ha:Angola]]
+[[hy:Անգոլա]]
+[[hi:अंगोला]]
+[[hsb:Angola]]
+[[hr:Angola]]
+[[io:Angola]]
+[[ig:Angola]]
+[[ilo:Angola]]
+[[bpy:এঙ্গোলা]]
+[[id:Angola]]
+[[ia:Angola]]
+[[ie:Angola]]
+[[os:Анголæ]]
+[[zu:I-Angola]]
+[[is:Angóla]]
+[[it:Angola]]
+[[he:אנגולה]]
+[[jv:Angola]]
+[[kn:ಅಂಗೋಲ]]
+[[pam:Angola]]
+[[ka:ანგოლა]]
+[[kk:Ангола]]
+[[kw:Angola]]
+[[rw:Angola]]
+[[sw:Angola]]
+[[kg:Ngola]]
+[[ht:Angola]]
+[[ku:Angola]]
+[[mrj:Ангола]]
+[[ltg:Angola]]
+[[la:Angolia]]
+[[lv:Angola]]
+[[lb:Angola]]
+[[lt:Angola]]
+[[lij:Angòla]]
+[[li:Angola]]
+[[ln:Angola]]
+[[jbo:angol]]
+[[lmo:Angola]]
+[[hu:Angola]]
+[[mk:Ангола]]
+[[mg:Angola]]
+[[ml:അംഗോള]]
+[[mt:Angola]]
+[[mi:Anakora]]
+[[mr:अँगोला]]
+[[arz:انجولا]]
+[[mzn:آنگولا]]
+[[ms:Angola]]
+[[mwl:Angola]]
+[[mn:Ангол]]
+[[my:အင်ဂိုလာနိုင်ငံ]]
+[[nah:Angola]]
+[[na:Angora]]
+[[nl:Angola]]
+[[nds-nl:Angola]]
+[[ne:अंगोला]]
+[[new:एङ्गोला]]
+[[ja:アンゴラ]]
+[[ce:Ангола]]
+[[pih:Angola]]
+[[no:Angola]]
+[[nn:Angola]]
+[[nov:Angola]]
+[[oc:Angòla]]
+[[or:ଆଙ୍ଗୋଲା]]
+[[uz:Angola]]
+[[pa:ਅੰਗੋਲਾ]]
+[[pnb:انگولا]]
+[[pap:Angola]]
+[[ps:آنګولا]]
+[[pms:Angòla]]
+[[nds:Angola]]
+[[pl:Angola]]
+[[pt:Angola]]
+[[kaa:Angola]]
+[[crh:Angola]]
+[[ksh:Angola]]
+[[ro:Angola]]
+[[rm:Angola]]
+[[qu:Angula]]
+[[rue:Анґола]]
+[[ru:Ангола]]
+[[sah:Ангола]]
+[[se:Angola]]
+[[sa:अङ्गोला]]
+[[sg:Angoläa]]
+[[sc:Angola]]
+[[sco:Angolae]]
+[[stq:Angola]]
+[[st:Angola]]
+[[nso:Angola]]
+[[sq:Angola]]
+[[scn:Angola]]
+[[simple:Angola]]
+[[ss:I-Angola]]
+[[sk:Angola]]
+[[sl:Angola]]
+[[szl:Angola]]
+[[so:Angola]]
+[[ckb:ئەنگۆلا]]
+[[sr:Ангола]]
+[[sh:Angola]]
+[[su:Angola]]
+[[fi:Angola]]
+[[sv:Angola]]
+[[tl:Anggola]]
+[[ta:அங்கோலா]]
+[[tt:Ангола]]
+[[te:అంగోలా]]
+[[tet:Angola]]
+[[th:ประเทศแองโกลา]]
+[[ti:ኣንጎላ]]
+[[tg:Ангола]]
+[[tr:Angola]]
+[[tk:Angola]]
+[[udm:Ангола]]
+[[uk:Ангола]]
+[[ur:انگولا]]
+[[ug:ئانگولا]]
+[[vec:Angoła]]
+[[vep:Angol]]
+[[vi:Angola]]
+[[vo:Langolän]]
+[[fiu-vro:Angola]]
+[[zh-classical:安哥拉]]
+[[war:Angola]]
+[[wo:Angolaa]]
+[[wuu:安哥拉]]
+[[ts:Angola]]
+[[yi:אנגאלא]]
+[[yo:Àngólà]]
+[[zh-yue:安哥拉]]
+[[diq:Angola]]
+[[zea:Anhola]]
+[[bat-smg:Anguola]]
+[[zh:安哥拉]]</text>
+      <sha1>srdlgbz9fpycopj4ogbpemqmg1wbcav</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+  </page>
+</mediawiki>

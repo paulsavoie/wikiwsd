@@ -29,11 +29,12 @@ def build():
     print '-' * 80 + '\n'
 
     choice = -1
-    while choice < 1 or choice > 3:
+    while choice < 1 or choice > 4:
         print 'Would you like to'
         print '\t(1)  setup the database'
         print '\t(2)  prepare the database'
-        print '\t(3)  create the disambiguation entries\n'
+        print '\t(3)  create the disambiguation entries'
+        print '\t(4)  learn the n-grams\n'
 
         choice = raw_input('Please enter your choice: ')
         try:
@@ -95,7 +96,7 @@ def build():
         else:
             print 'Aborting!'
 
-    else: # create the disambiguation entries
+    elif choice == 3: # create the disambiguation entries
         path = 'not existing'
         while not os.path.exists(path):
             path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
@@ -113,10 +114,31 @@ def build():
             minutes = total / 60
             seconds = total % 60
             print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-            print 'Database ready to work! - find detailed information in "learning.log"'
+            print 'Learning of disambiguations finished - find detailed information in "learning.log"'
         else:
             print 'Aborting!'
 
+    else: # learn n-grams
+        path = 'not existing'
+        while not os.path.exists(path):
+            path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
+        answer = ''
+        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
+            answer = raw_input('This step will require several DAYS to perform. Do you want to continue? (y/n): ').strip().lower()
+        print
+        if answer[0] == 'y':
+            logging.basicConfig(filename='n-grams.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
+            print 'Learning meanings %s:%s...' % (host, port)
+            setup = Creator(path, db_host=host, db_port=port, num_threads=26, max_queue_size=300, action='ngrams')
+            time.clock()
+            setup.run()
+            total = round(time.clock())
+            minutes = total / 60
+            seconds = total % 60
+            print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
+            print 'Learning of n-grams finished - find detailed information in "n-grams.log"'
+        else:
+            print 'Aborting!'
 
 if __name__ == '__main__':
     build()
