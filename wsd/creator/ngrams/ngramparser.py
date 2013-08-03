@@ -170,8 +170,8 @@ class NGramParser():
         article['text'] = new_text
 
         # TODO: move somewhere else
-        #self.extract_n_grams(article)
-        print new_text.encode('ascii', 'ignore')
+        self.extract_n_grams(article)
+        #print new_text.encode('ascii', 'ignore')
 
     def _remove_pairs(self, line, pair):
         """removes pair recursively
@@ -191,10 +191,71 @@ class NGramParser():
         return line
 
     def extract_n_grams(self, article):
+        # temporarily store ngrams in structure
+        ngrams = {}
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        for letter in letters:
+            ngrams[letter] = []
+        ngrams['other'] = []
+
         lines = article['text'].strip().split('\n')
         for line in lines:
-            phrases = re.split(r"[!#$%&*+./:;<=>?@\^_`{}~]", line)
+
+            # remove link targets
+            index = 0
+            while line.find('[[', index) != -1:
+                index = line.find('[[', index)+2
+                end = line.find(']]', index)
+                middle = line.find('|', index)
+                if middle != -1 and middle < end:
+                    line = line[0:index] + line[middle+1:]
+
+            phrases = re.split(r"[!#$%&*+./:;<=>?@\^_`{}~()]", line)
             for phrase in phrases:
                 phrase = phrase.strip()
                 if len(phrase) > 1:
-                    print phrase.encode('ascii', 'ignore')
+                    words = phrase.split(' ')
+                    # extract n-grams
+                    for size in range(1,7):
+                        start = 0
+                        while start < len(words) - size:
+                            ngram = ''
+                            for i in range(0, size):
+                                ngram+= words[start+i] + ' '
+                            ngram = ngram.strip(' ,.:!?=_-')
+                            is_link = 0
+                            if len(ngram) > 4 and ngram[0:2] == '[[' and ngram[-2:] == ']]':
+                                is_link = 1
+                            ngram = ngram.replace('[[', '')
+                            ngram = ngram.replace(']]', '')
+                            start+= 1
+
+                            if len(ngram) > 0:
+                                letter = ngram[0].lower()
+                                if letter in letters:
+                                    ngrams[letter].append((ngram, is_link))
+                                else:
+                                    ngrams['other'].append((ngram, is_link))
+
+
+        # iterate through ngrams and store in database
+        for letter in letters:
+            self._store_ngrams('ngrams_%s' % letter, ngrams[letter], article)
+        self._store_ngrams('ngrams_other', ngrams['other'], article)
+
+    def _store_ngrams(self, table, ngrams, article):
+        if len(ngrams) > 0:
+            retry = True
+            while retry:
+                retry = False
+                try:
+                    cursor = self._db_connection.cursor()
+                    query = 'INSERT INTO %s(string, occurrences, as_link)' % (table)
+                    cursor.executemany(query + ' VALUES(%s, 1, %s) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);', ngrams)
+                    self._db_connection.commit()
+                except mysqldb.Error, e:
+                    if e.args[0] == 1213: # deadlock with other threads
+                        retry = True
+                    else:
+                        logging.error("Error inserting ngrams of article '%s' (%d)" % (article['title'].encode('ascii', 'ignore'), article['id']))
+                        logging.error("Error %d: %s" % (e.args[0],e.args[1]))
