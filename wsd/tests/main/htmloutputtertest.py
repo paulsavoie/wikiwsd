@@ -5,7 +5,7 @@ from wsd import HTMLOutputter
 class HTMLOutputterTest(unittest.TestCase):
     def setUp(self):
         self._test_dir = os.path.dirname(os.path.abspath(__file__))
-        root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
+        root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'main')
         header_path = os.path.join(root, 'header.html')
         footer_path = os.path.join(root, 'footer.html')
         with open(header_path, 'r') as header_f:

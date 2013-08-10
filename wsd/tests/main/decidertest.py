@@ -1,5 +1,5 @@
 import unittest
-from wsd.decider import Decider 
+from wsd import Decider 
 
 class DeciderTest(unittest.TestCase):
     def setUp(self):

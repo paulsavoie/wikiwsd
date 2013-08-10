@@ -1,5 +1,5 @@
 import unittest
-from wsd.commonnessretriever import CommonnessRetriever 
+from wsd import CommonnessRetriever 
 
 class CommonnessRetrieverTest(unittest.TestCase):
     def setUp(self):

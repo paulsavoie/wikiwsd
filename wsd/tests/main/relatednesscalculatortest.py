@@ -1,6 +1,6 @@
 import unittest
 import math
-from wsd.relatednesscalculator import RelatednessCalculator 
+from wsd import RelatednessCalculator 
 
 class RelatednessCalculatorTest(unittest.TestCase):
     def setUp(self):

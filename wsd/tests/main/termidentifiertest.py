@@ -1,5 +1,5 @@
 import unittest
-from wsd.termidentifier import TermIdentifier
+from wsd import TermIdentifier
 
 class TermIdentifierTest(unittest.TestCase):
     def setUp(self):

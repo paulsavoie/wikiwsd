@@ -1,5 +1,5 @@
 import unittest
-from wsd.meaningfinder import MeaningFinder
+from wsd import MeaningFinder
 
 class MeaningFinderTest(unittest.TestCase):
     def setUp(self):
