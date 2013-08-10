@@ -1,2 +1,0 @@
-from resolvethread import ResolveThread
-from preparethread import PrepareThread
