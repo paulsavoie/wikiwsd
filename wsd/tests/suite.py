@@ -15,4 +15,5 @@ def suite():
     suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
     suite.addTests(unittest.makeSuite(DeciderTest, 'test'))
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))
+    suite.addTests(unittest.makeSuite(NGramParserTest, 'test'))
     return suite

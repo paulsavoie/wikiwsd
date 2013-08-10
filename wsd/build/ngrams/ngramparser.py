@@ -27,9 +27,6 @@ class NGramParser():
     """
     def __init__(self, db_connection):
         self._db_connection = db_connection
-        #self._sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-        #self._word_tokenizer = WhitespaceTokenizer() #WordPunctTokenizer()
-        #self._article_cache = {}
         self._REMOVE_PAIRS=(
             (u'{{', u'}}'),
             (u'=====', u'====='),
@@ -122,7 +119,8 @@ class NGramParser():
                 while next_link != -1:
                     next_colon = line.find(':', next_link)
                     next_end = line.find(']]', next_link)
-                    if next_colon != -1 and next_colon < next_end: # this link is invalid
+                    next_start = line.find('[[', next_link+2)
+                    if next_colon != -1 and (next_colon < next_end and (next_start == -1 or next_start > next_end or next_start > next_colon)): # this link is invalid
                         next_incorrect = next_link
                         count_inner = 0
                         next_end = 0
@@ -169,10 +167,6 @@ class NGramParser():
 
         article['text'] = new_text
 
-        # TODO: move somewhere else
-        self.extract_n_grams(article)
-        #print new_text.encode('ascii', 'ignore')
-
     def _remove_pairs(self, line, pair):
         """removes pair recursively
         """
@@ -218,7 +212,7 @@ class NGramParser():
                     # extract n-grams
                     for size in range(1,7):
                         start = 0
-                        while start < len(words) - size:
+                        while start < len(words) - size + 1:
                             ngram = ''
                             for i in range(0, size):
                                 ngram+= words[start+i] + ' '

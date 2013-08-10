@@ -1,3 +1,4 @@
+from wsd.tests.build.ngrams.ngramparsertest import NGramParserTest
 from wsd.tests.build.preparation.resolvethreadtest import ResolveThreadTest
 from wsd.tests.build.preparation.preparethreadtest import PrepareThreadTest 
 from wsd.tests.build.wikiparser.readertest import ReaderTest
