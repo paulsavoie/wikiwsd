@@ -1,7 +1,7 @@
 import unittest
 import Queue
 import time
-from wsd.creator.wikiparser import WorkingThread
+from wsd.build.wikiparser import WorkingThread
 
 class WorkingThreadTest(unittest.TestCase):
     def setUp(self):

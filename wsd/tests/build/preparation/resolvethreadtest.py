@@ -1,6 +1,6 @@
 import unittest
 import Queue
-from wsd.creator.preparation import ResolveThread
+from wsd.build.preparation import ResolveThread
 
 class ResolveThreadTest(unittest.TestCase):
     def setUp(self):

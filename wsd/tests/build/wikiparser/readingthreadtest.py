@@ -1,6 +1,6 @@
 import unittest
 import Queue
-from wsd.creator.wikiparser import ReadingThread
+from wsd.build.wikiparser import ReadingThread
 
 class ReadingThreadTest(unittest.TestCase):
     def setUp(self):

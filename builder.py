@@ -10,7 +10,7 @@ Date: Jun 2013
 
 '''
 
-from wsd.creator import DBSetup, Creator
+from wsd.build import DBSetup, Creator
 import sys
 import os
 import time

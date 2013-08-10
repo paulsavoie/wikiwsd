@@ -1,7 +1,7 @@
 import unittest
 import Queue
 import xml.sax
-from wsd.creator.wikiparser import Reader
+from wsd.build.wikiparser import Reader
 
 class ReaderTest(unittest.TestCase):
     def setUp(self):

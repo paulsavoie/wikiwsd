@@ -1,7 +1,7 @@
 import unittest
 import Queue
 import time
-from wsd.creator.preparation import PrepareThread
+from wsd.build.preparation import PrepareThread
 
 class PrepareThreadTest(unittest.TestCase):
     def setUp(self):

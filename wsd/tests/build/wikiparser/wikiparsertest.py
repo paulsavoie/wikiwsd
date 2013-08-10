@@ -1,7 +1,7 @@
 import unittest
 import Queue
 import xml.sax
-from wsd.creator.wikiparser import WikiParser
+from wsd.build.wikiparser import WikiParser
 
 class WikiParserTest(unittest.TestCase):
     def setUp(self):
