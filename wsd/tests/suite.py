@@ -16,4 +16,5 @@ def suite():
     suite.addTests(unittest.makeSuite(DeciderTest, 'test'))
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))
     suite.addTests(unittest.makeSuite(NGramParserTest, 'test'))
+    suite.addTests(unittest.makeSuite(NGramThreadTest, 'test'))
     return suite

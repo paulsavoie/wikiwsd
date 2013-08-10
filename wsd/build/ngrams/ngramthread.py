@@ -32,17 +32,15 @@ class NGramThread(threading.Thread):
         self._end = False
 
     def run(self):
-        #self._client.start_request()
         while not self._end:
             try:
                 article = self._queue.get(True, 2)
                 logging.info('parsing article %s' % (article['title'].encode('ascii', 'ignore')))
                 self._parser.parse_article(article)
-                self._parser.extract_ngrams(article)
+                self._parser.extract_n_grams(article)
                 self._queue.task_done()
             except Queue.Empty:
                 pass
-        #self._client.end_request()
 
     '''ends the thread 
     '''

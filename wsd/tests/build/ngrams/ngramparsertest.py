@@ -1,6 +1,4 @@
 import unittest
-import Queue
-import time
 from wsd.build.ngrams import NGramParser
 
 class NGramParserTest(unittest.TestCase):
