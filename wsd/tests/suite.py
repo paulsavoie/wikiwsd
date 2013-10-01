@@ -19,5 +19,6 @@ def suite():
     suite.addTests(unittest.makeSuite(NGramThreadTest, 'test'))
     # evaluation
     suite.addTests(unittest.makeSuite(EvaluationConnectorTest, 'test'))
+    suite.addTests(unittest.makeSuite(SampleReaderTest, 'test'))
     suite.addTests(unittest.makeSuite(WikiTermIdentifierTest, 'test'))
     return suite
