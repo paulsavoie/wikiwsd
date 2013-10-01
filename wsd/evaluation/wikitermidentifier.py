@@ -30,10 +30,12 @@ class WikiTermIdentifier():
         lines = text.strip().split('\n')
         for line in lines:
             line = line.strip()
+            next_in_comment = False
 
             # remove hyphens
             line = line.replace("'''", "")
             line = line.replace("''", "")
+            line = line.replace('&nbsp;', ' ')
             line = line.strip()
             if len(line) > 0 and line[0] == '*':
                 line = line[1:]
@@ -45,13 +47,14 @@ class WikiTermIdentifier():
 
             # remove multi-line-comments
             if line.find('<!--') != -1:
-                in_comment = True
+                line = line[:line.find('<!--')]
+                next_in_comment = True
 
             if in_comment and line.find('-->') != -1:
                 line = line[line.find('-->')+3:]
                 in_comment = False
 
-            if len(line) > 4 and not in_comment and line[0] != '|' and line[0] != '{' and line[0] != ':':
+            if len(line) > 4 and not in_comment and line[0] != '|' and line[0] != '{' and line[0] != ':' and line[0] != '!':
                 # do not consider lines only holding links
 
                 sentences = self._sent_detector.tokenize(line)
@@ -158,7 +161,7 @@ class WikiTermIdentifier():
                                         #if current_link_token != current_link_target:
                                         # always add disambiguation
                                         #disambiguations.append((current_link_token, current_link_target))
-                                        terms.append({'token': current_link_token, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start), 'disambiguations': [], 'original': current_link_target })
+                                        terms.append({'token': current_link_token, 'isNoun': True , 'index': link_start, 'length': (token_index - link_start) + 1, 'disambiguations': [], 'original': current_link_target })
 
                                 # clean up and prepare for next link
                                 in_link = False
@@ -170,6 +173,9 @@ class WikiTermIdentifier():
                         if set_in_ref:
                             in_ref = True
                             set_in_ref = False
+
+            if next_in_comment:
+                in_comment = True
 
         return {
             "links" : links,

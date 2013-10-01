@@ -6,11 +6,12 @@ from wsd.tests.build.wikiparser.readertest import ReaderTest
 from wsd.tests.build.wikiparser.wikiparsertest import WikiParserTest
 from wsd.tests.build.wikiparser.readingthreadtest import ReadingThreadTest
 from wsd.tests.build.wikiparser.workingthreadtest import WorkingThreadTest
+from wsd.tests.evaluation.connectortest import EvaluationConnectorTest
+from wsd.tests.evaluation.wikitermidentifiertest import WikiTermIdentifierTest
 from wsd.tests.main.termidentifiertest import TermIdentifierTest
 from wsd.tests.main.meaningfindertest import MeaningFinderTest 
 from wsd.tests.main.commonnessretrievertest import CommonnessRetrieverTest 
 from wsd.tests.main.relatednesscalculatortest import RelatednessCalculatorTest
 from wsd.tests.main.decidertest import DeciderTest
 from wsd.tests.main.htmloutputtertest import HTMLOutputterTest
-from wsd.tests.evaluation.connectortest import EvaluationConnectorTest
 from suite import suite
