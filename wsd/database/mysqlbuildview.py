@@ -120,6 +120,9 @@ class MySQLBuildView:
                 self._article_id_cache[title] = None
             else:
                 self._article_id_cache[title] = row[0]
+        except:
+            logging.error('error resolving article "%s": %s (%d)'
+                % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 
         return self._article_id_cache[title]
 

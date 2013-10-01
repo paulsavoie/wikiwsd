@@ -1,7 +1,7 @@
 import MySQLdb as mysqldb
 import logging
 import time
-import MySQLBuildView
+from mysqlbuildview import MySQLBuildView
 
 class MySQLDatabase:
     """The MySQLDatabase class allows to build and manage the
@@ -42,9 +42,9 @@ class MySQLDatabase:
         # build redirects table
         logging.info('Building table redirects...')
         cursor.execute('CREATE TABLE `redirects` ('
-                           '`id` BIGINT UNSIGNED INT NOT NULL PRIMARY KEY AUTO_INCREMENT,'
-                           '`source_article_name` VARCHAR(200) NOT NULL',
-                           '`target_article_name` VARCHAR(200) NOT NULL',
+                           '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,'
+                           '`source_article_name` VARCHAR(200) NOT NULL,'
+                           '`target_article_name` VARCHAR(200) NOT NULL,'
                            'INDEX USING HASH(`source_article_name`)'
                        ') ENGINE = InnoDB;')
 
@@ -114,7 +114,7 @@ class MySQLDatabase:
         total = round(end-start)
         minutes = total / 60
         secs = total % 60
-        logging.info('DONE optimizing tables (took %d minutes and %d seconds)' % (minutes, seconds))
+        logging.info('DONE optimizing tables (took %d minutes and %d seconds)' % (minutes, secs))
 
     def get_build_view(self):
         """returns a new database view optimized for the build process
