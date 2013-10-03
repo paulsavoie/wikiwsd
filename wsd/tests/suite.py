@@ -7,7 +7,7 @@ def suite():
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
     suite.addTests(unittest.makeSuite(MySQLBuildViewTest, 'test'))
     suite.addTests(unittest.makeSuite(MySQLWorkViewTest, 'test'))
-
+    
     suite.addTests(unittest.makeSuite(ResolveThreadTest, 'test'))
     suite.addTests(unittest.makeSuite(PrepareThreadTest, 'test'))
     suite.addTests(unittest.makeSuite(ReaderTest, 'test'))
@@ -22,8 +22,12 @@ def suite():
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))
     suite.addTests(unittest.makeSuite(NGramParserTest, 'test'))
     suite.addTests(unittest.makeSuite(NGramThreadTest, 'test'))
+    
     # evaluation
     suite.addTests(unittest.makeSuite(EvaluationConnectorTest, 'test'))
     suite.addTests(unittest.makeSuite(SampleReaderTest, 'test'))
     suite.addTests(unittest.makeSuite(WikiTermIdentifierTest, 'test'))
+
+    # wikipedia
+    suite.addTests(unittest.makeSuite(WikipediaReaderTest, 'test'))
     return suite

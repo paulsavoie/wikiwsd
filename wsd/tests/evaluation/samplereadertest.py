@@ -12,7 +12,7 @@ class SampleReaderTest(unittest.TestCase):
             os.remove(self.output_path)
 
     def test_sample(self):
-        reader = SampleReader('wsd/tests/data/multiple.xml', 1, self.output_path)
+        reader = SampleReader('wsd/tests/data/multiple1.xml', 1, self.output_path)
         reader.read()
 
         f = open(self.output_path)
