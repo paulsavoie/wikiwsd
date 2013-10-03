@@ -19,4 +19,5 @@ from wsd.tests.main.relatednesscalculatortest import RelatednessCalculatorTest
 from wsd.tests.main.decidertest import DeciderTest
 from wsd.tests.main.htmloutputtertest import HTMLOutputterTest
 from wsd.tests.wikipedia.wikipediareadertest import WikipediaReaderTest
+from wsd.tests.wikipedia.wikipediapreprocessortest import WikipediaPreProcessorTest
 from suite import suite

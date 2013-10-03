@@ -1,8 +1,10 @@
-import time
 import threading
 import Queue
 import logging
 import xml.sax
+import nltk.data
+from nltk.tokenize import *
+import re
 
 class WikipediaReader(threading.Thread):
     '''allows to read a wikipedia xml dump file and extract articles

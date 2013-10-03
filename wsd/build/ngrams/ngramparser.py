@@ -122,7 +122,6 @@ class NGramParser():
                     next_start = line.find('[[', next_link+2)
                     if next_colon != -1 and (next_colon < next_end and (next_start == -1 or next_start > next_end or next_start > next_colon)): # this link is invalid
                         next_incorrect = next_link
-                        count_inner = 0
                         next_end = 0
                         pos_inner = 0
                         if next_incorrect != -1:

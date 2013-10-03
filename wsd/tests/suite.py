@@ -30,4 +30,5 @@ def suite():
 
     # wikipedia
     suite.addTests(unittest.makeSuite(WikipediaReaderTest, 'test'))
+    suite.addTests(unittest.makeSuite(WikipediaPreProcessorTest, 'test'))
     return suite
