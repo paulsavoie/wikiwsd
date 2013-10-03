@@ -77,7 +77,7 @@ class MySQLBuildView:
                 % (target_article_name.encode('ascii', 'ignore'), source_article_id))
         else:
             try:
-                self._cursor.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s,  %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
+                self._cursor.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
                     string, target_article_id)
             except MySQLdb.Error, e:
                 logging.error('error saving disambiguation "%s" --> %s (%d): %s (%d)'
@@ -92,7 +92,7 @@ class MySQLBuildView:
         try:
             self._cursor.executemany('INSERT INTO ngrams(string, occurrences, as_link) VALUES(%s, 1, %s) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);',
                     ngrams)
-        except MySQLdb.error, e:
+        except MySQLdb.Error, e:
             logging.error('error saving ngrams: %s (%d)' % (e.args[1], e.args[0]))
 
     def reset_cache(self):
@@ -112,15 +112,15 @@ class MySQLBuildView:
             self._cursor.execute('SELECT id FROM articles WHERE title=%s;', title)
             row = self._cursor.fetchone()
             if row == None:
-                cur.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
+                self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
                         title)
-                row = self.cursor.fetchone()
+                row = self._cursor.fetchone()
 
             if row == None:
                 self._article_id_cache[title] = None
             else:
                 self._article_id_cache[title] = row[0]
-        except:
+        except MySQLdb.Error, e:
             logging.error('error resolving article "%s": %s (%d)'
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 

@@ -3,6 +3,7 @@ class MockMySQLConnection():
     def __init__(self):
         self._cursor = MockMySQLCursor()
         self.closed = False
+        self._last_query = None
 
     def cursor(self):
         return self._cursor
@@ -18,14 +19,24 @@ class MockMySQLCursor():
 
     def execute(self, *args):
         query = args[0]
-        arguments = []
-        if len(args) > 1:
-            arguments = args[1]
-        index = 0
+        index = 1
         while (query.find('%s') != -1):
-            query = query.replace('%s', str(arguments[index]), 1)
+            query = query.replace('%s', str(args[index]), 1)
             index += 1
         self.queries.append(query)
-        if (query in self.return_vals):
-            return self.return_vals[query]
+        self._last_query = query
+
+    def executemany(self, query, params):
+        for item in params:
+            copy = query
+            index = 0
+            while(copy.find('%s') != -1):
+                copy = copy.replace('%s', str(item[index]), 1)
+                index += 1
+            self.queries.append(copy)
+            self._last_query = copy
+
+    def fetchone(self):
+        if (self._last_query in self.return_vals):
+            return self.return_vals[self._last_query]
         return None
