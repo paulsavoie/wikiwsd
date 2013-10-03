@@ -6,6 +6,7 @@ def suite():
     # database
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
     suite.addTests(unittest.makeSuite(MySQLBuildViewTest, 'test'))
+    suite.addTests(unittest.makeSuite(MySQLWorkViewTest, 'test'))
 
     suite.addTests(unittest.makeSuite(ResolveThreadTest, 'test'))
     suite.addTests(unittest.makeSuite(PrepareThreadTest, 'test'))

@@ -8,6 +8,7 @@ from wsd.tests.build.wikiparser.readingthreadtest import ReadingThreadTest
 from wsd.tests.build.wikiparser.workingthreadtest import WorkingThreadTest
 from wsd.tests.database.mysqldatabasetest import MySQLDatabaseTest 
 from wsd.tests.database.mysqlbuildviewtest import MySQLBuildViewTest
+from wsd.tests.database.mysqlworkviewtest import MySQLWorkViewTest
 from wsd.tests.evaluation.connectortest import EvaluationConnectorTest
 from wsd.tests.evaluation.wikitermidentifiertest import WikiTermIdentifierTest
 from wsd.tests.evaluation.samplereadertest import SampleReaderTest

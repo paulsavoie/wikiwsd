@@ -40,3 +40,8 @@ class MockMySQLCursor():
         if (self._last_query in self.return_vals):
             return self.return_vals[self._last_query]
         return None
+
+    def fetchall(self):
+        if (self._last_query in self.return_vals):
+            return self.return_vals[self._last_query]
+        return None

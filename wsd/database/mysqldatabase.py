@@ -2,6 +2,7 @@ import MySQLdb as mysqldb
 import logging
 import time
 from mysqlbuildview import MySQLBuildView
+from mysqlworkview import MySQLWorkView
 
 class MySQLDatabase:
     """The MySQLDatabase class allows to build and manage the
@@ -126,7 +127,9 @@ class MySQLDatabase:
     def get_work_view(self):
         """returns a new database view optimized for the disambiguation process
         """
-        pass
+        connection = self._create_connection()
+        view = MySQLWorkView(connection)
+        return view
 
     def _create_connection(self):
         con = mysqldb.connect(self._host, self._user, self._passwd, self._database, charset='utf8', use_unicode=True)

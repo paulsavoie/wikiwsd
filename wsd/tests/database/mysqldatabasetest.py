@@ -65,6 +65,13 @@ class MySQLDatabaseTest(unittest.TestCase):
         del view
         self.assertEqual(db.connection.closed, True)
 
+    def test_get_work_view(self):
+        db = MockMySQLDatabase()
+        view = db.get_work_view()
+        self.assertEqual(db.connection.closed, False)
+        del view
+        self.assertEqual(db.connection.closed, True)
+
 class MockMySQLDatabase(MySQLDatabase):
 
     def __init__(self):
