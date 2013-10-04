@@ -109,3 +109,33 @@ class MySQLWorkView:
         except MySQLdb.Error, e:
             logging.error('error retrieving meanings: %s (%d)' % (e.args[1], e.args[0]))
         return meanings
+
+    def resolve_title(self, title):
+        """resolves an article and returns it
+
+           @param title the title of the article
+
+           @return a dictionary with fields 'id' and 'title' or None if could not be resolved
+        """
+        if title in self._article_cache:
+            return self._article_cache[title]
+
+        try:
+            self._cursor.execute('SELECT id, title FROM articles WHERE title=%s;', title)
+            row = self._cursor.fetchone()
+            if row == None:
+                self._cursor.execute('SELECT id, title FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
+                        title)
+                row = self._cursor.fetchone()
+
+            if row == None:
+                self._article_cache[title] = None
+            else:
+                self._article_cache[title] = { 'id': row[0], 'title': row[1] }
+                if (row[1] != title):
+                    self._article_cache[row[1]] = { 'id': row[0], 'title': row[1] }
+        except MySQLdb.Error, e:
+            logging.error('error resolving article "%s": %s (%d)'
+                % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
+
+        return self._article_cache[title]

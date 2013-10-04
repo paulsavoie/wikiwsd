@@ -63,3 +63,37 @@ class MySQLWorkViewTest(unittest.TestCase):
         self.assertEqual(meanings[0], { 'id': 1, 'title': 'myMeaning1', 'articleincount': 7, 'occurrences': 7 })
         self.assertEqual(meanings[1], { 'id': 3, 'title': 'myMeaning3', 'articleincount': 100, 'occurrences': 1 })
 
+    def test_resolve_title(self):
+        conn = MockMySQLConnection()
+        view = MySQLWorkView(conn)
+        conn.cursor().return_vals['SELECT id, title FROM articles WHERE title=myArticle;'] = [1, 'myArticle']
+        article = view.resolve_title('myArticle')
+        self.assertEqual(len(conn.cursor().queries), 1)
+        self.assertEqual(conn.cursor().queries[0], 'SELECT id, title FROM articles WHERE title=myArticle;')
+        self.assertEqual(article['id'], 1)
+        self.assertEqual(article['title'], 'myArticle')
+
+    def test_resolve_title_redirect(self):
+        conn = MockMySQLConnection()
+        view = MySQLWorkView(conn)
+        conn.cursor().return_vals['SELECT id, title FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=myRedirect);'] = [1, 'myArticle']
+        article = view.resolve_title('myRedirect')
+        self.assertEqual(len(conn.cursor().queries), 2)
+        self.assertEqual(conn.cursor().queries[0], 'SELECT id, title FROM articles WHERE title=myRedirect;')
+        self.assertEqual(conn.cursor().queries[1], 'SELECT id, title FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=myRedirect);')
+        self.assertEqual(article['id'], 1)
+        self.assertEqual(article['title'], 'myArticle')
+
+    def test_resolve_title_cache(self):
+        conn = MockMySQLConnection()
+        view = MySQLWorkView(conn)
+        conn.cursor().return_vals['SELECT id, title FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=myRedirect);'] = [1, 'myArticle']
+        view.resolve_title('myRedirect')
+
+        article1 = view.resolve_title('myArticle')
+        article2 = view.resolve_title('myRedirect')
+        self.assertEqual(len(conn.cursor().queries), 2)
+        self.assertEqual(article1['id'], 1)
+        self.assertEqual(article1['title'], 'myArticle')
+        self.assertEqual(article1, article2)
+        
