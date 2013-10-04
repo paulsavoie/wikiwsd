@@ -95,9 +95,9 @@ class MySQLBuildViewTest(unittest.TestCase):
         view.insert_ngrams(ngrams)
         self.assertEqual(len(conn.cursor().queries), 3)
         self.assertEqual(conn.cursor().queries[0], 
-            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(nolink, 1, 0) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
+            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(LOWER(nolink), 1, 0) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
         self.assertEqual(conn.cursor().queries[1], 
-            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(link1, 1, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
+            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(LOWER(link1), 1, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
         self.assertEqual(conn.cursor().queries[2], 
-            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(link link1, 1, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
+            'INSERT INTO ngrams(string, occurrences, as_link) VALUES(LOWER(link link1), 1, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
 

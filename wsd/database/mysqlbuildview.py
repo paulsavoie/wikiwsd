@@ -90,7 +90,7 @@ class MySQLBuildView:
                          and a zero or one indicating whether it was used as a link
         """
         try:
-            self._cursor.executemany('INSERT INTO ngrams(string, occurrences, as_link) VALUES(%s, 1, %s) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);',
+            self._cursor.executemany('INSERT INTO ngrams(string, occurrences, as_link) VALUES(LOWER(%s), 1, %s) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);',
                     ngrams)
         except MySQLdb.Error, e:
             logging.error('error saving ngrams: %s (%d)' % (e.args[1], e.args[0]))
