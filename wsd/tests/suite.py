@@ -3,7 +3,7 @@ from . import *
 
 def suite():
     suite = unittest.TestSuite()
-    # database
+    ## database
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
     suite.addTests(unittest.makeSuite(MySQLBuildViewTest, 'test'))
     suite.addTests(unittest.makeSuite(MySQLWorkViewTest, 'test'))
@@ -27,8 +27,9 @@ def suite():
     suite.addTests(unittest.makeSuite(EvaluationConnectorTest, 'test'))
     suite.addTests(unittest.makeSuite(SampleReaderTest, 'test'))
     suite.addTests(unittest.makeSuite(WikiTermIdentifierTest, 'test'))
-
+    
     # wikipedia
     suite.addTests(unittest.makeSuite(WikipediaReaderTest, 'test'))
     suite.addTests(unittest.makeSuite(WikipediaPreProcessorTest, 'test'))
+    suite.addTests(unittest.makeSuite(NGramExtractorTest, 'test'))
     return suite
