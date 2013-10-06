@@ -10,10 +10,10 @@ Date: Jun 2013
 
 import unittest
 import logging
-from wsd.tests import suite
+from wsd.tests import testsuite
 
 logging.disable(logging.ERROR)
 
-testsuite = suite()
+suite = testsuite()
 runner = unittest.TextTestRunner()
-runner.run(testsuite)
+runner.run(suite)

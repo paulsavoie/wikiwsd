@@ -22,4 +22,4 @@ from wsd.tests.wikipedia.linkextractortest import LinkExtractorTest
 from wsd.tests.wikipedia.ngramextractortest import NGramExtractorTest
 from wsd.tests.wikipedia.wikipediareadertest import WikipediaReaderTest
 from wsd.tests.wikipedia.wikipediapreprocessortest import WikipediaPreProcessorTest
-from suite import suite
+from testsuite import testsuite

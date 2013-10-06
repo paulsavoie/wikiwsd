@@ -1,7 +1,7 @@
 import unittest
 from . import *
 
-def suite():
+def testsuite():
     suite = unittest.TestSuite()
     # database
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
