@@ -23,3 +23,4 @@ from wsd.tests.wikipedia.ngramextractortest import NGramExtractorTest
 from wsd.tests.wikipedia.wikipediareadertest import WikipediaReaderTest
 from wsd.tests.wikipedia.wikipediapreprocessortest import WikipediaPreProcessorTest
 from testsuite import testsuite
+from e2etestsuite import e2etestsuite
