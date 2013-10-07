@@ -21,7 +21,7 @@ class MeaningFinder:
                     a further field 'meanings' will be created for each 'link' that shall hold the following subfields:
                         'target_article_id': the id of the referenced article
                         'target_article_name': the name of the referenced article
-                        'relevance': a value between 0 and 1 that defines how relevant the meaning is
+                        'commonness': a value between 0 and 1 that defines how relevant the meaning is
                         'articleincount': how many times this article is linked to
     '''
     def find_meanings(self, article):
@@ -50,7 +50,7 @@ class MeaningFinder:
                         result.append({ 
                             'target_article_id': m['id'], 
                             'target_article_name': m['name'], 
-                            'relevance': percentage, 
+                            'commonness': percentage, 
                             'articleincount': m['articleincount']
                             })
 

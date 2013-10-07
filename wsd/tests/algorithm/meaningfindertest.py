@@ -32,7 +32,7 @@ class MeaningFinderTest(unittest.TestCase):
                 'articleincount': 2
             }]
         reference = {
-            'relevance': 1.0,
+            'commonness': 1.0,
             'target_article_name': 'meaning1',
             'target_article_id': 1,
             'articleincount': 2
@@ -59,13 +59,13 @@ class MeaningFinderTest(unittest.TestCase):
                 'articleincount': 3
             }]
         reference1 = {
-            'relevance': 0.25,
+            'commonness': 0.25,
             'target_article_name': 'meaning1',
             'target_article_id': 1,
             'articleincount': 2
         }
         reference2 = {
-            'relevance': 0.75,
+            'commonness': 0.75,
             'target_article_name': 'meaning2',
             'target_article_id': 2,
             'articleincount': 3
@@ -84,7 +84,7 @@ class MeaningFinderTest(unittest.TestCase):
                 'articleincount': 2
             }]
         reference = {
-            'relevance': 1.0,
+            'commonness': 1.0,
             'target_article_name': 'meaning1',
             'target_article_id': 1,
             'articleincount': 2
@@ -103,7 +103,7 @@ class MeaningFinderTest(unittest.TestCase):
                 'articleincount': 2
             }]
         reference = {
-            'relevance': 1.0,
+            'commonness': 1.0,
             'target_article_name': 'meaning1',
             'target_article_id': 1,
             'articleincount': 2
