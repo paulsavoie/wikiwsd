@@ -6,7 +6,7 @@ from wsd import CommonnessRetriever
 from wsd import RelatednessCalculator
 from wsd import Decider
 from wsd import MySQLConnector
-from outputter import EvaluationOutputter
+from outputterold import EvaluationOutputterOld
 from connector import EvaluationConnector
 import logging
 
@@ -67,7 +67,7 @@ class Evaluator():
             decider.decide(words)
 
             # TODO: create evaluation outputter
-            outputter = EvaluationOutputter()
+            outputter = EvaluationOutputterOld()
             results = outputter.output(words)
             total += results['total']
             correct += results['correct']

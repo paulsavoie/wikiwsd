@@ -1,6 +1,6 @@
 import logging
 
-class EvaluationOutputter():
+class EvaluationOutputterOld():
     def __init__(self):
         pass
 

@@ -4,7 +4,8 @@ from e2e import *
 
 def e2etestsuite():
     # create tmp folder if not existent
-    os.mkdir('./tmp')
+    if not os.path.exists('./tmp'):
+        os.mkdir('./tmp')
     failed = 0
 
     print '### TESTING evaluation'
