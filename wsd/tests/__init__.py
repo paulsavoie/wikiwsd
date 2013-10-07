@@ -1,6 +1,7 @@
 from wsd.tests.algorithm.meaningfindertest import MeaningFinderTest
 from wsd.tests.algorithm.relatednessretrievertest import RelatednessRetrieverTest
 from wsd.tests.algorithm.relatednesscalculatortest import RelatednessCalculatorTest
+from wsd.tests.algorithm.decidertest import DeciderTest
 from wsd.tests.build.ngrams.ngramparsertest import NGramParserTest
 from wsd.tests.build.ngrams.ngramthreadtest import NGramThreadTest
 from wsd.tests.build.preparation.resolvethreadtest import ResolveThreadTest
@@ -19,7 +20,7 @@ from wsd.tests.main.termidentifiertest import TermIdentifierTest
 #from wsd.tests.main.meaningfindertest import MeaningFinderTest 
 #from wsd.tests.main.commonnessretrievertest import CommonnessRetrieverTest 
 #from wsd.tests.main.relatednesscalculatortest import RelatednessCalculatorTest
-from wsd.tests.main.decidertest import DeciderTest
+#from wsd.tests.main.decidertest import DeciderTest
 from wsd.tests.main.htmloutputtertest import HTMLOutputterTest
 from wsd.tests.wikipedia.linkextractortest import LinkExtractorTest
 from wsd.tests.wikipedia.ngramextractortest import NGramExtractorTest
