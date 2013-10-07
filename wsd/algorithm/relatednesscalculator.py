@@ -16,8 +16,8 @@ class RelatednessCalculator:
 
     '''calculates the relatedness
 
-        @param m1 --- article 1 as dictionary with fields 'id' and 'articleincount'
-        @param m2 --- article 2 as dictionary with fields 'id' and 'articleincount'
+        @param m1 --- link 1 as dictionary with fields 'target_article_id' and 'articleincount'
+        @param m2 --- link 2 as dictionary with fields 'target_article_id' and 'articleincount'
 
         @return a relatedness measure that defines how close the two articles relate
     '''

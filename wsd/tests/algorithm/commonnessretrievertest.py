@@ -8,19 +8,15 @@ class CommonnessRetrieverTest(unittest.TestCase):
         self._retriever = CommonnessRetriever(self._work_view)
 
     def _retrieve_commonness(self, id1, id2):
-        article1 = {
-            'id': id1,
-            'title': 'Dummy Article 1',
-            'text': '',
-            'links': []
+        link1 = {
+            'target_article_id': id1,
+            'target_article_name': 'Dummy Article 1'
         }
-        article2 = {
-            'id': id2,
-            'title': 'Dummy Article 1',
-            'text': '',
-            'links': []
+        link2 = {
+            'target_article_id': id2,
+            'target_article_name': 'Dummy Article 1'
         }
-        return self._retriever.retrieve_commonness(article1, article2)
+        return self._retriever.retrieve_commonness(link1, link2)
 
 
     def test_simple(self):

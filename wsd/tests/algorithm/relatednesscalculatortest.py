@@ -9,21 +9,17 @@ class RelatednessCalculatorTest(unittest.TestCase):
         self._calculator = RelatednessCalculator(self._work_view)
 
     def _calculate_relatedness(self, id1, articleincount1, id2, articleincount2):
-        article1 = {
-            'id': id1,
-            'title': 'Dummy Article 1',
-            'text': '',
-            'links': [],
+        link1 = {
+            'target_article_id': id1,
+            'target_article_name': 'Dummy Article 1',
             'articleincount': articleincount1
         }
-        article2 = {
-            'id': id2,
-            'title': 'Dummy Article 1',
-            'text': '',
-            'links': [],
+        link2 = {
+            'target_article_id': id2,
+            'target_article_name': 'Dummy Article 1',
             'articleincount': articleincount2
         }
-        return self._calculator.calculate_relatedness(article1, article2)
+        return self._calculator.calculate_relatedness(link1, link2)
 
     def test_simple(self):
         self._work_view.commons.append({
