@@ -1,5 +1,5 @@
 from wsd.tests.algorithm.meaningfindertest import MeaningFinderTest
-from wsd.tests.algorithm.commonnessretrievertest import CommonnessRetrieverTest
+from wsd.tests.algorithm.relatednessretrievertest import RelatednessRetrieverTest
 from wsd.tests.algorithm.relatednesscalculatortest import RelatednessCalculatorTest
 from wsd.tests.build.ngrams.ngramparsertest import NGramParserTest
 from wsd.tests.build.ngrams.ngramthreadtest import NGramThreadTest

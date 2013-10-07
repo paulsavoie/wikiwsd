@@ -4,7 +4,7 @@ from . import *
 def testsuite():
     suite = unittest.TestSuite()
     # algorithm
-    suite.addTests(unittest.makeSuite(CommonnessRetrieverTest, 'test'))
+    suite.addTests(unittest.makeSuite(RelatednessRetrieverTest, 'test'))
     suite.addTests(unittest.makeSuite(MeaningFinderTest, 'test'))
     suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
     

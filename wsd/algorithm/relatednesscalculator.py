@@ -1,5 +1,5 @@
 import math
-from wsd.algorithm import CommonnessRetriever
+from wsd.algorithm import RelatednessRetriever
 
 TOTAL_ARTICLES = 4696033.0 # TOOD: define somewhere else?
 
@@ -12,7 +12,7 @@ class RelatednessCalculator:
         @param work_view the work view to connect to the database
     '''
     def __init__(self, work_view):
-        self._commonness_retriever = CommonnessRetriever(work_view)
+        self._relatedness_retriever = RelatednessRetriever(work_view)
 
     '''calculates the relatedness
 
@@ -29,7 +29,7 @@ class RelatednessCalculator:
         if round(a_total_in) == 0 or round(b_total_in) == 0:
             return 0.0
 
-        common_in = float(self._commonness_retriever.retrieve_commonness(m1, m2))
+        common_in = float(self._relatedness_retriever.retrieve_relatedness(m1, m2))
 
         if common_in == 0.0:
             return 0.0
