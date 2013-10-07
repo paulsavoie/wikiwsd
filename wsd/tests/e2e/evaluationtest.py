@@ -48,7 +48,7 @@ class EvaluationTest():
         if diff_ok == False:
             success = False
         else:
-            os.unlink(path)
+            os.unlink(log_path)
 
         # evaluate percentage
         if round(percentage*100) != 84:
