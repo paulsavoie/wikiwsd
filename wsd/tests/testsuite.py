@@ -6,6 +6,7 @@ def testsuite():
     # algorithm
     suite.addTests(unittest.makeSuite(CommonnessRetrieverTest, 'test'))
     suite.addTests(unittest.makeSuite(MeaningFinderTest, 'test'))
+    suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
     
     # database
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
@@ -21,7 +22,7 @@ def testsuite():
     suite.addTests(unittest.makeSuite(TermIdentifierTest, 'test'))
     #suite.addTests(unittest.makeSuite(MeaningFinderTest, 'test'))
     #suite.addTests(unittest.makeSuite(CommonnessRetrieverTest, 'test'))
-    suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
+    #suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
     suite.addTests(unittest.makeSuite(DeciderTest, 'test'))
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))
     suite.addTests(unittest.makeSuite(NGramParserTest, 'test'))

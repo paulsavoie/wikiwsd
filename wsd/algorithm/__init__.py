@@ -1,2 +1,3 @@
 from meaningfinder import MeaningFinder
 from commonnessretriever import CommonnessRetriever
+from relatednesscalculator import RelatednessCalculator

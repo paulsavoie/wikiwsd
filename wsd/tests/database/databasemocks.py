@@ -27,4 +27,4 @@ class WorkViewMock:
         for item in self.commons:
             if (item['id1'] == id1 and item['id2'] == id2) or (item['id1'] == id2 and item['id2'] == id1):
                 return item['num']
-        return None
+        return 0
