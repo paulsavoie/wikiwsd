@@ -1,1 +1,2 @@
 from meaningfinder import MeaningFinder
+from commonnessretriever import CommonnessRetriever

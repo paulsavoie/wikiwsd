@@ -4,6 +4,7 @@ class WorkViewMock:
         self.articles = {}
         self.meanings = {}
         self.query_counter = 0
+        self.commons = []
 
     def resolve_title(self, title):
         if title in self.articles:
@@ -20,3 +21,10 @@ class WorkViewMock:
         if term in self.meanings:
             return self.meanings[term]
         return []
+
+    def retrieve_number_of_common_articles(self, id1, id2):
+        self.query_counter+= 1
+        for item in self.commons:
+            if (item['id1'] == id1 and item['id2'] == id2) or (item['id1'] == id2 and item['id2'] == id1):
+                return item['num']
+        return None
