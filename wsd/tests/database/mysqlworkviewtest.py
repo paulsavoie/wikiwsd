@@ -54,11 +54,11 @@ class MySQLWorkViewTest(unittest.TestCase):
         conn = MockMySQLConnection()
         view = MySQLWorkView(conn)
         conn.cursor().return_vals['SELECT target_article_id, SUM(occurrences) AS occurrences FROM disambiguations WHERE string=myTerm GROUP BY target_article_id ORDER BY occurrences DESC;'] = [(1,7),(2,3),(3,1)]
-        conn.cursor().return_vals['SELECT id, title, articleincount FROM articles WHERE id in (1,2,3);'] = [(1, 'myMeaning1', 7), (3, 'myMeaning3', 100)]
+        conn.cursor().return_vals['SELECT id, title, articleincount FROM articles WHERE id IN (1,2,3);'] = [(1, 'myMeaning1', 7), (3, 'myMeaning3', 100)]
         meanings = view.retrieve_meanings('myTerm')
         self.assertEqual(len(conn.cursor().queries), 2)
         self.assertEqual(conn.cursor().queries[0], 'SELECT target_article_id, SUM(occurrences) AS occurrences FROM disambiguations WHERE string=myTerm GROUP BY target_article_id ORDER BY occurrences DESC;')
-        self.assertEqual(conn.cursor().queries[1], 'SELECT id, title, articleincount FROM articles WHERE id in (1,2,3);')
+        self.assertEqual(conn.cursor().queries[1], 'SELECT id, title, articleincount FROM articles WHERE id IN (1,2,3);')
         self.assertEqual(len(meanings), 2)
         self.assertEqual(meanings[0], { 'id': 1, 'title': 'myMeaning1', 'articleincount': 7, 'occurrences': 7 })
         self.assertEqual(meanings[1], { 'id': 3, 'title': 'myMeaning3', 'articleincount': 100, 'occurrences': 1 })

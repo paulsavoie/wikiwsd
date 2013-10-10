@@ -49,7 +49,7 @@ class MeaningFinder:
                     if percentage >= RELEVANCE_THRESHOLD:
                         result.append({ 
                             'target_article_id': m['id'], 
-                            'target_article_name': m['name'], 
+                            'target_article_name': m['title'], 
                             'commonness': percentage, 
                             'articleincount': m['articleincount']
                             })

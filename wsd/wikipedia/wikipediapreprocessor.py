@@ -28,7 +28,7 @@ class WikipediaPreProcessor(threading.Thread):
             (u'==', u'=='),
             (u'[http', u']'),
             (u'[File:', u']'),
-            (u'[Category:', u']'),
+            (u'[Category:', u']')
         )
         # html tags can end with /> or </tag-name> and needs to be handled separately
         # <!-- --> comments also as they can spread multiple lines
@@ -53,9 +53,27 @@ class WikipediaPreProcessor(threading.Thread):
         for line in lines:
             line = line.strip()
 
-            # STEP 1 - remove hyphens
+            # reset html tags if an empty line (probably one was not properly closed somewhere)
+            if len(line) == 0:
+                html_tags = []
+
+            # STEP 1 - remove hyphens and restore tags
             line = line.replace("'''", "")
             line = line.replace("''", "")
+            line = line.replace('&lt;', '<')
+            line = line.replace('&gt;', '>')
+
+            # keep <sub> and <sup> tags if preceeded by uppercase letter (chemical element)
+            index = 1
+            while line.find('<sub>', index) != -1:
+                index = line.find('<sub>', index)+5
+                letter_before = line[index-6]
+                end = line.find('</sub>', index)
+                content = line[index:end]
+                # check if content is numeric and letter is uppercase
+                if content.isdigit() and letter_before == letter_before.upper():
+                    line = line[:index-5] + content + line[end+6:]
+                    index = index-5
 
             # check if the line starts in a comment
             line_starts_in_comment = next_line_starts_in_comment
@@ -110,7 +128,7 @@ class WikipediaPreProcessor(threading.Thread):
                             outer_start_tag = line.find('<')
                     # a normal tag is simply pushed to the stack
                     else:
-                        html_tags.append(line[index:end_tag-1])
+                        html_tags.append(line[index:end_tag])
 
             # TODO: refactor
             if len(html_tags) > 0:
@@ -208,10 +226,11 @@ class WikipediaPreProcessor(threading.Thread):
                     # count inner links
                     inner_link_counter = 0
                     next_inner_link = following_link
-                    while next_inner_link == -1 or next_inner_link > next_end:
+                    while next_inner_link == -1 or next_inner_link < next_end:
                         inner_link_counter+= 1
                         next_inner_link = line.find('[[', next_inner_link+2)
-
+                        next_end = line.find(']]', next_end+2)
+                        
                     # find matching end brackets
                     end_link = next_end
                     while inner_link_counter > 0:

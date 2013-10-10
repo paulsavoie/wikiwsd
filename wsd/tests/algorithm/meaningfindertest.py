@@ -27,7 +27,7 @@ class MeaningFinderTest(unittest.TestCase):
     def test_single_meaning(self):
         self._view.meanings['myNoun'] = [{
                 'occurrences': 1,
-                'name': 'meaning1',
+                'title': 'meaning1',
                 'id': 1,
                 'articleincount': 2
             }]
@@ -49,12 +49,12 @@ class MeaningFinderTest(unittest.TestCase):
     def test_multiple_meanings(self):
         self._view.meanings['myNoun'] = [{
                 'occurrences': 1,
-                'name': 'meaning1',
+                'title': 'meaning1',
                 'id': 1,
                 'articleincount': 2
             }, {
                 'occurrences': 3,
-                'name': 'meaning2',
+                'title': 'meaning2',
                 'id': 2,
                 'articleincount': 3
             }]
@@ -79,7 +79,7 @@ class MeaningFinderTest(unittest.TestCase):
     def test_multiple_terms(self):
         self._view.meanings['myNoun'] = [{
                 'occurrences': 1,
-                'name': 'meaning1',
+                'title': 'meaning1',
                 'id': 1,
                 'articleincount': 2
             }]
@@ -98,7 +98,7 @@ class MeaningFinderTest(unittest.TestCase):
     def test_same_term(self):
         self._view.meanings['myNoun'] = [{
                 'occurrences': 1,
-                'name': 'meaning1',
+                'title': 'meaning1',
                 'id': 1,
                 'articleincount': 2
             }]

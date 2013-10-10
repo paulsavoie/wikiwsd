@@ -34,7 +34,6 @@ class LinkExtractor(threading.Thread):
     def process(self, article):
         links = []
         new_text = ''
-
         lines = article['text'].strip().split('\n')
         for line in lines:
 

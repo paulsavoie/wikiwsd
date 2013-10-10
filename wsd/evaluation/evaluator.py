@@ -1,79 +1,63 @@
 import logging
-import json
-import MySQLdb as mysqldb
-from wsd import MeaningFinder
-from wsd import CommonnessRetriever 
-from wsd import RelatednessCalculator
-from wsd import Decider
-from wsd import MySQLConnector
-from outputterold import EvaluationOutputterOld
-from connector import EvaluationConnector
-import logging
+import Queue
+from wsd.database import MySQLDatabase
+from wsd.algorithm import MeaningFinder, RelatednessCalculator, RelatednessRetriever, Decider
+from workview import EvaluationWorkView
+from outputter import EvaluationOutputter
+from wsd.wikipedia import WikipediaReader, WikipediaPreProcessor, LinkExtractor
 
 class Evaluator():
 
-    def __init__(self, inputFile, db_host='localhost', db_port=27017):
+    def __init__(self, inputFile):
         self._input_path = inputFile
-        self._db_host = db_host
-        self._db_port = db_port
 
     def run(self):
-        # read json file
-        f = open(self._input_path, 'r')
-        content = f.read()
-        content = content.replace('&nbsp;', ' ')
-        samples = json.JSONDecoder().decode(content)
-        f.close()
+        # connect to db
+        db = MySQLDatabase()
+        orig_work_view = db.get_work_view()
 
-        # terms are already identified
+        # read sample
+        article_queue = Queue.Queue()
+        reader = WikipediaReader(self._input_path, article_queue)
+        preprocessor = WikipediaPreProcessor()
+        linkextractor = LinkExtractor(orig_work_view)
 
-        # TODO: temporary connect to mysql db - change with upgrade to mongodb
-        db_connector = MySQLConnector('localhost')
+        reader.start()
+        reader.join()
+        articles = []
+        while article_queue.empty() == False:
+            article = article_queue.get()
+            preprocessor.process(article)
+            linkextractor.process(article)
+            articles.append(article)
 
+        # do actual evaluation
         total = 0.0
         correct = 0.0
-        for sample in samples:
-            words = sample['terms']
-            links = sample['links']
+        for article in articles:
+            # wrap work view in evaluation
+            work_view = EvaluationWorkView(db.get_work_view(), article)
 
-            logging.info('starting to evaluate sample %s' % sample['title'])
+            logging.info('starting to evaluate sample %s' % article['title'])
 
-            # update the correct meaning in case of redirects
-            for word in words:
-                if word.has_key('original'):
-                    original = word['original']
-                    real_name = db_connector.resolve_redirect(original)
-                    if real_name != None:
-                        word['original'] = real_name
-                        # update links
-                        if links.has_key(original):
-                            links[real_name] = links[original]
-                            del links[original]
-                    # strip word - is done by wordpuncttokenizer in normal run
-                    word['token'] = word['token'].strip(' ,.:;-!"\'')
+            # start for each sample from the beginning
+            work_view.reset_cache()
 
+            meaningFinder = MeaningFinder(work_view)
+            meaningFinder.find_meanings(article)
 
-            evaluation_connector = EvaluationConnector(db_connector, sample)
-
-            # TODO: modify meaningFinder to only retrieve reduced meanings
-            meaningFinder = MeaningFinder(evaluation_connector)
-            disambiguations = meaningFinder.find_meanings(words)
-
-            # TODO: modify commonnessRetriever to only retrieve reduced commonness
-            commonnessRetriever = CommonnessRetriever(evaluation_connector)
-            relatednessCalculator = RelatednessCalculator(commonnessRetriever)
+            relatednessCalculator = RelatednessCalculator(work_view)
 
             decider = Decider(relatednessCalculator)
-            decider.decide(words)
+            decider.decide(article)
 
-            # TODO: create evaluation outputter
-            outputter = EvaluationOutputterOld()
-            results = outputter.output(words)
+            outputter = EvaluationOutputter()
+            results = outputter.output(article)
+
             total += results['total']
             correct += results['correct']
             rate = float(results['correct']) / float(results['total'])
-            logging.info('evaluated sample %s: got %d%% correct', sample['title'], round(rate*100))
+            logging.info('evaluated sample %s: got %d%% correct', article['title'], round(rate*100))
 
-        logging.info('done evaluating %d samples' % len(samples))
-
+        logging.info('done evaluating %d samples' % len(articles))
         return correct / total

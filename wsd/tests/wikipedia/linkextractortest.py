@@ -117,3 +117,24 @@ class LinkExtractorTest(unittest.TestCase):
             ])
         self.assertEqual(result2['text'], 'And another [[line]] pointing somewhere.\n')
 
+    def test_real_1(self):
+        text = ('thumb|right| Different C4-alkanes and -cycloalkanes (left to right): '
+                    '[[n-butane|n-butane]] and [[isobutane]] are the two C4H10 isomers; [[cyclobutane]] and '
+                    '[[methylcyclopropane]] are the two C4H8 isomers. Bicyclo[1.1.0]butane is the only '
+                    'C4H6 compound and has no isomer; [[tetrahedrane]] (not shown) is the only C4H4 compound and has '
+                    'also no isomer.\n')
+        article = self._process_text(text)
+        self.assertEqual(article['links'], [
+                { 'target_article_id': None, 'target_article_name': None, 'phrase': 'n-butane'},
+                { 'target_article_id': None, 'target_article_name': None, 'phrase': 'isobutane'},
+                { 'target_article_id': None, 'target_article_name': None, 'phrase': 'cyclobutane'},
+                { 'target_article_id': None, 'target_article_name': None, 'phrase': 'methylcyclopropane'},
+                { 'target_article_id': None, 'target_article_name': None, 'phrase': 'tetrahedrane'}
+            ])
+        expected = ('thumb|right| Different C4-alkanes and -cycloalkanes (left to right): '
+                    '[[n-butane]] and [[isobutane]] are the two C4H10 isomers; [[cyclobutane]] and '
+                    '[[methylcyclopropane]] are the two C4H8 isomers. Bicyclo[1.1.0]butane is the only '
+                    'C4H6 compound and has no isomer; [[tetrahedrane]] (not shown) is the only C4H4 compound and has '
+                    'also no isomer.\n')
+        self.assertEqual(article['text'], expected)
+

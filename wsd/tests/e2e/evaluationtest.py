@@ -2,7 +2,7 @@ import logging
 import time
 import os
 import difflib
-from wsd.evaluation import Evaluator
+from wsd.evaluation import EvaluatorOld, Evaluator
 
 class EvaluationTest():
 
@@ -11,7 +11,8 @@ class EvaluationTest():
         log_path = './tmp/evaluation-alkane.log'
         logging_format = '%(levelname)s:\t%(message)s'
         logging.basicConfig(filename=log_path, level=logging.DEBUG, format=logging_format, filemode='w+')
-        evaluator = Evaluator(path)
+        #evaluator = EvaluatorOld(path)
+        evaluator = Evaluator('./wsd/tests/data/alkane.xml')
         start = time.clock()
         percentage = evaluator.run()
         seconds = round(time.clock() - start)

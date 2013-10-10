@@ -71,7 +71,10 @@ class Decider:
                             logging.info('comparing %s to %s' % (link['phrase'], links[index]['phrase']))
                             # if there is already a meaning selected for the compared link
                             if links[index]['done']:
-                                neighbour_meanings = [links[index]['meanings'][0]]
+                                if len(links[index]['meanings']) == 0:
+                                    neighbour_meanings = []
+                                else:
+                                    neighbour_meanings = [links[index]['meanings'][0]]
                             else:
                                 neighbour_meanings = links[index]['meanings']
                             # compare each neighboring meaning to the current one
@@ -122,7 +125,8 @@ class Decider:
             del link['done']
             del link['numCmp']
             for m in link['meanings']:
-                del m['cumulativeRelatedness']
+                if m.has_key('cumulativeRelatedness'): # TODO: investigate why this field is missing sometimes
+                    del m['cumulativeRelatedness']
 
     def _find_next_link_index(self, links):
         # it there is one with only one meaning left, take that one first

@@ -93,12 +93,17 @@ class MySQLWorkView:
             self._cursor.execute('SELECT target_article_id, SUM(occurrences) AS occurrences FROM disambiguations WHERE string=%s GROUP BY target_article_id ORDER BY occurrences DESC;', term)
             result = self._cursor.fetchall()
             ids = '('
+            count = 0
             for row in result:
                 meanings_sorted[row[0]] = { 'id': row[0], 'occurrences': row[1] }
                 ids+= '%d,' % row[0]
+                count += 1
             ids = ids[:-1] + ')'
+            if count == 0:
+                return []
+                
             # query rest of info
-            self._cursor.execute('SELECT id, title, articleincount FROM articles WHERE id in %s;' % ids)
+            self._cursor.execute('SELECT id, title, articleincount FROM articles WHERE id IN %s;' % ids)
             result = self._cursor.fetchall()
             for row in result:
                 meaning = meanings_sorted[row[0]]

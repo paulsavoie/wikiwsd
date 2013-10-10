@@ -121,3 +121,20 @@ class WikipediaPreProcessorTest(unittest.TestCase):
         result2 = output_queue.get()
         self.assertEqual(result2['text'], 'This is another text.\nWhich has an ending line.\n')
 
+    def test_real_1(self):
+        text = ('[[Image:Saturated C4 hydrocarbons ball-and-stick.png|thumb|right| '
+                'Different C&lt;sub&gt;4&lt;/sub&gt;-alkanes and -cycloalkanes (left'
+                ' to right): [[n-butane|''n''-butane]] and [[isobutane]] are the two '
+                'C&lt;sub&gt;4&lt;/sub&gt;H&lt;sub&gt;10&lt;/sub&gt; isomers; [[cyclobutane]] ' 
+                'and [[methylcyclopropane]] are the two C&lt;sub&gt;4&lt;/sub&gt;H&lt;sub&gt;8&lt;/sub&gt; '
+                'isomers.&lt;br /&gt; Bicyclo[1.1.0]butane is the only '
+                'C&lt;sub&gt;4&lt;/sub&gt;H&lt;sub&gt;6&lt;/sub&gt; compound and has no isomer; '
+                '[[tetrahedrane]] (not shown) is the only C&lt;sub&gt;4&lt;/sub&gt;H&lt;sub&gt;4&lt;/sub&gt; ' 
+                'compound and has also no isomer.]]')
+        expected = ('thumb|right| Different C4-alkanes and -cycloalkanes (left to right): '
+                    '[[n-butane|n-butane]] and [[isobutane]] are the two C4H10 isomers; [[cyclobutane]] and '
+                    '[[methylcyclopropane]] are the two C4H8 isomers. Bicyclo[1.1.0]butane is the only '
+                    'C4H6 compound and has no isomer; [[tetrahedrane]] (not shown) is the only C4H4 compound and has '
+                    'also no isomer.\n')
+        self.assertEqual(self._process_text(text), expected)
+
