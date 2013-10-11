@@ -17,7 +17,7 @@ import time
 import logging
 
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
-SAMPLE_FILE = 'samples.json'
+SAMPLE_FILE = 'samples.xml'
 
 '''requests the required values from the user through the command-line
 and starts the evaluation process
@@ -103,7 +103,7 @@ def evaluate():
             if answer[0] == 'y':
                 logging.basicConfig(filename='evaluation-2.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
                 print 'Starting evaluation %s:%s...' % (host, port)
-                evaluation = Evaluator(SAMPLE_FILE, db_host=host, db_port=port)
+                evaluation = Evaluator(SAMPLE_FILE)
                 time.clock()
                 percentage = evaluation.run()
                 total = round(time.clock())

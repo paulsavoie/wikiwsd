@@ -1,11 +1,10 @@
 import unittest
 import os
-import json
 from wsd.evaluation.samplereader import SampleReader
 
 class SampleReaderTest(unittest.TestCase):
     def setUp(self):
-        self.output_path = 'wsd/tests/data/temp.json'
+        self.output_path = 'wsd/tests/data/tmp.xmp'
 
     def tearDown(self):
         if os.path.exists(self.output_path):
@@ -19,18 +18,32 @@ class SampleReaderTest(unittest.TestCase):
         content = f.read()
         f.close()
         self.maxDiff = None
-        expected = [{
-            'terms': [
-                { 'index': 1, 'token': u'This', 'length': 1, 'isNoun': False },
-                { 'index': 2, 'token': u'is', 'length': 1, 'isNoun': False },
-                { 'index': 3, 'token': u'a', 'length': 1, 'isNoun': False },
-                { 'index': 4, 'token': u'dummy', 'length': 1, 'isNoun': False },
-                { 'index': 5, 'token': u'text.', 'length': 1, 'isNoun': False }
-            ],
-            'id': 123456,
-            'links': {},
-            'title': 'Dummy Title'
-        }]
-        self.assertEqual(content, json.JSONEncoder().encode(expected))
+        expected = ('<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.8/" '
+                    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                    'xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.8/ '
+                    'http://www.mediawiki.org/xml/export-0.8.xsd" version="0.8" xml:lang="en">\n'
+                    '  <page>\n'
+                    '    <title>Dummy Title</title>\n'
+                    '    <ns>0</ns>\n'
+                    '    <id>123456</id>\n'
+                    '    <revision>\n'
+                    '      <id>530930715</id>\n'
+                    '      <parentid>530791886</parentid>\n'
+                    '      <timestamp>2013-01-02T15:40:49Z</timestamp>\n'
+                    '      <contributor>\n'
+                    '        <username>FigureArtist</username>\n'
+                    '        <id>2148412</id>\n'
+                    '      </contributor>\n'
+                    '      <minor />\n'
+                    '      <comment>/* Creative art and Fine art */ added hyperlink to creativity</comment>\n'
+                    '      <text xml:space="preserve">This is a dummy text.</text>\n'
+                    '      <sha1>9r03u34xpc7phjgxvp02n68wnsbemiw</sha1>\n'
+                    '      <model>wikitext</model>\n'
+                    '      <format>text/x-wiki</format>\n'
+                    '    </revision>\n'
+                    '  </page>\n'
+                    '</mediawiki>')
+
+        self.assertEqual(content, expected)
 
 

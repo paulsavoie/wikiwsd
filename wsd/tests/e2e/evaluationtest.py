@@ -39,7 +39,7 @@ class EvaluationTest():
                     if diff_ok:
                         print 'ERROR: the log file is not how expected (see %s):' % (log_path)
                     diff_ok = False
-                    print line.strip('\n')
+                    #print line.strip('\n')
                     if line[0] == '-' or line[0] == '?':
                         lines_diff += 1
 
@@ -55,5 +55,7 @@ class EvaluationTest():
         if round(percentage*100) != 84:
             print 'ERROR: percentage was expected to be 84, was %d' % round(percentage*100)
             success = False
+
+        print 'Test finished - took %02d:%02d' % (seconds / 60, seconds % 60)
 
         return success
