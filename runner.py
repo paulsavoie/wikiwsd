@@ -10,68 +10,52 @@ Date: Jun 2013
 
 import time
 import logging
-import MySQLdb as mysqldb
-from wsd import TermIdentifier
-from wsd import MeaningFinder
-from wsd import CommonnessRetriever 
-from wsd import RelatednessCalculator
-from wsd import Decider
-from wsd import HTMLOutputter
-from wsd import MySQLConnector 
+import Queue
+from wsd.database import MySQLDatabase
+from wsd.algorithm import MeaningFinder
+from wsd.algorithm import RelatednessCalculator
+from wsd.algorithm import RelatednessRetriever
+from wsd.algorithm import Decider
+from wsd.runner.termidentifier import TermIdentifier
+from wsd.runner.htmloutputter import HTMLOutputter
 
+# setup logging
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+logging.basicConfig(filename='running.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
 
-class MainProgram():
-    '''this class glues together the different parts of the wsd library to model
-    the whole disambiguation process
-    '''
+# measure time
+start = time.clock()
 
-    '''constructor
+# connect to db
+db = MySQLDatabase()
+work_view = db.get_work_view()
 
-    Arguments:
-        db_connector --- the database connector (an instance of wsd.DBConnector)
-        input_file --- the path to the text file to be disambiguated
-        output_file --- the path of the html output file containing the disambiguation 
-    '''
-    def __init__(self, db_connector, input_file='data/simpleinput.txt', output_file='data/simpleoutput.html'):
-        self._db_connector = db_connector
-        self._input_file = input_file
-        self._output_file = output_file
+# read input
+INPUT_FILE = 'data/simpleinput.txt'
+f = open(INPUT_FILE, 'r')
+text = f.read()
+text = text.replace('&nbsp;', ' ')
+f.close()
 
-    '''runs the actual disambiguation process
-    '''
-    def run(self):
-        f = open(self._input_file, 'r')
-        text = f.read()
-        text = text.replace('&nbsp;', ' ')
-        f.close()
+# identify terms
+term_identifier = TermIdentifier()
+article = term_identifier.identify_terms(text)
 
-        termIdentifier = TermIdentifier(self._db_connector)
-        words = termIdentifier.identify_terms(text)
+# find possible meanings
+meaning_finder = MeaningFinder(work_view)
+meaning_finder.find_meanings(article)
 
-        meaningFinder = MeaningFinder(self._db_connector)
-        disambiguations = meaningFinder.find_meanings(words)
+# calculate relatedness
+relatedness_calculator = RelatednessCalculator(work_view)
 
-        commonnessRetriever = CommonnessRetriever(self._db_connector)
-        relatednessCalculator = RelatednessCalculator(commonnessRetriever)
+# decide for meaning
+decider = Decider(relatedness_calculator)
+decider.decide(article)
 
-        decider = Decider(relatednessCalculator)
-        decider.decide(words)
+# output results
+OUTPUT_FILE = 'data/simpleoutput.html'
+html_outputter = HTMLOutputter()
+html_outputter.output(article, OUTPUT_FILE)
 
-        outputter = HTMLOutputter()
-        outputter.output(words, self._output_file)
-
-
-if __name__ == '__main__':
-    try:
-        dbConnector = MySQLConnector('localhost')
-        logging.basicConfig(filename='running.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-        prog = MainProgram(db_connector=dbConnector)
-        time.clock()
-        prog.run()
-        total = round(time.clock())
-        minutes = total / 60
-        seconds = total % 60
-        print 'Finished in %d minutes and %d seconds' % (minutes, seconds)
-    except mysqldb.Error, e:
-        print e
+seconds = round (time.clock() - start)
+print 'Finished in %02d:%02d minutes' % (seconds / 60, seconds % 60)
