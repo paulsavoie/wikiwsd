@@ -1,5 +1,5 @@
 import math
-from wsd.algorithm import RelatednessRetriever
+from relatednessretriever import RelatednessRetriever
 
 TOTAL_ARTICLES = 4696033.0 # TOOD: define somewhere else?
 

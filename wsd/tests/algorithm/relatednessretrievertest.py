@@ -1,5 +1,5 @@
 import unittest
-from wsd.algorithm import RelatednessRetriever
+from wsd.algorithm.relatednessretriever import RelatednessRetriever
 from wsd.tests.database.databasemocks import *
 
 class RelatednessRetrieverTest(unittest.TestCase):

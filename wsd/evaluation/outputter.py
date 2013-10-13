@@ -1,16 +1,17 @@
 import logging
 
 class EvaluationOutputter():
+    '''The EvaluationOutputter class checks for every link
+       if the correct meaning was selected and logs the output accordingly
+    '''
+
+    '''constructor
+    '''
     def __init__(self):
         pass
 
-    def _normalize_term(self, term):
-        tokens = ['(', ')', '[', ']', "'", '"', '.', ',', '_']
-        for token in tokens:
-            term = term.replace(token, '')
-        return term.lower()
-
-
+    '''outputs an evaluated article
+    '''
     def output(self, article):
         
         total_links = 0.0
@@ -39,3 +40,9 @@ class EvaluationOutputter():
             'correct': total_correct,
             'ratio': total_correct / total_links
         }
+
+    def _normalize_term(self, term):
+        tokens = ['(', ')', '[', ']', "'", '"', '.', ',', '_']
+        for token in tokens:
+            term = term.replace(token, '')
+        return term.lower()

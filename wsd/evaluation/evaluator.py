@@ -1,10 +1,14 @@
 import logging
 import Queue
 from wsd.database import MySQLDatabase
-from wsd.algorithm import MeaningFinder, RelatednessCalculator, RelatednessRetriever, Decider
+from wsd.algorithm import MeaningFinder
+from wsd.algorithm import RelatednessCalculator
+from wsd.algorithm import Decider
+from wsd.wikipedia import WikipediaReader
+from wsd.wikipedia import WikipediaPreProcessor
+from wsd.wikipedia import LinkExtractor
 from workview import EvaluationWorkView
 from outputter import EvaluationOutputter
-from wsd.wikipedia import WikipediaReader, WikipediaPreProcessor, LinkExtractor
 
 class Evaluator():
 

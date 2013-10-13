@@ -10,7 +10,8 @@ Date: Jun 2013
 
 '''
 
-from wsd.evaluation import Evaluator, SampleReader
+from wsd.evaluation import Evaluator
+from wsd.evaluation import SampleReader
 import sys
 import os
 import time

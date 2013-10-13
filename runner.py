@@ -14,10 +14,9 @@ import Queue
 from wsd.database import MySQLDatabase
 from wsd.algorithm import MeaningFinder
 from wsd.algorithm import RelatednessCalculator
-from wsd.algorithm import RelatednessRetriever
 from wsd.algorithm import Decider
-from wsd.runner.termidentifier import TermIdentifier
-from wsd.runner.htmloutputter import HTMLOutputter
+from wsd.runner import TermIdentifier
+from wsd.runner import HTMLOutputter
 
 # setup logging
 LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'

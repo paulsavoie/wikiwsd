@@ -26,12 +26,15 @@ class EvaluationWorkView():
     def retrieve_number_of_common_articles(self, id1, id2):
         num = self._work_view.retrieve_number_of_common_articles(id1, id2)
         # if this sample article links to both, reduce the number of links accordingly
-        links_to = 0
+        links_to_id1 = False
+        links_to_id2 = False
         for link in self._article['links']:
-            if link['target_article_id'] == id1 or link['target_article_id'] == id2:
-                links_to+= 1
+            if link['target_article_id'] == id1:
+                links_to_id1 = True
+            if link['target_article_id'] == id2:
+                links_to_id2 = True
         # reduce the number of common articles by one if necessary
-        if links_to == 2:
+        if links_to_id1 and links_to_id2:
             num-= 1
         if num < 0: # should not happen, but may due to errors in db building
             num = 0
@@ -39,6 +42,7 @@ class EvaluationWorkView():
 
     def retrieve_meanings(self, term):
         meanings = self._work_view.retrieve_meanings(term)
+        new_meanings = []
         # iterate over all meanings to check if this article influenced them
         for meaning in meanings:
             article_links_there = False
@@ -51,14 +55,16 @@ class EvaluationWorkView():
             if article_links_there:
                 meaning['articleincount'] -= 1
             # if no other article links to the meaning, remove it
-            if meaning['articleincount'] == 0 or meaning['occurrences'] == 0:
-                meanings.remove(meaning)
-        return meanings
+            if meaning['articleincount'] != 0 and meaning['occurrences'] != 0:
+                new_meanings.append(meaning)
+        return new_meanings
         
 
     def resolve_title(self, title):
         # prevent the current article from being found
         result = self._work_view.resolve_title(title)
+        if result == None:
+            return None
         if result['id'] == self._article['id']:
             return None
         return result

@@ -1,6 +1,6 @@
 import unittest
 import os
-from wsd.runner.htmloutputter import HTMLOutputter 
+from wsd.runner import HTMLOutputter 
 
 class HTMLOutputterTest(unittest.TestCase):
     def setUp(self):
