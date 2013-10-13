@@ -36,8 +36,9 @@ class Evaluator():
             articles.append(article)
 
         # do actual evaluation
-        total = 0.0
-        correct = 0.0
+        num_links = 0.0
+        num_correct = 0.0
+        num_resolved = 0.0
         for article in articles:
             # wrap work view in evaluation
             work_view = EvaluationWorkView(db.get_work_view(), article)
@@ -58,10 +59,12 @@ class Evaluator():
             outputter = EvaluationOutputter()
             results = outputter.output(article)
 
-            total += results['total']
-            correct += results['correct']
-            rate = float(results['correct']) / float(results['total'])
-            logging.info('evaluated sample %s: got %d%% correct', article['title'], round(rate*100))
+            num_links += results['total']
+            num_correct += results['correct']
+            num_resolved += results['resolved']
+            precision_rate = float(results['correct']) / float(results['resolved'])
+            recall_rate = float(results['correct']) / float(results['total'])
+            logging.info('evaluated sample %s: precision: %d%%, recall. %d%%', article['title'], round(precision_rate*100), round(recall_rate*100))
 
         logging.info('done evaluating %d samples' % len(articles))
-        return correct / total
+        return { 'precision': num_correct / num_resolved, 'recall': num_correct / num_links }

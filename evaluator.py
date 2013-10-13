@@ -106,12 +106,12 @@ def evaluate():
                 print 'Starting evaluation %s:%s...' % (host, port)
                 evaluation = Evaluator(SAMPLE_FILE)
                 time.clock()
-                percentage = evaluation.run()
+                result = evaluation.run()
                 total = round(time.clock())
                 minutes = total / 60
                 seconds = total % 60
                 print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-                print 'Evaluation done! - got %d%% correct' % round(percentage*100)
+                print 'Evaluation done! - precision: %d%%, recall: %d%%' % (round(result['precision']*100), round(result['recall']*100))
             else:
                 print 'Aborting!'
 

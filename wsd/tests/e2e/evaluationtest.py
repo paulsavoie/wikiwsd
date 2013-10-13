@@ -14,7 +14,7 @@ class EvaluationTest():
         #evaluator = EvaluatorOld(path)
         evaluator = Evaluator('./wsd/tests/data/alkane.xml')
         start = time.clock()
-        percentage = evaluator.run()
+        result = evaluator.run()
         seconds = round(time.clock() - start)
 
         success = True
@@ -51,9 +51,14 @@ class EvaluationTest():
         else:
             os.unlink(log_path)
 
-        # evaluate percentage
-        if round(percentage*100) != 84:
-            print 'ERROR: percentage was expected to be 84, was %d' % round(percentage*100)
+        # evaluate recall and precision
+        recall = result['recall']
+        precision = result['precision']
+        if round(recall*100) != 84:
+            print 'ERROR: recall was expected to be 84, was %d' % round(recall*100)
+            success = False
+        if round(precision*100) != 84:
+            print 'ERROR: precision was expected to be 84, was %d' % round(precision*100)
             success = False
 
         print 'Test finished - took %02d:%02d' % (seconds / 60, seconds % 60)

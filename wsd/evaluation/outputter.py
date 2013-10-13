@@ -16,6 +16,7 @@ class EvaluationOutputter():
         
         total_links = 0.0
         total_correct = 0.0
+        total_resolved = 0.0
         for link in article['links']:
             if link.has_key('meanings'):
                 if link['target_article_name'] == None:
@@ -31,12 +32,14 @@ class EvaluationOutputter():
                     else:
                         logging.info('INCORRECT: got %s, should be %s' 
                             % (actual, target))
+                    total_resolved += 1.0
                 else:
                     logging.error('INCORRECT: no meaning found for word %s' % link['phrase'])
                 total_links += 1.0
         logging.info('FINISHED: got %d of %d correct (%d%%)' % (total_correct, total_links, (100.0*total_correct/total_links)))
         return {
             'total': total_links,
+            'resolved': total_resolved,
             'correct': total_correct,
             'ratio': total_correct / total_links
         }
