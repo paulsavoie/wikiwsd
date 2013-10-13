@@ -16,12 +16,13 @@ from wsd.tests.database.mysqlworkviewtest import MySQLWorkViewTest
 from wsd.tests.evaluation.connectortest import EvaluationConnectorTest
 from wsd.tests.evaluation.wikitermidentifiertest import WikiTermIdentifierTest
 from wsd.tests.evaluation.samplereadertest import SampleReaderTest
-from wsd.tests.main.termidentifiertest import TermIdentifierTest
+from wsd.tests.runner.termidentifiertest import TermIdentifierTest
+from wsd.tests.runner.htmloutputtertest import HTMLOutputterTest
 #from wsd.tests.main.meaningfindertest import MeaningFinderTest 
 #from wsd.tests.main.commonnessretrievertest import CommonnessRetrieverTest 
 #from wsd.tests.main.relatednesscalculatortest import RelatednessCalculatorTest
 #from wsd.tests.main.decidertest import DeciderTest
-from wsd.tests.main.htmloutputtertest import HTMLOutputterTest
+#from wsd.tests.main.htmloutputtertest import HTMLOutputterTest
 from wsd.tests.wikipedia.linkextractortest import LinkExtractorTest
 from wsd.tests.wikipedia.ngramextractortest import NGramExtractorTest
 from wsd.tests.wikipedia.wikipediareadertest import WikipediaReaderTest

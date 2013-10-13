@@ -2,7 +2,7 @@ import logging
 import time
 import os
 import difflib
-from wsd.evaluation import EvaluatorOld, Evaluator
+from wsd.evaluation import Evaluator
 
 class EvaluationTest():
 

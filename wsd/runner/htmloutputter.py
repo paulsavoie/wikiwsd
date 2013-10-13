@@ -44,8 +44,11 @@ class HTMLOutputter():
 
             html+= token + ' '
 
-            if token[-2:] == ']]':
-                token = token[:-2]
+            if token[-2:] == ']]' or token[-3:-1] == ']]':
+                if token[-2:] == ']]':
+                    html = html[:-3]
+                else:
+                    html = html[:-4] + html[-2:-1]
                 link_html += '<div class="disambiguations"><ul>'
                 link_html += '<li class="header"><span class="label">Meaning</span><span class="percentage">Overall</span><span class="percentage">Rel.</span><span class="percentage">Comm.</span></li>'
                 first_meaning = True
@@ -62,7 +65,9 @@ class HTMLOutputter():
                         round(meaning['commonness']*100)))
                 link_html += '</ul></div>'
 
-                html = html[:-3] + ' ' + link_html + '</span>'
+                html = html + ' ' + link_html + '</span>'
+
+        html = html.strip()
 
         # write output
         with open(output_path, 'w') as output_f:
