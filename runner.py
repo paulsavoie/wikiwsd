@@ -17,44 +17,63 @@ from wsd.algorithm import RelatednessCalculator
 from wsd.algorithm import Decider
 from wsd.runner import TermIdentifier
 from wsd.runner import HTMLOutputter
+from consoleapp import ConsoleApp
+from dbsettings import *
 
-# setup logging
-LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
-logging.basicConfig(filename='running.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
+class Runner(ConsoleApp):
 
-# measure time
-start = time.clock()
+    def __init__(self):
+        pass
 
-# connect to db
-db = MySQLDatabase()
-work_view = db.get_work_view()
+    def run(self):
+        self.print_title('This is the interactive runner program')
+        self.create_tmp_if_not_exists()
 
-# read input
-INPUT_FILE = 'data/simpleinput.txt'
-f = open(INPUT_FILE, 'r')
-text = f.read()
-text = text.replace('&nbsp;', ' ')
-f.close()
+        INPUT_FILE = self.read_path('Please enter the path of the input file [.txt]', default='./tmp/input.txt')
+        OUTPUT_FILE = self.read_path('Please enter the path of the output file [.html]', default='./tmp/output.html', must_exist=False)
+        LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/runner.log', must_exist=False)
 
-# identify terms
-term_identifier = TermIdentifier()
-article = term_identifier.identify_terms(text)
 
-# find possible meanings
-meaning_finder = MeaningFinder(work_view)
-meaning_finder.find_meanings(article)
+        print '# Starting runner...'
+        # setup logging
+        LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+        logging.basicConfig(filename=LOGGING_PATH, level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
 
-# calculate relatedness
-relatedness_calculator = RelatednessCalculator(work_view)
+        # measure time
+        start = time.clock()
 
-# decide for meaning
-decider = Decider(relatedness_calculator)
-decider.decide(article)
+        # connect to db
+        db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+        work_view = db.get_work_view()
 
-# output results
-OUTPUT_FILE = 'data/simpleoutput.html'
-html_outputter = HTMLOutputter()
-html_outputter.output(article, OUTPUT_FILE)
+        # read input
+        f = open(INPUT_FILE, 'r')
+        text = f.read()
+        text = text.replace('&nbsp;', ' ')
+        f.close()
 
-seconds = round (time.clock() - start)
-print 'Finished in %02d:%02d minutes' % (seconds / 60, seconds % 60)
+        # identify terms
+        term_identifier = TermIdentifier()
+        article = term_identifier.identify_terms(text)
+
+        # find possible meanings
+        meaning_finder = MeaningFinder(work_view)
+        meaning_finder.find_meanings(article)
+
+        # calculate relatedness
+        relatedness_calculator = RelatednessCalculator(work_view)
+
+        # decide for meaning
+        decider = Decider(relatedness_calculator)
+        decider.decide(article)
+
+        # output results
+        html_outputter = HTMLOutputter()
+        html_outputter.output(article, OUTPUT_FILE)
+
+        seconds = round (time.clock() - start)
+        print 'Finished in %02d:%02d minutes' % (seconds / 60, seconds % 60)
+
+if __name__ == '__main__':
+    runner = Runner()
+    runner.run()
