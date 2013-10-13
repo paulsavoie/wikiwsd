@@ -1,120 +1,94 @@
 # -*- coding: utf-8 -*-
 '''
-This file contains the code which allows to easily evaluate
-the database of the disambiguation library - by executing
-it, a command-line interface is presented to the user to
-enter the necessary configuration values
+This file contains the code which allows the easy usage
+of the disambiguation library
 
 Author: Paul Laufer
 Date: Jun 2013
 
 '''
 
-from wsd.evaluation import Evaluator
-from wsd.evaluation import SampleReader
-import sys
 import os
 import time
 import logging
+from wsd.database import MySQLDatabase
+from wsd.evaluation import Evaluator
+from wsd.evaluation import SampleReader
+from consoleapp import ConsoleApp
+from dbsettings import *
 
-LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
-SAMPLE_FILE = 'samples.xml'
+class EvaluationApp(ConsoleApp):
+    '''The EvaluationApp class is a console application to facilitate
+       the evaluation process
+    '''
 
-'''requests the required values from the user through the command-line
-and starts the evaluation process
-'''
-def evaluate():
-    print '-' * 80
-    print '- This is the interactive evaluation program'
-    print '-' * 80 + '\n'
+    def __init__(self):
+        pass
 
-    choice = -1
-    while choice < 1 or choice > 2:
-        print 'Would you like to'
-        print '\t(1)  read samples from the wiki dump file'
-        print '\t(2)  evaluate the samples'
+    def run(self):
+        self.print_title('This is the interactive evaluation program')
+        self.create_tmp_if_not_exists()
 
-        choice = raw_input('Please enter your choice: ')
-        try:
-            choice = int(choice)
-        except:
-            pass
+        choice = self.read_choice('Would you like to', ['read samples from the wiki dump file', 'evaluate the samples'])
 
-    print
-
-    if choice == 1: # read samples
-
-        path = 'not existing'
-        while not os.path.exists(path):
-            path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
-
-        numSamples = 0
-        while numSamples <= 0:
-            new_numSamples = raw_input('Select the number of samples to use for evaluation (10): ').strip()
-            if len(new_numSamples) == 0:
-                numSamples = 10
-            else:
-                try:
-                    numSamples = 0
-                    numSamples = int(new_numSamples)
-                except:
-                    pass
-
-        answer = ''
-        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This step will require up to several minutes depending on how many items are parsed. Do you want to continue? (y/n): ').strip().lower()
-        print
-        if answer[0] == 'y':
-            logging.basicConfig(filename='evaluation-1.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-            print 'Starting to read %d samples from %s...' % (numSamples, path)
-            reader = SampleReader(path, numSamples, output=SAMPLE_FILE)
-            time.clock()
-            reader.read()
-            total = round(time.clock())
-            minutes = total / 60
-            seconds = total % 60
-            print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-            print 'Finished reader samples'
+        if choice[0] == 0:
+            self._read_samples()
         else:
-            print 'Aborting!'
+            self._evaluate_samples()
 
-    else: # evaluate samples
+    def _read_samples(self):
+        INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        OUTPUT_FILE = self.read_path('Please enter the path of the output samples file [.xml]', default='./tmp/samples.xml', must_exist=False)
+        LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/evaluation1.log', must_exist=False)
+        NUM_SAMPLES = self.read_number('Select the number of samples to use for the evaluation', default=1)
 
-        host = 'localhost'
-        new_host = raw_input('Select the host of the MongoDB installation (localhost): ').strip()
-        if len(new_host) != 0:
-            host = new_host
+        CONTINUE = self.read_yes_no('This process might take from some seconds to some minutes.\nDo you want to continue?')
 
-        port = 0
-        while port == 0:
-            new_port = raw_input('Select the port of the MongoDB installation(27017): ').strip()
-            if len(new_port) == 0:
-                port = 27017
-            else:
-                try:
-                    port = 0
-                    port = int(new_port)
-                except:
-                    pass
+        if not CONTINUE:
+            print '# Aborting...'
+            return
 
-            answer = ''
-            while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-                answer = raw_input('This step will require up to an hour to perform. Do you want to continue? (y/n): ').strip().lower()
-            print
-            if answer[0] == 'y':
-                logging.basicConfig(filename='evaluation-2.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-                print 'Starting evaluation %s:%s...' % (host, port)
-                evaluation = Evaluator(SAMPLE_FILE)
-                time.clock()
-                result = evaluation.run()
-                total = round(time.clock())
-                minutes = total / 60
-                seconds = total % 60
-                print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-                print 'Evaluation done! - precision: %d%%, recall: %d%%' % (round(result['precision']*100), round(result['recall']*100))
-            else:
-                print 'Aborting!'
+        print '# Starting to read samples...'
+        # setup logging
+        LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+        logging.basicConfig(filename=LOGGING_PATH, level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
 
+        # measure time
+        start = time.clock()
+
+        # read samples
+        reader = SampleReader(INPUT_FILE, NUM_SAMPLES, OUTPUT_FILE)
+        reader.read()
+
+        seconds = round (time.clock() - start)
+        print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+
+    def _evaluate_samples(self):
+        INPUT_FILE = self.read_path('Please enter the path of the samples file [.xml]', default='./tmp/samples.xml')
+        LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/evaluation2.log', must_exist=False)
+        
+        CONTINUE = self.read_yes_no('This process might take from several minutes to several hours.\nDo you want to continue?')
+
+        if not CONTINUE:
+            print '# Aborting...'
+            return
+
+        print '# Starting evaluation...'
+        # setup logging
+        LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+        logging.basicConfig(filename=LOGGING_PATH, level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
+
+        # connecting to db
+        db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+        work_view = db.get_work_view()
+
+        evaluator = Evaluator(INPUT_FILE, work_view)
+        result = evaluator.run()
+
+        seconds = round (time.clock() - start)
+        print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+        print 'Evaluation done! - precision: %d%%, recall: %d%%' % (round(result['precision']*100), round(result['recall']*100))
 
 if __name__ == '__main__':
-    evaluate()
+    runner = EvaluationApp()
+    runner.run()

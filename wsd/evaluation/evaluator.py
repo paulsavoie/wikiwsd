@@ -11,20 +11,24 @@ from workview import EvaluationWorkView
 from outputter import EvaluationOutputter
 
 class Evaluator():
+    '''The Evaluator class manages the evaluation process
+    '''
 
-    def __init__(self, inputFile):
-        self._input_path = inputFile
+    '''constructor
+
+       @param input_file the xml samples file to read from
+       @param work_view the database work view to use
+    '''
+    def __init__(self, input_file, work_view):
+        self._input_path = input_file
+        self._orig_work_view = work_view
 
     def run(self):
-        # connect to db
-        db = MySQLDatabase()
-        orig_work_view = db.get_work_view()
-
         # read sample
         article_queue = Queue.Queue()
         reader = WikipediaReader(self._input_path, article_queue)
         preprocessor = WikipediaPreProcessor()
-        linkextractor = LinkExtractor(orig_work_view)
+        linkextractor = LinkExtractor(self._orig_work_view)
 
         reader.start()
         reader.join()
@@ -41,7 +45,7 @@ class Evaluator():
         num_resolved = 0.0
         for article in articles:
             # wrap work view in evaluation
-            work_view = EvaluationWorkView(db.get_work_view(), article)
+            work_view = EvaluationWorkView(self._orig_work_view, article)
 
             logging.info('starting to evaluate sample %s' % article['title'])
 

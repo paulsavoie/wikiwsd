@@ -20,7 +20,10 @@ from wsd.runner import HTMLOutputter
 from consoleapp import ConsoleApp
 from dbsettings import *
 
-class Runner(ConsoleApp):
+class RunnerApp(ConsoleApp):
+    '''The RunnerApp is a console application to facilitate the
+       usage of the wsd library
+    '''
 
     def __init__(self):
         pass
@@ -72,8 +75,8 @@ class Runner(ConsoleApp):
         html_outputter.output(article, OUTPUT_FILE)
 
         seconds = round (time.clock() - start)
-        print 'Finished in %02d:%02d minutes' % (seconds / 60, seconds % 60)
+        print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
 
 if __name__ == '__main__':
-    runner = Runner()
+    runner = RunnerApp()
     runner.run()

@@ -28,10 +28,10 @@ class ConsoleApp:
     '''
     def read_choice(self, question, choices):
         choice = -1
-        while choice < 1 or choice > len(choice):
+        while choice < 1 or choice > len(choices):
             print question
             for i in range(1, len(choices)+1):
-                print '\t(%d)\t%s' % (i, choices[i])
+                print '\t(%d)\t%s' % (i, choices[i-1])
 
             choice = raw_input('Please enter your choice: ')
             try:
@@ -80,7 +80,7 @@ class ConsoleApp:
         if default != None:
             default_string=' (%d)' % default
         while number == None or (minimum != None and number < minimum) or (maximum != None and number > maximum):
-            string = raw_input('%s%s: ').strip()
+            string = raw_input('%s%s: ' % (question, default_string)).strip()
             if len(string) == 0 and default != None:
                 number = default
             else:

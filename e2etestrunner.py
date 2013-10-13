@@ -11,5 +11,6 @@ Date: Jun 2013
 import unittest
 import logging
 from wsd.tests import e2etestsuite
+from dbsettings import *
 
-e2etestsuite()
+e2etestsuite(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
