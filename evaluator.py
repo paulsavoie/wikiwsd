@@ -82,6 +82,9 @@ class EvaluationApp(ConsoleApp):
         db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
         work_view = db.get_work_view()
 
+        # measure time
+        start = time.clock()
+
         evaluator = Evaluator(INPUT_FILE, work_view)
         result = evaluator.run()
 
