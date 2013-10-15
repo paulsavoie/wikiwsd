@@ -15,6 +15,7 @@ from wsd.database import MySQLDatabase
 from wsd.algorithm import MeaningFinder
 from wsd.algorithm import RelatednessCalculator
 from wsd.algorithm import Decider
+from wsd.algorithm import LinkDetector
 from wsd.runner import TermIdentifier
 from wsd.runner import HTMLOutputter
 from consoleapp import ConsoleApp
@@ -55,9 +56,20 @@ class RunnerApp(ConsoleApp):
         text = text.replace('&nbsp;', ' ')
         f.close()
 
+        # create dummy article
+        article = {}
+        article['type'] = 'article'
+        article['id'] = None
+        article['title'] = None
+        article['text'] = text
+        article['links'] = []
+
+        # identify links
+        link_detector = LinkDetector(work_view)
+        link_detector.detect_links(article)
         # identify terms
-        term_identifier = TermIdentifier()
-        article = term_identifier.identify_terms(text)
+        #term_identifier = TermIdentifier()
+        #article = term_identifier.identify_terms(text)
 
         # find possible meanings
         meaning_finder = MeaningFinder(work_view)

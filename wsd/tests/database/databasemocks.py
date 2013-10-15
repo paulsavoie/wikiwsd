@@ -5,6 +5,7 @@ class WorkViewMock:
         self.meanings = {}
         self.query_counter = 0
         self.commons = []
+        self.occurrences = {}
 
     def resolve_title(self, title):
         if title in self.articles:
@@ -28,3 +29,10 @@ class WorkViewMock:
             if (item['id1'] == id1 and item['id2'] == id2) or (item['id1'] == id2 and item['id2'] == id1):
                 return item['num']
         return 0
+
+    def retrieve_occurrences(self, phrase):
+        self.query_counter += 1
+        if phrase in self.occurrences:
+            return self.occurrences[phrase]
+
+        return { 'occurrences': 0, 'as_link': 0 }

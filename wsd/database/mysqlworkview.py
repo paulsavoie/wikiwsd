@@ -146,7 +146,7 @@ class MySQLWorkView:
 
         return self._article_cache[title]
 
-    def retrieve_occurences(self, phrase):
+    def retrieve_occurrences(self, phrase):
         '''retrieves occurences of a phrase in wikipedia and how often
            they were used as a link
 

@@ -8,6 +8,7 @@ def testsuite():
     suite.addTests(unittest.makeSuite(MeaningFinderTest, 'test'))
     suite.addTests(unittest.makeSuite(RelatednessCalculatorTest, 'test'))
     suite.addTests(unittest.makeSuite(DeciderTest, 'test'))
+    suite.addTests(unittest.makeSuite(LinkDetectorTest, 'test'))
     
     # database
     suite.addTests(unittest.makeSuite(MySQLDatabaseTest, 'test'))
@@ -22,7 +23,7 @@ def testsuite():
     suite.addTests(unittest.makeSuite(ReadingThreadTest, 'test'))
     suite.addTests(unittest.makeSuite(WorkingThreadTest, 'test'))
     suite.addTests(unittest.makeSuite(TermIdentifierTest, 'test'))
-
+    
     # runner
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))
     suite.addTests(unittest.makeSuite(NGramParserTest, 'test'))

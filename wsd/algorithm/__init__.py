@@ -1,3 +1,4 @@
 from meaningfinder import MeaningFinder
 from relatednesscalculator import RelatednessCalculator
 from decider import Decider
+from linkdetector import LinkDetector
