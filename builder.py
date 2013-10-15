@@ -1,144 +1,133 @@
 # -*- coding: utf-8 -*-
 '''
-This file contains the code which allows to easily build
-the database of the disambiguation library - by executing
-it, a command-line interface is presented to the user to
-enter the necessary configuration values
+This file contains the code which allows to easily
+build and prepare the database used for the disambiguation library
 
 Author: Paul Laufer
-Date: Jun 2013
+Date: Oct 2013
 
 '''
 
-from wsd.build import DBSetup, Creator
-import sys
 import os
 import time
 import logging
+from wsd.database import MySQLDatabase
+from consoleapp import ConsoleApp
+from dbsettings import *
 
-LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+class BuilderApp(ConsoleApp):
+    '''The EvaluationApp class is a console application to facilitate
+       the building process
+    '''
 
-'''requests the configuration from the user through the command-line 
-and starts the building process
-'''
-def build():
-    print '-' * 80
-    print '- This is the interactive build program which guides you'
-    print '- through the build setup of the word sense disambugation'
-    print '- module'
-    print '-' * 80 + '\n'
+    def __init__(self):
+        pass
 
-    choice = -1
-    while choice < 1 or choice > 4:
-        print 'Would you like to'
-        print '\t(1)  setup the database'
-        print '\t(2)  prepare the database'
-        print '\t(3)  create the disambiguation entries'
-        print '\t(4)  learn the n-grams\n'
+    def run(self):
+        self.print_title('This is the interactive building program')
+        self.create_tmp_if_not_exists()
 
-        choice = raw_input('Please enter your choice: ')
-        try:
-            choice = int(choice)
-        except:
-            pass
+        choice = self.read_choice('Would you like to', [
+            'create the database structure', 
+            'extract articles and redirects from the wikipedia dump file',
+            'parse the wikipedia dump file and extract links and disambiguations',
+            'parse the wikipedia dump file and extract ngrams for link detection',
+            'optimize the database'
+            ])
 
-    print
+        # setup logging
+        LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+        LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/build-%d.log' % (choice[0]+1), must_exist=False)
+        logging.basicConfig(filename=LOGGING_PATH, level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
 
-    host = 'localhost'
-    new_host = raw_input('Select the host of the MongoDB installation (localhost): ').strip()
-    if len(new_host) != 0:
-        host = new_host
-
-    port = 0
-    while port == 0:
-        new_port = raw_input('Select the port of the MongoDB installation(27017): ').strip()
-        if len(new_port) == 0:
-            port = 27017
+        if choice[0] == 0:
+            self._create_structure()
+        elif choice[0] == 1:
+            self._extract_articles()
+        elif choice[0] == 2:
+            self._extract_disambiguations()
+        elif choice[0] == 3:
+            self._extract_ngrams()
         else:
-            try:
-                port = 0
-                port = int(new_port)
-            except:
-                pass
+            self._optimize_database()
 
-    if choice == 1: # setup the db
-        answer = ''
-        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This will erase all previous data from the database. Do you want to continue? (y/n): ').strip().lower()
-        print
-        if answer[0] == 'y':
-            print 'Setting up database at %s:%s...' % (host, port)
-            setup = DBSetup(host, port)
-            setup.run()
-            print 'Setup finished!'
-        else:
-            print 'Aborting!'
+    def _create_structure(self):
 
-    elif choice == 2: # prepare the database
-        path = 'not existing'
-        while not os.path.exists(path):
-            path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
-        answer = ''
-        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This step will require several HOURS to perform. Do you want to continue? (y/n): ').strip().lower()
-        print
-        if answer[0] == 'y':
-            logging.basicConfig(filename='preparation.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-            print 'Preparing database %s:%s...' % (host, port)
-            setup = Creator(path, db_host=host, db_port=port, num_threads=8, max_queue_size=300, action='prepare')
-            time.clock()
-            setup.run()
-            total = round(time.clock())
-            minutes = total / 60
-            seconds = total % 60
-            print 'Finished after %d minutes and %02d seconds' % (minutes, seconds)
-            print 'Preparation of database finished - detailed information can be found in preparation.log logfile!'
-        else:
-            print 'Aborting!'
+        # measure time
+        start = time.clock()
 
-    elif choice == 3: # create the disambiguation entries
-        path = 'not existing'
-        while not os.path.exists(path):
-            path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
-        answer = ''
-        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This step will require several DAYS to perform. Do you want to continue? (y/n): ').strip().lower()
-        print
-        if answer[0] == 'y':
-            logging.basicConfig(filename='learning.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-            print 'Learning meanings %s:%s...' % (host, port)
-            setup = Creator(path, db_host=host, db_port=port, num_threads=26, max_queue_size=300, action='learn')
-            time.clock()
-            setup.run()
-            total = round(time.clock())
-            minutes = total / 60
-            seconds = total % 60
-            print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-            print 'Learning of disambiguations finished - find detailed information in "learning.log"'
-        else:
-            print 'Aborting!'
+        print 'TODO: create database structure'
 
-    else: # learn n-grams
-        path = 'not existing'
-        while not os.path.exists(path):
-            path = raw_input('Please enter the path to the wikipedia dump file (.xml): ').strip()
-        answer = ''
-        while answer != 'y' and answer != 'n' and answer != 'yes' and answer != 'no':
-            answer = raw_input('This step will require several DAYS to perform. Do you want to continue? (y/n): ').strip().lower()
-        print
-        if answer[0] == 'y':
-            logging.basicConfig(filename='n-grams.log', level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
-            print 'Learning meanings %s:%s...' % (host, port)
-            setup = Creator(path, db_host=host, db_port=port, num_threads=26, max_queue_size=300, action='ngrams')
-            time.clock()
-            setup.run()
-            total = round(time.clock())
-            minutes = total / 60
-            seconds = total % 60
-            print 'Finished after %d minutes and %d seconds' % (minutes, seconds)
-            print 'Learning of n-grams finished - find detailed information in "n-grams.log"'
+        seconds = round (time.clock() - start)
+        print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+
+    def _extract_articles(self):
+
+        INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
+
+        if CONTINUE:
+            # measure time
+            start = time.clock()
+
+            print 'TODO: extract articles and redirects'
+
+            seconds = round (time.clock() - start)
+            print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+
         else:
-            print 'Aborting!'
+            print 'Aborting...'
+
+    def _extract_disambiguations(self):
+
+        INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
+
+        if CONTINUE:
+            # measure time
+            start = time.clock()
+
+            print 'TODO: extract links and disambiguations'
+
+            seconds = round (time.clock() - start)
+            print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+            
+        else:
+            print 'Aborting...'
+
+    def _extract_ngrams(self):
+
+        INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
+
+        if CONTINUE:
+            # measure time
+            start = time.clock()
+
+            print 'TODO: extract ngrams'
+
+            seconds = round (time.clock() - start)
+            print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+            
+        else:
+            print 'Aborting...'
+
+    def _optimize_database(self):
+
+        CONTINUE = self.read_yes_no('This process might take several hours to finish.\nDo you want to continue?')
+
+        if CONTINUE:
+            # measure time
+            start = time.clock()
+
+            print 'TODO: optimize'
+
+            seconds = round (time.clock() - start)
+            print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+            
+        else:
+            print 'Aborting...'
 
 if __name__ == '__main__':
-    build()
+    runner = BuilderApp()
+    runner.run()
