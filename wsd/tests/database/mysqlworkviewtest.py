@@ -96,4 +96,24 @@ class MySQLWorkViewTest(unittest.TestCase):
         self.assertEqual(article1['id'], 1)
         self.assertEqual(article1['title'], 'myArticle')
         self.assertEqual(article1, article2)
-        
+    
+    def test_retrieve_occurences(self):
+        conn = MockMySQLConnection()
+        view = MySQLWorkView(conn)
+        conn.cursor().return_vals['SELECT occurrences, as_link FROM ngrams_m WHERE string=myPhrase;'] = [7, 2]
+        result = view.retrieve_occurences('myPhrase')
+
+        self.assertEqual(len(conn.cursor().queries), 1)
+        self.assertEqual(result['occurrences'], 7)
+        self.assertEqual(result['as_link'], 2)
+
+    def test_retrieve_occurences_cache(self):
+        conn = MockMySQLConnection()
+        view = MySQLWorkView(conn)
+        conn.cursor().return_vals['SELECT occurrences, as_link FROM ngrams_m WHERE string=myPhrase;'] = [7, 2]
+        result = view.retrieve_occurences('myPhrase')
+        result = view.retrieve_occurences('myPhrase')
+
+        self.assertEqual(len(conn.cursor().queries), 1)
+        self.assertEqual(result['occurrences'], 7)
+        self.assertEqual(result['as_link'], 2)

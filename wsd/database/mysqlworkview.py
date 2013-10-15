@@ -27,6 +27,7 @@ class MySQLWorkView:
         self._redirect_cache = {}
         self._link_cache = {}
         self._article_cache = {}
+        self._occurrences_cache = {}
 
     def resolve_redirect(self, name):
         """resolves a redirect and returns the real article name
@@ -144,3 +145,37 @@ class MySQLWorkView:
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 
         return self._article_cache[title]
+
+    def retrieve_occurences(self, phrase):
+        '''retrieves occurences of a phrase in wikipedia and how often
+           they were used as a link
+
+           @param phrase the phrase to be looked up
+
+           @return a dictionary with two fields, 'occurrences' and 'as_link' that hold the number
+                   of times the phrase was used and how often as a link
+        '''
+
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        if phrase in self._occurrences_cache:
+            return self._occurrences_cache[phrase]
+
+        occurrences = { 'occurrences': 0, 'as_link': 0 }
+        try:
+            letter = phrase[0]
+            if letter in letters:
+                table = 'ngrams_%s' % letter
+            else:
+                table = 'ngrams_other'
+            self._cursor.execute('SELECT occurrences, as_link FROM ' + table + ' WHERE string=%s;', phrase)
+            
+            result = self._cursor.fetchone()
+            if result != None:
+                occurrences['occurrences'] = result[0]
+                occurrences['as_link'] = result[1]
+        except MySQLdb.Error, e:
+            logging.error('error retrieving occurrences for phrase "%s": %s (%d)'
+                % (phrase.encode('ascii', 'ignore'), e.args[1], e.args[0]))
+
+        self._occurrences_cache[phrase] = occurrences
+        return occurrences
