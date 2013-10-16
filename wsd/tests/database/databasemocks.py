@@ -36,3 +36,34 @@ class WorkViewMock:
             return self.occurrences[phrase]
 
         return { 'occurrences': 0, 'as_link': 0 }
+
+class BuildViewMock:
+    def __init__(self):
+        self.articles = []
+        self.redirects = []
+        self.links = []
+        self.disambiguations = []
+        self.ngrams = []
+        self.commited = 0
+        self.cache_reset = 0
+
+    def insert_article(self, id, title):
+        self.articles.append((id, title))
+
+    def insert_redirect(self, source, target):
+        self.redirects.append((source, target))
+
+    def insert_link(self, source_id, target_name):
+        self.links.append((source_id, target_name))
+
+    def insert_disambiguation(self, string, target_name):
+        self.disambiguations.append((string, target_name))
+
+    def insert_ngrams(self, ngrams):
+        self.ngrams.extend(ngrams)
+
+    def commit(self):
+        self.commited+= 1
+
+    def reset_cache(self):
+        self.cache_reset += 1

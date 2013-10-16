@@ -12,7 +12,7 @@ class LinkExtractor(threading.Thread):
 
     '''constructor
 
-       @param work_view a database work used to resolve redirects and extract target article ids
+       @param work_view a database work used to resolve redirects and extract target article ids (if None, then they will not be resolved)
        @param input_queue if the extractor is used as a thread, articles are read from this queue [optional]
        @param output_queue if the extractor is used as a thread, articles with links are written to this queue [optional]
     '''
@@ -83,13 +83,17 @@ class LinkExtractor(threading.Thread):
         self._end = True
 
     def _resolve_link(self, target, phrase):
-        result = self._work_view.resolve_title(target)
-        if (result == None):
-            target_article_id = None
-            target_article_name = None
+        if self._work_view != None:
+            result = self._work_view.resolve_title(target)
+            if result == None:
+                target_article_id = None
+                target_article_name = None
+            else:
+                target_article_id = result['id']
+                target_article_name = result['title']
         else:
-            target_article_id = result['id']
-            target_article_name = result['title']
+            target_article_id = None
+            target_article_name = target
 
         link = {
             'target_article_id': target_article_id,

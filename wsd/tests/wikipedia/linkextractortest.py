@@ -138,3 +138,18 @@ class LinkExtractorTest(unittest.TestCase):
                     'also no isomer.\n')
         self.assertEqual(article['text'], expected)
 
+    def test_no_work_view(self):
+        extractor = LinkExtractor(None)
+        text = 'Text with [[multiple]] [[target|links]] [[somewhere]].'
+        article = {
+            'id': 1,
+            'title': 'Dummy Title',
+            'text': text
+        }
+        article = extractor.process(article)
+        self.assertEqual(article['links'], [
+                { 'target_article_id': None, 'target_article_name': 'multiple', 'phrase': 'multiple' },
+                { 'target_article_id': None, 'target_article_name': 'target', 'phrase': 'links' },
+                { 'target_article_id': None, 'target_article_name': 'somewhere', 'phrase': 'somewhere' }
+            ])
+        self.assertEqual(article['text'], 'Text with [[multiple]] [[links]] [[somewhere]].\n')

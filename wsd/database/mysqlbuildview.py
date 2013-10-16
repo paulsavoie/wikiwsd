@@ -95,6 +95,12 @@ class MySQLBuildView:
         except MySQLdb.Error, e:
             logging.error('error saving ngrams: %s (%d)' % (e.args[1], e.args[0]))
 
+    def commit(self):
+        '''commits the changes
+        '''
+        self._db_connection.commit()
+
+
     def reset_cache(self):
         """resets the internal cache and thus prevents it from growing too big
         """
@@ -125,4 +131,3 @@ class MySQLBuildView:
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 
         return self._article_id_cache[title]
-

@@ -4,7 +4,7 @@ import logging
 import re
 
 WAIT_QUEUE_TIMEOUT = 2 # in seconds
-MAX_NGRAM_LENGTH = 5
+MAX_NGRAM_LENGTH = 3
 
 class NGramExtractor(threading.Thread):
     '''The NGramExtractor class extracts ngrams from an article and returns them

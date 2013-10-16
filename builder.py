@@ -11,7 +11,12 @@ Date: Oct 2013
 import os
 import time
 import logging
+import Queue
 from wsd.database import MySQLDatabase
+from wsd.wikipedia import WikipediaReader
+from wsd.build import ArticleInserter
+from wsd.build import DisambiguationInserter
+from wsd.build import NGramInserter
 from consoleapp import ConsoleApp
 from dbsettings import *
 
@@ -56,7 +61,9 @@ class BuilderApp(ConsoleApp):
         # measure time
         start = time.clock()
 
-        print 'TODO: create database structure'
+        # creating structure
+        db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+        db.build()
 
         seconds = round (time.clock() - start)
         print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
@@ -64,13 +71,39 @@ class BuilderApp(ConsoleApp):
     def _extract_articles(self):
 
         INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        MAX_ARTICLES_IN_QUEUE = self.read_number('How many articles should be kept in the memory at any time at most?', 200, 20, 300)
+        NUM_THREADS = self.read_number('How many threads shall be used to write to the database?', 20, 1, 50)
         CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
 
         if CONTINUE:
             # measure time
             start = time.clock()
 
-            print 'TODO: extract articles and redirects'
+            # connect to database and create article queue
+            db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+
+            # create reader and threads
+            reader = WikipediaReader(INPUT_FILE, queue, extract_text=False)
+            threads = []
+            for i in range(0, NUM_THREADS):
+                inserter = ArticleInserter(queue, db.get_build_view())
+                threads.append(inserter)
+
+            # start reader
+            reader.start()
+
+            # start insert threads
+            for thread in threads:
+                thread.start()
+
+            # wait for reading thread, queue and inserters to be done
+            reader.join()
+            queue.join()
+            for thread in threads:
+                thread.end()
+            for thread in threads:
+                thread.join()
 
             seconds = round (time.clock() - start)
             print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
@@ -81,13 +114,39 @@ class BuilderApp(ConsoleApp):
     def _extract_disambiguations(self):
 
         INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        MAX_ARTICLES_IN_QUEUE = self.read_number('How many articles should be kept in the memory at any time at most?', 200, 20, 300)
+        NUM_THREADS = self.read_number('How many threads shall be used to write to the database?', 20, 1, 50)
         CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
 
         if CONTINUE:
             # measure time
             start = time.clock()
 
-            print 'TODO: extract links and disambiguations'
+            # connect to database and create article queue
+            db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+
+            # create reader and threads
+            reader = WikipediaReader(INPUT_FILE, queue)
+            threads = []
+            for i in range(0, NUM_THREADS):
+                inserter = DisambiguationInserter(queue, db.get_build_view())
+                threads.append(inserter)
+
+            # start reader
+            reader.start()
+
+            # start insert threads
+            for thread in threads:
+                thread.start()
+
+            # wait for reading thread, queue and inserters to be done
+            reader.join()
+            queue.join()
+            for thread in threads:
+                thread.end()
+            for thread in threads:
+                thread.join()
 
             seconds = round (time.clock() - start)
             print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
@@ -98,13 +157,39 @@ class BuilderApp(ConsoleApp):
     def _extract_ngrams(self):
 
         INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
+        MAX_ARTICLES_IN_QUEUE = self.read_number('How many articles should be kept in the memory at any time at most?', 200, 20, 300)
+        NUM_THREADS = self.read_number('How many threads shall be used to write to the database?', 20, 1, 50)
         CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
 
         if CONTINUE:
             # measure time
             start = time.clock()
 
-            print 'TODO: extract ngrams'
+             # connect to database and create article queue
+            db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+
+            # create reader and threads
+            reader = WikipediaReader(INPUT_FILE, queue)
+            threads = []
+            for i in range(0, NUM_THREADS):
+                inserter = NGramInserter(queue, db.get_build_view())
+                threads.append(inserter)
+
+            # start reader
+            reader.start()
+
+            # start insert threads
+            for thread in threads:
+                thread.start()
+
+            # wait for reading thread, queue and inserters to be done
+            reader.join()
+            queue.join()
+            for thread in threads:
+                thread.end()
+            for thread in threads:
+                thread.join()
 
             seconds = round (time.clock() - start)
             print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
@@ -120,7 +205,10 @@ class BuilderApp(ConsoleApp):
             # measure time
             start = time.clock()
 
-            print 'TODO: optimize'
+            # optimizing database
+            # creating structure
+            db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+            db.optimize()
 
             seconds = round (time.clock() - start)
             print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)

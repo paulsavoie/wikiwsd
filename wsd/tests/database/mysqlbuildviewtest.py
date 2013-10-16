@@ -101,3 +101,9 @@ class MySQLBuildViewTest(unittest.TestCase):
         self.assertEqual(conn.cursor().queries[2], 
             'INSERT INTO ngrams(string, occurrences, as_link) VALUES(LOWER(link link1), 1, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1, as_link=as_link+VALUES(as_link);')
 
+    def test_commit(self):
+        conn = MockMySQLConnection()
+        view = MySQLBuildView(conn)
+        self.assertEqual(conn.commited, 0)
+        view.commit()
+        self.assertEqual(conn.commited, 1)

@@ -3,14 +3,9 @@ from wsd.tests.algorithm.relatednessretrievertest import RelatednessRetrieverTes
 from wsd.tests.algorithm.relatednesscalculatortest import RelatednessCalculatorTest
 from wsd.tests.algorithm.decidertest import DeciderTest
 from wsd.tests.algorithm.linkdetectortest import LinkDetectorTest
-from wsd.tests.build.ngrams.ngramparsertest import NGramParserTest
-from wsd.tests.build.ngrams.ngramthreadtest import NGramThreadTest
-from wsd.tests.build.preparation.resolvethreadtest import ResolveThreadTest
-from wsd.tests.build.preparation.preparethreadtest import PrepareThreadTest 
-from wsd.tests.build.wikiparser.readertest import ReaderTest
-from wsd.tests.build.wikiparser.wikiparsertest import WikiParserTest
-from wsd.tests.build.wikiparser.readingthreadtest import ReadingThreadTest
-from wsd.tests.build.wikiparser.workingthreadtest import WorkingThreadTest
+from wsd.tests.build.articleinsertertest import ArticleInserterTest
+from wsd.tests.build.disambiguationinsertertest import DisambiguationInserterTest
+from wsd.tests.build.ngraminsertertest import NGramInserterTest
 from wsd.tests.database.mysqldatabasetest import MySQLDatabaseTest 
 from wsd.tests.database.mysqlbuildviewtest import MySQLBuildViewTest
 from wsd.tests.database.mysqlworkviewtest import MySQLWorkViewTest

@@ -4,12 +4,16 @@ class MockMySQLConnection():
         self._cursor = MockMySQLCursor()
         self.closed = False
         self._last_query = None
+        self.commited = 0
 
     def cursor(self):
         return self._cursor
 
     def close(self):
         self.closed = True
+
+    def commit(self):
+        self.commited += 1
 
 class MockMySQLCursor():
 

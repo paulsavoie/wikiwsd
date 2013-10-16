@@ -1,2 +1,3 @@
-from creator import Creator 
-from dbsetup import DBSetup
+from articleinserter import ArticleInserter
+from disambiguationinserter import DisambiguationInserter
+from ngraminserter import NGramInserter 

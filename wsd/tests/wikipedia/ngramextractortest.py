@@ -29,10 +29,7 @@ class NGramExtractorTest(unittest.TestCase):
                 ('simple text', 0),
                 ('This is a', 0),
                 ('is a simple', 0),
-                ('a simple text', 0),
-                ('This is a simple', 0),
-                ('is a simple text', 0),
-                ('This is a simple text', 0)
+                ('a simple text', 0)
             ])
 
     def test_ngrams_multiple_lines(self):
