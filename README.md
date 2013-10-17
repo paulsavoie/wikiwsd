@@ -40,7 +40,7 @@ In order to test the library, create a plain text file and insert the text to be
 To evaluate the library, the `evaluator.py` script can be used. It allows to select a set of random samples from the Wikipedia dump file and perform a holdout evaluation on them, determining the precision and recall for the two performed steps, finding the words to be disambiguated and disambiguation the possible links separately.
 
 ## About
-This project was developed as part of my Master program "Software Development and Business Management" at Graz University of Technology. 
+This project was developed as part of my Master program "Software Development and Business Management" at Graz University of Technology. The algorithms used in this project are partially taken from [this paper](http://www.cs.waikato.ac.nz/~ihw/papers/08-DNM-IHW-LearningToLinkWithWikipedia.pdf) by David Milne and Ian H. Witten.
 
 ### License
 This project is published under the MIT License.
