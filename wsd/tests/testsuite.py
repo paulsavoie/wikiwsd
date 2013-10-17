@@ -23,7 +23,6 @@ def testsuite():
     # evaluation
     suite.addTests(unittest.makeSuite(EvaluationWorkViewTest, 'test'))
     suite.addTests(unittest.makeSuite(SampleReaderTest, 'test'))
-    suite.addTests(unittest.makeSuite(WikiTermIdentifierTest, 'test'))
     
     # runner
     suite.addTests(unittest.makeSuite(HTMLOutputterTest, 'test'))

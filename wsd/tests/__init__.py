@@ -10,7 +10,6 @@ from wsd.tests.database.mysqldatabasetest import MySQLDatabaseTest
 from wsd.tests.database.mysqlbuildviewtest import MySQLBuildViewTest
 from wsd.tests.database.mysqlworkviewtest import MySQLWorkViewTest
 from wsd.tests.evaluation.workviewtest import EvaluationWorkViewTest
-from wsd.tests.evaluation.wikitermidentifiertest import WikiTermIdentifierTest
 from wsd.tests.evaluation.samplereadertest import SampleReaderTest
 from wsd.tests.runner.termidentifiertest import TermIdentifierTest
 from wsd.tests.runner.htmloutputtertest import HTMLOutputterTest
