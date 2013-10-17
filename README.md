@@ -1,7 +1,6 @@
 # WSD - Word Sense Disambiguation Library
 
-The WSD library provides tools to detect words within a text which can be interpreted in multiple ways. All known meanings of those words are pulled from a database and the most likely disambiguation is chosen by evaluating the 
-context of the word. The project is written entirely in Python and contains 4 executable Python scripts:
+The WSD library provides tools to detect words within a text which can be interpreted in multiple ways. All known meanings of those words are pulled from a database and the most likely disambiguation is chosen by evaluating the context of the word. The project is written entirely in Python and contains 4 executable Python scripts:
 
 - `runner.py` reads a text from a plain text file, detects words to be disambiguated and outputs the text into a html file. All required configurations can be entered via a command-line interface.
 
