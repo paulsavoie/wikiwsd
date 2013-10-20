@@ -20,7 +20,7 @@ Before using the library, a MySQL database has to be set up. The `builder.py` sc
     GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`localhost` IDENTIFIED BY 'wikiwsd';
     GRANT ALL ON `wikiwsd`.* TO `wikiwsd`@`%` IDENTIFIED BY 'wikiwsd';
 
-You may change the database name, user and password according to your needs, just make sure to update the `dbsettings.py` file accordingly.
+Please copy the `dbsettings.py.example` file to `dbsettings.py` and change the settings accordingly to your database setup.
 
 ### Building the database
 The interactive `builder.py` script should be rather self-explanatory. It allows one to

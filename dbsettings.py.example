@@ -5,4 +5,4 @@
 DATABASE_HOST = 'localhost'
 DATABASE_USER = 'wikiwsd'
 DATABASE_PASSWORD = 'wikiwsd'
-DATABASE_NAME = 'wikiwsd3'
+DATABASE_NAME = 'wikiwsd'
