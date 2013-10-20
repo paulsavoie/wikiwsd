@@ -110,4 +110,4 @@ class ConsoleApp:
     '''
     def create_tmp_if_not_exists(self):
         if not os.path.exists('./tmp'):
-            os.path.mkdir('./tmp')
+            os.mkdir('./tmp')
