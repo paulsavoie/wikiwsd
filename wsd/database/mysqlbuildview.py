@@ -29,7 +29,7 @@ class MySQLBuildView:
         """
         try:
             self._cursor.execute('INSERT INTO articles(id, title) VALUES(%s, %s);', 
-                id, title)
+                (id, title))
         except MySQLdb.Error, e:
             logging.error('error saving article "%s" to database: %s (%d)' 
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
@@ -42,7 +42,7 @@ class MySQLBuildView:
         """
         try:
             self._cursor.execute('INSERT INTO redirects(source_article_name, target_article_name) VALUES(%s, %s);',
-                source_name, target_name)
+                (source_name, target_name))
         except MySQLdb.Error, e:
             logging.error('error saving redirect "%s" --> "%s" to database: %s (%d)' 
                 % (source_name.encode('ascii', 'ignore'), target_name.encode('ascii', 'ignore'), e.args[1], e.args[0]))
@@ -60,7 +60,7 @@ class MySQLBuildView:
         else:
             try:
                 self._cursor.execute('INSERT INTO links(source_article_id, target_article_id) VALUES(%s, %s);',
-                    source_article_id, target_article_id)
+                    (source_article_id, target_article_id))
             except MySQLdb.Error, e:
                 logging.error('error saving link (%d) --> (%d) to database: %s (%d)' 
                 % (source_article_id, target_article_id, e.args[1], e.args[0]))
@@ -78,7 +78,7 @@ class MySQLBuildView:
         else:
             try:
                 self._cursor.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
-                    string, target_article_id)
+                    (string, target_article_id))
             except MySQLdb.Error, e:
                 logging.error('error saving disambiguation "%s" --> %s (%d): %s (%d)'
                     % (string.encode('ascii', 'ignore'), target_article_name.encode('ascii', 'ignore'), target_article_id, e.args[1], e.args[0]))
