@@ -37,7 +37,7 @@ class MySQLWorkView:
            @return the real name of the article or None if it cannot be resolved
         """
         try:
-            self._cursor.execute('SELECT target_article_name FROM redirects WHERE source_article_name=%s;', name)
+            self._cursor.execute('SELECT target_article_name FROM redirects WHERE source_article_name=%s;', (name,))
             row = self._cursor.fetchone()
             if row != None:
                 return row[0]
@@ -57,10 +57,10 @@ class MySQLWorkView:
         # retrieve from database and store in cache
         try:
             if id1 not in self._link_cache:
-                self._cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id1))
+                self._cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id1,))
                 self._link_cache[id1] = self._cursor.fetchall()
             if id2 not in self._link_cache:
-                self._cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id2))
+                self._cursor.execute('SELECT source_article_id FROM links WHERE target_article_id=%s;', (id2,))
                 self._link_cache[id2] = self._cursor.fetchall()
         except MySQLdb.Error, e:
             logging.error('error resolving links for source article id %d or %d: %s (%d)'
@@ -91,7 +91,7 @@ class MySQLWorkView:
         try:
             # TODO: change when database schema is updated
             #self._cursor.execute('SELECT target_article_id, occurrences FROM disambiguations WHERE string=%s;', term)
-            self._cursor.execute('SELECT target_article_id, SUM(occurrences) AS occurrences FROM disambiguations WHERE string=%s GROUP BY target_article_id ORDER BY occurrences DESC;', term)
+            self._cursor.execute('SELECT target_article_id, SUM(occurrences) AS occurrences FROM disambiguations WHERE string=%s GROUP BY target_article_id ORDER BY occurrences DESC;', (term,))
             result = self._cursor.fetchall()
             ids = '('
             count = 0
@@ -104,7 +104,7 @@ class MySQLWorkView:
                 return []
                 
             # query rest of info
-            self._cursor.execute('SELECT id, title, articleincount FROM articles WHERE id IN %s;' % ids)
+            self._cursor.execute('SELECT id, title, articleincount FROM articles WHERE id IN %s;' % (ids,))
             result = self._cursor.fetchall()
             for row in result:
                 meaning = meanings_sorted[row[0]]
@@ -127,11 +127,11 @@ class MySQLWorkView:
             return self._article_cache[title]
 
         try:
-            self._cursor.execute('SELECT id, title FROM articles WHERE title=%s;', title)
+            self._cursor.execute('SELECT id, title FROM articles WHERE title=%s;', (title,))
             row = self._cursor.fetchone()
             if row == None:
                 self._cursor.execute('SELECT id, title FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
-                        title)
+                        (title,))
                 row = self._cursor.fetchone()
 
             if row == None:
@@ -167,7 +167,7 @@ class MySQLWorkView:
                 table = 'ngrams_%s' % letter
             else:
                 table = 'ngrams_other'
-            self._cursor.execute('SELECT occurrences, as_link FROM ' + table + ' WHERE string=%s;', phrase)
+            self._cursor.execute('SELECT occurrences, as_link FROM ' + table + ' WHERE string=%s;', (phrase,))
             
             result = self._cursor.fetchone()
             if result != None:

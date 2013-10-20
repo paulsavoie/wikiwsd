@@ -34,13 +34,21 @@ class DisambiguationInserter(threading.Thread):
                 self._extractor.process(article)
 
                 # insert links into database
+                referenced_articles = []
                 for link in article['links']:
 
-                    self._build_view.insert_link(article['id'], link['target_article_name'])
+                    referenced_article = self._build_view.insert_link(article['id'], link['target_article_name'])
                     self._build_view.insert_disambiguation(link['phrase'], link['target_article_name'])
+                    if referenced_article != None:
+                        referenced_articles.append(referenced_article)
 
                     # commit changes
                     self._build_view.commit()
+
+                # update articleincount in target articles
+                referenced_articles = set(referenced_articles)
+                self._build_view.insert_references(referenced_articles)
+                self._build_view.commit()
 
                 # reset cache and mark as done
                 self._build_view.reset_cache()

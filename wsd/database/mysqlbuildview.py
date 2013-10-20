@@ -52,6 +52,8 @@ class MySQLBuildView:
 
            @param source_article_id the id of the article which links to the target
            @param target_article_name the name of the target article
+
+           @return the id of the referenced article or None if not found
         """
         target_article_id = self._resolve_title(target_article_name)
         if target_article_id == None:
@@ -64,6 +66,19 @@ class MySQLBuildView:
             except MySQLdb.Error, e:
                 logging.error('error saving link (%d) --> (%d) to database: %s (%d)' 
                 % (source_article_id, target_article_id, e.args[1], e.args[0]))
+
+        return target_article_id
+
+    def insert_references(self, target_article_ids):
+        """inserts references to update the linkincount field of the target article
+
+           @param target_article_ids array of the referenced articles
+        """
+        try:
+            self._cursor.executemany('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_ids)
+        except MySQLdb.Error, e:
+            logging.error('error updating articleincount field for ids: ("%s"): %s (%d)'
+                % (",".join(target_article_ids),  e.args[1], e.args[0]))
 
     def insert_disambiguation(self, string, target_article_name):
         """saves a disambiguation to the database
@@ -115,11 +130,11 @@ class MySQLBuildView:
             return self._article_id_cache[title]
 
         try:
-            self._cursor.execute('SELECT id FROM articles WHERE title=%s;', title)
+            self._cursor.execute('SELECT id FROM articles WHERE title=%s;', (title,))
             row = self._cursor.fetchone()
             if row == None:
                 self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
-                        title)
+                        (title,))
                 row = self._cursor.fetchone()
 
             if row == None:

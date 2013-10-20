@@ -23,9 +23,12 @@ class MockMySQLCursor():
 
     def execute(self, *args):
         query = args[0]
-        index = 1
+        params = []
+        if len(args) > 1:
+            params = args[1]
+        index = 0
         while (query.find('%s') != -1):
-            query = query.replace('%s', str(args[index]), 1)
+            query = query.replace('%s', str(params[index]), 1)
             index += 1
         self.queries.append(query)
         self._last_query = query

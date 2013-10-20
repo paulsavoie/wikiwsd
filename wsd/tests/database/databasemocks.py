@@ -46,6 +46,8 @@ class BuildViewMock:
         self.ngrams = []
         self.commited = 0
         self.cache_reset = 0
+        self.target_article_ids = []
+        self.article_ids = {}
 
     def insert_article(self, id, title):
         self.articles.append((id, title))
@@ -55,6 +57,12 @@ class BuildViewMock:
 
     def insert_link(self, source_id, target_name):
         self.links.append((source_id, target_name))
+        if target_name in self.article_ids:
+            return self.article_ids[target_name]
+        return None
+
+    def insert_references(self, target_article_ids):
+        self.target_article_ids.append(target_article_ids)
 
     def insert_disambiguation(self, string, target_name):
         self.disambiguations.append((string, target_name))
