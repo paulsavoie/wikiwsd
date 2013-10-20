@@ -73,8 +73,8 @@ class MySQLBuildView:
         """
         target_article_id = self._resolve_title(target_article_name)
         if target_article_id == None:
-            logging.error('Could not resolve target article "%s" for link from source article %d' 
-                % (target_article_name.encode('ascii', 'ignore'), target_article_id))
+            logging.error('Could not resolve target article "%s" for link from source article' 
+                % (target_article_name.encode('ascii', 'ignore'))
         else:
             try:
                 self._cursor.execute('INSERT INTO disambiguations(string, target_article_id, occurrences) VALUES(%s, %s, 1) ON DUPLICATE KEY UPDATE occurrences=occurrences+1;',
