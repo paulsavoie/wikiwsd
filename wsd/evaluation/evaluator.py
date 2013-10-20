@@ -66,9 +66,19 @@ class Evaluator():
             num_links += results['total']
             num_correct += results['correct']
             num_resolved += results['resolved']
-            precision_rate = float(results['correct']) / float(results['resolved'])
-            recall_rate = float(results['correct']) / float(results['total'])
+            precision_rate = 0.0
+            recall_rate = 0.0
+            if results['resolved'] != 0:
+                precision_rate = float(results['correct']) / float(results['resolved'])
+            if results['total'] != 0:
+                recall_rate = float(results['correct']) / float(results['total'])
             logging.info('evaluated sample %s: precision: %d%%, recall. %d%%', article['title'], round(precision_rate*100), round(recall_rate*100))
 
         logging.info('done evaluating %d samples' % len(articles))
-        return { 'precision': num_correct / num_resolved, 'recall': num_correct / num_links }
+        overall_precision = 0.0
+        overall_recall = 0.0
+        if num_resolved != 0:
+            overall_precision = num_correct / num_resolved
+        if num_links != 0:
+            overall_recall = num_correct / num_links
+        return { 'precision': overall_precision, 'recall': overall_recall }

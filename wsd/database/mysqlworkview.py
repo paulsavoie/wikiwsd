@@ -144,7 +144,9 @@ class MySQLWorkView:
             logging.error('error resolving article "%s": %s (%d)'
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 
-        return self._article_cache[title]
+        if title in self._article_cache:
+            return self._article_cache[title]
+        return None
 
     def retrieve_occurrences(self, phrase):
         '''retrieves occurences of a phrase in wikipedia and how often
