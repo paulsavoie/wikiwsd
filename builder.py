@@ -81,7 +81,7 @@ class BuilderApp(ConsoleApp):
 
             # connect to database and create article queue
             db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
-            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+            queue = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
 
             # create reader and threads
             reader = WikipediaReader(INPUT_FILE, queue, extract_text=False)
@@ -124,7 +124,7 @@ class BuilderApp(ConsoleApp):
 
             # connect to database and create article queue
             db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
-            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+            queue = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
 
             # create reader and threads
             reader = WikipediaReader(INPUT_FILE, queue)
@@ -167,7 +167,7 @@ class BuilderApp(ConsoleApp):
 
              # connect to database and create article queue
             db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
-            queue = Queue.Queue(max_size=MAX_ARTICLES_IN_QUEUE)
+            queue = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
 
             # create reader and threads
             reader = WikipediaReader(INPUT_FILE, queue)
