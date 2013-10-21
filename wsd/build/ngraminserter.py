@@ -30,17 +30,19 @@ class NGramInserter(threading.Thread):
                 # fetch article from queue
                 article = self._queue.get(True, MAX_WAIT_QUEUE_TIMEOUT)
 
-                # extract links
-                self._preprocessor.process(article)
-                ngrams = self._extractor.process(article)
+                if article['type'] == 'article':
+                    # extract links
+                    self._preprocessor.process(article)
+                    ngrams = self._extractor.process(article)
 
-                self._build_view.insert_ngrams(ngrams)
+                    self._build_view.insert_ngrams(ngrams)
 
-                # commit changes
-                self._build_view.commit()
+                    # commit changes
+                    self._build_view.commit()
 
-                # reset cache and mark as done
-                self._build_view.reset_cache()
+                    # reset cache and mark as done
+                    self._build_view.reset_cache()
+                
                 self._queue.task_done()
 
             except Queue.Empty:

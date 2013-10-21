@@ -29,29 +29,30 @@ class DisambiguationInserter(threading.Thread):
                 # fetch article from queue
                 article = self._queue.get(True, MAX_WAIT_QUEUE_TIMEOUT)
 
-                # extract links
-                self._preprocessor.process(article)
-                self._extractor.process(article)
+                if article['type'] == 'article':
+                    # extract links
+                    self._preprocessor.process(article)
+                    self._extractor.process(article)
 
-                # insert links into database
-                referenced_articles = []
-                for link in article['links']:
+                    # insert links into database
+                    referenced_articles = []
+                    for link in article['links']:
 
-                    referenced_article = self._build_view.insert_link(article['id'], link['target_article_name'])
-                    self._build_view.insert_disambiguation(link['phrase'], link['target_article_name'])
-                    if referenced_article != None:
-                        referenced_articles.append(referenced_article)
+                        referenced_article = self._build_view.insert_link(article['id'], link['target_article_name'])
+                        self._build_view.insert_disambiguation(link['phrase'], link['target_article_name'])
+                        if referenced_article != None:
+                            referenced_articles.append(referenced_article)
 
-                    # commit changes
+                        # commit changes
+                        self._build_view.commit()
+
+                    # update articleincount in target articles
+                    referenced_articles = set(referenced_articles)
+                    self._build_view.insert_references(referenced_articles)
                     self._build_view.commit()
 
-                # update articleincount in target articles
-                referenced_articles = set(referenced_articles)
-                self._build_view.insert_references(referenced_articles)
-                self._build_view.commit()
-
-                # reset cache and mark as done
-                self._build_view.reset_cache()
+                    # reset cache and mark as done
+                    self._build_view.reset_cache()
                 self._queue.task_done()
 
             except Queue.Empty:

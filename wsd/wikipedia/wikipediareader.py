@@ -99,7 +99,7 @@ class WikipediaArticleReader(xml.sax.handler.ContentHandler):
                         % (self._item['title'].encode('ascii', 'ignore'), self._item['id'].encode('ascii', 'ignore')))
 
             # log progress
-            if self._article_counter % 1000 == 0:
+            if self._article_counter % 100 == 0:
                 logging.info('%d articles parsed' % (self._article_counter))
 
             # reset article
