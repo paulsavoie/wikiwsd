@@ -23,7 +23,7 @@ class EvaluationTest():
         #evaluator = EvaluatorOld(path)
         evaluator = Evaluator('./wsd/tests/data/alkane.xml', self._db.get_work_view())
         start = time.clock()
-        result = evaluator.run()
+        result = evaluator.evaluate_disambiguations()
         seconds = round(time.clock() - start)
 
         success = True

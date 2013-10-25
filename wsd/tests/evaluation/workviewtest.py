@@ -12,6 +12,11 @@ class EvaluationWorkViewTest(unittest.TestCase):
                 { 'target_article_name': 'myLink1', 'target_article_id': 5, 'phrase': 'p1' },
                 { 'target_article_name': 'myLink2', 'target_article_id': 6, 'phrase': 'p2' },
                 { 'target_article_name': 'myLink1', 'target_article_id': 5, 'phrase': 'p3' },
+            ],
+            'ngrams': [ # only required for occurrences
+                ('my ngram 1', 0),
+                ('my ngram 2', 1),
+                ('my ngram 2', 0)
             ]
         }
         self.work_view = EvaluationWorkView(self.mock, sample)
@@ -59,3 +64,19 @@ class EvaluationWorkViewTest(unittest.TestCase):
         ]
         meanings = self.work_view.retrieve_meanings('term1')
         self.assertEqual(len(meanings), 0)
+
+    def test_occurrences(self):
+        self.mock.occurrences['my ngram 1'] = { 'occurrences': 3, 'as_link': 0 }
+        self.mock.occurrences['my ngram 2'] = { 'occurrences': 4, 'as_link': 3 }
+        self.mock.occurrences['my ngram 3'] = { 'occurrences': 3, 'as_link': 1 }
+
+        occurrences1 = self.work_view.retrieve_occurrences('my ngram 1')
+        occurrences2 = self.work_view.retrieve_occurrences('my ngram 2')
+        occurrences3 = self.work_view.retrieve_occurrences('my ngram 3')
+
+        self.assertEqual(occurrences1['occurrences'], 2)
+        self.assertEqual(occurrences2['occurrences'], 2)
+        self.assertEqual(occurrences3['occurrences'], 3)
+        self.assertEqual(occurrences1['as_link'], 0)
+        self.assertEqual(occurrences2['as_link'], 2)
+        self.assertEqual(occurrences3['as_link'], 1)

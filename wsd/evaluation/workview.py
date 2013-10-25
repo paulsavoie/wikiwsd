@@ -68,3 +68,13 @@ class EvaluationWorkView():
         if result['id'] == self._article['id']:
             return None
         return result
+
+    def retrieve_occurrences(self, phrase):
+        occurrences = self._work_view.retrieve_occurrences(phrase)
+        # remove occurrences from article under test
+        for ngram in self._article['ngrams']:
+            if ngram[0] == phrase:
+                occurrences['occurrences'] -= 1
+                occurrences['as_link'] -= ngram[1]
+
+        return occurrences

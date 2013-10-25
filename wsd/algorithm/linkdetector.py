@@ -1,6 +1,6 @@
 from wsd.wikipedia import NGramExtractor
 
-AS_LINK_RATIO_THRESHOLD = 0.01
+AS_LINK_RATIO_THRESHOLD = 0.03
 
 class LinkDetector:
     '''The LinkDetector class uses a database connection to retrieve possible

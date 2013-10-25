@@ -29,12 +29,16 @@ class EvaluationApp(ConsoleApp):
         self.print_title('This is the interactive evaluation program')
         self.create_tmp_if_not_exists()
 
-        choice = self.read_choice('Would you like to', ['read samples from the wiki dump file', 'evaluate the samples'])
+        choice = self.read_choice('Would you like to', ['read samples from the wiki dump file', 
+            'evaluate the link detection using the samples', 
+            'evaluate the disambiguation detection using the samples'])
 
         if choice[0] == 0:
             self._read_samples()
+        elif choice[0] == 1:
+            self._evaluate_link_detection()
         else:
-            self._evaluate_samples()
+            self._evaluate_disambiguations()
 
     def _read_samples(self):
         INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
@@ -63,7 +67,7 @@ class EvaluationApp(ConsoleApp):
         seconds = round (time.clock() - start)
         print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
 
-    def _evaluate_samples(self):
+    def _evaluate_link_detection(self):
         INPUT_FILE = self.read_path('Please enter the path of the samples file [.xml]', default='./tmp/samples.xml')
         LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/evaluation2.log', must_exist=False)
         
@@ -86,7 +90,36 @@ class EvaluationApp(ConsoleApp):
         start = time.clock()
 
         evaluator = Evaluator(INPUT_FILE, work_view)
-        result = evaluator.run()
+        result = evaluator.evaluate_link_detection()
+
+        seconds = round (time.clock() - start)
+        print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
+        print 'Evaluation done! - precision: %d%%, recall: %d%%' % (round(result['precision']*100), round(result['recall']*100))
+
+    def _evaluate_disambiguations(self):
+        INPUT_FILE = self.read_path('Please enter the path of the samples file [.xml]', default='./tmp/samples.xml')
+        LOGGING_PATH = self.read_path('Please enter the path of the logging file [.log]', default='./tmp/evaluation3.log', must_exist=False)
+        
+        CONTINUE = self.read_yes_no('This process might take from several minutes to several hours.\nDo you want to continue?')
+
+        if not CONTINUE:
+            print '# Aborting...'
+            return
+
+        print '# Starting evaluation...'
+        # setup logging
+        LOGGING_FORMAT = '%(levelname)s:\t%(asctime)-15s %(message)s'
+        logging.basicConfig(filename=LOGGING_PATH, level=logging.DEBUG, format=LOGGING_FORMAT, filemode='w')
+
+        # connecting to db
+        db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
+        work_view = db.get_work_view()
+
+        # measure time
+        start = time.clock()
+
+        evaluator = Evaluator(INPUT_FILE, work_view)
+        result = evaluator.evaluate_disambiguations()
 
         seconds = round (time.clock() - start)
         print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
