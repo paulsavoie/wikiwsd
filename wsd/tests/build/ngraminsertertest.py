@@ -10,12 +10,17 @@ class NGramInserterTest(unittest.TestCase):
         view = BuildViewMock()
         inserter = NGramInserter(queue, view)
         inserter.start()
-        queue.put({
-            'type': 'article',
-            'id': 1,
-            'title': 'myArticle1',
-            'text': 'This is [[target|an article]].'
-        })
+        queue.put([
+            ('This', 0),
+            ('is', 0),
+            ('an', 0),
+            ('article', 0),
+            ('This is', 0),
+            ('is an', 0),
+            ('an article', 1),
+            ('This is an', 0),
+            ('is an article', 0)
+        ])
         queue.join()
         inserter.end()
         inserter.join()

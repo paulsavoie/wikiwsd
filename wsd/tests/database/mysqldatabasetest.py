@@ -39,11 +39,9 @@ class MySQLDatabaseTest(unittest.TestCase):
             ') ENGINE=InnoDB;')
         self.assertEqual(db.connection.cursor().queries[4],
             'CREATE TABLE `ngrams` ('
-               '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,'
-               '`string` VARCHAR(200) NOT NULL,'
-               '`occurrences` INT UNSIGNED NOT NULL DEFAULT 0,'
-               '`as_link` INT UNSIGNED NOT NULL DEFAULT 0,'
-               'INDEX USING HASH(`string`)'
+                '`string` VARCHAR(200) NOT NULL PRIMARY KEY,'
+                '`occurrences` INT UNSIGNED NOT NULL DEFAULT 0,'
+                '`as_link` INT UNSIGNED NOT NULL DEFAULT 0'
             ') ENGINE=InnoDB;')
         self.assertEqual(db.connection.closed, True)
 

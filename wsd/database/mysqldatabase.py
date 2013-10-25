@@ -71,11 +71,9 @@ class MySQLDatabase:
         # build ngrams table
         logging.info('Building table ngrams...')
         cursor.execute('CREATE TABLE `ngrams` ('
-                           #'`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,'
                            '`string` VARCHAR(200) NOT NULL PRIMARY KEY,'
                            '`occurrences` INT UNSIGNED NOT NULL DEFAULT 0,'
                            '`as_link` INT UNSIGNED NOT NULL DEFAULT 0'
-                           #'INDEX USING HASH(`string`)'
                        ') ENGINE=InnoDB;')
 
         logging.info('closing database connection...')

@@ -169,7 +169,7 @@ class MySQLWorkView:
             #    table = 'ngrams_%s' % letter
             #else:
             #    table = 'ngrams_other'
-            self._cursor.execute('SELECT SUM(occurrences), SUM(as_link) FROM ngrams WHERE string=%s;', (phrase,))
+            self._cursor.execute('SELECT occurrences, as_link FROM ngrams WHERE string=%s;', (phrase,))
             
             result = self._cursor.fetchone()
             if result != None:
