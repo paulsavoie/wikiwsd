@@ -44,6 +44,8 @@ class EvaluationOutputter():
                     logging.info('INCORRECT: did not find link %s' % orig_links[x]['phrase'])
                     x-= 1
                 else:
+                    if arr[y][x-1] == arr[y-1][x]:
+                        logging.info('INCORRECT: did not find link %s' % orig_links[x]['phrase'])
                     logging.info('INCORRECT: found link %s, which does not exist in reference', new_links[y]['phrase'])
                     y-= 1
 
