@@ -50,18 +50,33 @@ class WikipediaPreProcessor(threading.Thread):
 
         # iterate over lines
         lines = article['text'].strip().split('\n')
+        debug = False
         for line in lines:
             line = line.strip()
+            if article['title'][:38] == 'Latin American Integration Association':
+                #logging.debug(line)
+                if line[0:19] == 'Perhaps the easiest':
+                    pass #debug = True
 
             # reset html tags if an empty line (probably one was not properly closed somewhere)
             if len(line) == 0:
                 html_tags = []
+
+            if debug:
+                print "DEBUG 0"
+                print line
+                print
 
             # STEP 1 - remove hyphens and restore tags
             line = line.replace("'''", "")
             line = line.replace("''", "")
             line = line.replace('&lt;', '<')
             line = line.replace('&gt;', '>')
+
+            if debug:
+                print "DEBUG 1"
+                print line
+                print
 
             # keep <sub> and <sup> tags if preceeded by uppercase letter (chemical element)
             index = 1
@@ -74,6 +89,11 @@ class WikipediaPreProcessor(threading.Thread):
                 if content.isdigit() and letter_before == letter_before.upper():
                     line = line[:index-5] + content + line[end+6:]
                     index = index-5
+
+            if debug:
+                print "DEBUG 2"
+                print line
+                print
 
             # check if the line starts in a comment
             line_starts_in_comment = next_line_starts_in_comment
@@ -94,7 +114,11 @@ class WikipediaPreProcessor(threading.Thread):
                     next_line_starts_in_comment = True
                     line = line[0:start]
                 else:
-                    line = line[0:start] + line[end+3:]
+                    # a problem occurred, just ignore the line
+                    if start > end:
+                        line = ''
+                    else:
+                        line = line[0:start] + line[end+3:]
 
             # STEP 3 - remove html tags
             index = 0
@@ -105,30 +129,37 @@ class WikipediaPreProcessor(threading.Thread):
             while line.find('<', index) != -1:
                 start = False
                 index = line.find('<', index)+1
-                end_tag = line.find('>', index)
-                # if tag is a closing tag
-                if line[index] == '/':
-                    # this query is necessary as some invalid close tags appear on wikipedia - nothging to be done about that
-                    if len(html_tags) != 0:
-                        html_tags.pop()
-                    # this is the outermost html tag
-                    if len(html_tags) == 0:
-                        line = line[:outer_start_tag] + line[end_tag+1:]
-                        # start with next tag
-                        outer_start_tag = line.find('<')
-                        index = 0
-                # not a closing tag
+                # if the tag is the last sign in the line, just remove it
+                if index == len(line):
+                    line = line[:-1]
                 else:
-                    # a simple tag without an ending one, just remove it
-                    if line[end_tag-1] == '/':
-                        line = line[0:index-1] + line[end_tag+1:]
-                        index-= 1
-                        # if this was the outermost tag, start from the next tag
-                        if index == outer_start_tag:
+                    end_tag = line.find('>', index)
+                    # if tag is a closing tag
+                    if line[index] == '/':
+                        # this query is necessary as some invalid close tags appear on wikipedia - nothging to be done about that
+                        if len(html_tags) != 0:
+                            html_tags.pop()
+                        # this is the outermost html tag
+                        if len(html_tags) == 0:
+                            line = line[:outer_start_tag] + line[end_tag+1:]
+                            # start with next tag
                             outer_start_tag = line.find('<')
-                    # a normal tag is simply pushed to the stack
+                            index = 0
+                    # not a closing tag
                     else:
-                        html_tags.append(line[index:end_tag])
+                        # a simple tag without an ending one, just remove it
+                        if line[end_tag-1] == '/':
+                            line = line[0:index-1] + line[end_tag+1:]
+                            index-= 1
+                            # if this was the outermost tag, start from the next tag
+                            if index == outer_start_tag:
+                                outer_start_tag = line.find('<')
+                        # a normal tag is simply pushed to the stack
+                        else:
+                            tag_name = line[index:end_tag]
+                            # ignore unclean br tags
+                            if tag_name != 'br':
+                                html_tags.append(line[index:end_tag])
 
             # TODO: refactor
             if len(html_tags) > 0:
@@ -137,6 +168,11 @@ class WikipediaPreProcessor(threading.Thread):
                     line = line[:line.find('<')]
                 else: # everything is already within a tag
                     line = ''
+
+            if debug:
+                print "DEBUG 3"
+                print line
+                print
 
             # STEP 4 - remove invalid lines
             # simply ignore too short lines and those that start with an incorrect token
@@ -162,6 +198,11 @@ class WikipediaPreProcessor(threading.Thread):
                 if len(line) > 0:
                     new_text += line + '\n'
 
+            if debug:
+                print "DEBUG 5"
+                print line
+                print
+
         # set the cleaned text in the article and return it
         article['text'] = new_text
         return article
@@ -173,12 +214,15 @@ class WikipediaPreProcessor(threading.Thread):
             try:
                 # retrieve a new article from the queue
                 article = self._input_queue.get(True, WAIT_QUEUE_TIMEOUT)
-                # process the article
-                logging.info('preprocessing article %s' % (article['title'].encode('ascii', 'ignore')))
-                self.process(article)
-                # add the cleaned article to the output queue
-                self._output_queue.put(article)
-                # mark the task as done
+
+                # ignore redirects
+                if article['type'] == 'article':
+                    # process the article
+                    logging.info('preprocessing article %s' % (article['title'].encode('ascii', 'ignore')))
+                    self.process(article)
+                    # add the cleaned article to the output queue
+                    self._output_queue.put(article)
+                    # mark the task as done
                 self._input_queue.task_done()
             except Queue.Empty:
                 pass
@@ -230,12 +274,20 @@ class WikipediaPreProcessor(threading.Thread):
                         inner_link_counter+= 1
                         next_inner_link = line.find('[[', next_inner_link+2)
                         next_end = line.find(']]', next_end+2)
+                        # if a link is not closed, do not parse this line
+                        if next_end == -1:
+                            return ''
                         
                     # find matching end brackets
                     end_link = next_end
-                    while inner_link_counter > 0:
-                        end_link = line.find(']]', end_link+2)
-                        inner_link_counter-= 1
+                    #while inner_link_counter > 0:
+                    #    tmp = line.find(']]', end_link)
+                    #    # something went completely wrong here, ignore this line
+                    #    if tmp == -1:
+                    #        return ''
+                    #    else:
+                    #        end_link = line.find(']]', end_link+2)
+                    #        inner_link_counter-= 1
                 # if there is no inner_link
                 else:
                     end_link = next_end

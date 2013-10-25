@@ -1,13 +1,10 @@
 import MySQLdb
 import logging
-import threading
 
 class MySQLBuildView:
     """The MySQLBuildView class allows database access optimized to
        build the disambiguation database
     """
-    _article_id_cache = {}
-    _lock = threading.Lock()
 
     def __init__(self, db_connection):
         """constructor
@@ -16,6 +13,7 @@ class MySQLBuildView:
         """
         self._db_connection = db_connection
         self._cursor = db_connection.cursor()
+        self.reset_cache()
 
     def __del__(self):
         """destructor
@@ -121,21 +119,15 @@ class MySQLBuildView:
     def reset_cache(self):
         """resets the internal cache and thus prevents it from growing too big
         """
-        #self._article_id_cache = {}
+        self._article_id_cache = {}
 
     def _resolve_title(self, title):
         """resolves an article and returns its id
 
            @param title the title of the article
         """
-        MySQLBuildView._lock.acquire()
         if title in self._article_id_cache:
-            result = self._article_id_cache[title]
-            MySQLBuildView._lock.release()
-            return result
-        MySQLBuildView._lock.release()
-
-        result = None
+            return self._article_id_cache[title]
 
         try:
             self._cursor.execute('SELECT id FROM articles WHERE title=%s;', (title,))
@@ -145,16 +137,12 @@ class MySQLBuildView:
                         (title,))
                 row = self._cursor.fetchone()
 
-            MySQLBuildView._lock.acquire()
             if row == None:
                 self._article_id_cache[title] = None
-                result = None
             else:
                 self._article_id_cache[title] = row[0]
-                result = row[0]
-            MySQLBuildView._lock.release()
         except MySQLdb.Error, e:
             logging.error('error resolving article "%s": %s (%d)'
                 % (title.encode('ascii', 'ignore'), e.args[1], e.args[0]))
 
-        return result
+        return self._article_id_cache[title]

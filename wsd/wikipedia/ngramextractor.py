@@ -55,6 +55,8 @@ class NGramExtractor(threading.Thread):
                                 is_link = 1
                             ngram = ngram.replace('[[', '')
                             ngram = ngram.replace(']]', '')
+                            ngram = ngram.replace('"', '')
+                            ngram = ngram.replace('"', '')
                             start+= 1
 
                             if len(ngram) > 0:

@@ -14,6 +14,8 @@ import logging
 import Queue
 from wsd.database import MySQLDatabase
 from wsd.wikipedia import WikipediaReader
+from wsd.wikipedia import WikipediaPreProcessor
+from wsd.wikipedia import NGramExtractor
 from wsd.build import ArticleInserter
 from wsd.build import DisambiguationInserter
 from wsd.build import NGramInserter
@@ -157,8 +159,7 @@ class BuilderApp(ConsoleApp):
     def _extract_ngrams(self):
 
         INPUT_FILE = self.read_path('Please enter the path of the wiki dump file [.xml]')
-        MAX_ARTICLES_IN_QUEUE = self.read_number('How many articles should be kept in the memory at any time at most?', 200, 20, 300)
-        NUM_THREADS = self.read_number('How many threads shall be used to write to the database?', 20, 1, 50)
+        MAX_ARTICLES_IN_QUEUE = self.read_number('How many articles should be kept in the memory (times 3) at any time at most?', 100, 20, 300)
         CONTINUE = self.read_yes_no('This process might take several days to finish.\nDo you want to continue?')
 
         if CONTINUE:
@@ -167,29 +168,35 @@ class BuilderApp(ConsoleApp):
 
              # connect to database and create article queue
             db = MySQLDatabase(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME)
-            queue = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
+            queue1 = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
+            queue2 = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
+            queue3 = Queue.Queue(maxsize=MAX_ARTICLES_IN_QUEUE)
 
-            # create reader and threads
-            reader = WikipediaReader(INPUT_FILE, queue)
-            threads = []
-            for i in range(0, NUM_THREADS):
-                inserter = NGramInserter(queue, db.get_build_view())
-                threads.append(inserter)
+            # create reader, preprocessor, ngramextractor and inserter
+            reader = WikipediaReader(INPUT_FILE, queue1)
+            preprocessor = WikipediaPreProcessor(queue1, queue2)
+            ngramextractor = NGramExtractor(queue2, queue3)
+            inserter = NGramInserter(queue3, db.get_build_view())
 
-            # start reader
+            # start instances
             reader.start()
+            preprocessor.start()
+            ngramextractor.start()
+            inserter.start()
 
-            # start insert threads
-            for thread in threads:
-                thread.start()
-
-            # wait for reading thread, queue and inserters to be done
+            # wait for queues and isntances
             reader.join()
-            queue.join()
-            for thread in threads:
-                thread.end()
-            for thread in threads:
-                thread.join()
+            queue1.join()
+            queue2.join()
+            queue3.join()
+
+            preprocessor.end()
+            ngramextractor.end()
+            inserter.end()
+
+            preprocessor.join()
+            ngramextractor.join()
+            inserter.join()
 
             seconds = round (time.clock() - start)
             print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)

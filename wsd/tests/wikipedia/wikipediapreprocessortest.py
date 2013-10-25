@@ -138,3 +138,18 @@ class WikipediaPreProcessorTest(unittest.TestCase):
                     'also no isomer.\n')
         self.assertEqual(self._process_text(text), expected)
 
+    def test_real_2(self):
+        text = ('Perhaps the easiest way for U.S residents to envisage an acre is as a rectangle measuring 88 yards by 55 yards ({{frac|1'
+                '|10}} of 880 yards by {{frac|1|16}} of 880 yards), about {{frac|9|10}} the size of a standard [[American football field]'
+                ']. [[File:Acre over US and Associationl football field.svg|frame|The area of one acre (red) superposed on an [[American'
+                'football]] field (green) and [[association football]] (soccer) pitch (blue).]] To be more exact, one acre is 90.75 perce'
+                'nt of a {{convert|100|yd|m|2|abbr=off|lk=in}} long by {{convert|53.33|yd|m|abbr=off|lk=in}} wide American football field'
+                ' (without the [[end zone]]s). The full field, including the end zones, covers approximately {{convert|1.32|acres|2|abbr='
+                'on}}.')
+        expected =  ('Perhaps the easiest way for U.S residents to envisage an acre is as a rectangle measuring 88 yards by 55 yards ('
+                ' of 880 yards by of 880 yards), about the size of a standard [[American football field]'
+                ']. frame|The area of one acre (red) superposed on an [[American'
+                'football]] field (green) and [[association football]] (soccer) pitch (blue). To be more exact, one acre is 90.75 perce'
+                'nt of a long by wide American football field'
+                ' (without the [[end zone]]s). The full field, including the end zones, covers approximately.\n')
+        self.assertEqual(self._process_text(text), expected)

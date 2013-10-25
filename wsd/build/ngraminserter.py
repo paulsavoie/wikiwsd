@@ -1,5 +1,7 @@
 import Queue
 import threading
+import time
+import logging
 from wsd.wikipedia import WikipediaPreProcessor
 from wsd.wikipedia import NGramExtractor
 
@@ -28,20 +30,15 @@ class NGramInserter(threading.Thread):
             
             try:
                 # fetch article from queue
-                article = self._queue.get(True, MAX_WAIT_QUEUE_TIMEOUT)
+                ngrams = self._queue.get(True, MAX_WAIT_QUEUE_TIMEOUT)
 
-                if article['type'] == 'article':
-                    # extract links
-                    self._preprocessor.process(article)
-                    ngrams = self._extractor.process(article)
+                self._build_view.insert_ngrams(ngrams)
 
-                    self._build_view.insert_ngrams(ngrams)
-
-                    # commit changes
-                    self._build_view.commit()
-
-                    # reset cache and mark as done
-                    self._build_view.reset_cache()
+                # commit changes
+                self._build_view.commit()
+                #logging.debug('inserted %d ngrams in %d seconds' % (len(ngrams), round(time.clock() - before)))
+                # reset cache and mark as done
+                self._build_view.reset_cache()
                 
                 self._queue.task_done()
 

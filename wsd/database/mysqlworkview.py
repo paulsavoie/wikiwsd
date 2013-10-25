@@ -158,18 +158,18 @@ class MySQLWorkView:
                    of times the phrase was used and how often as a link
         '''
 
-        letters = 'abcdefghijklmnopqrstuvwxyz'
+        #letters = 'abcdefghijklmnopqrstuvwxyz'
         if phrase in self._occurrences_cache:
             return self._occurrences_cache[phrase]
 
         occurrences = { 'occurrences': 0, 'as_link': 0 }
         try:
-            letter = phrase[0]
-            if letter in letters:
-                table = 'ngrams_%s' % letter
-            else:
-                table = 'ngrams_other'
-            self._cursor.execute('SELECT occurrences, as_link FROM ' + table + ' WHERE string=%s;', (phrase,))
+            #letter = phrase[0]
+            #if letter in letters:
+            #    table = 'ngrams_%s' % letter
+            #else:
+            #    table = 'ngrams_other'
+            self._cursor.execute('SELECT SUM(occurrences), SUM(as_link) FROM ngrams WHERE string=%s;', (phrase,))
             
             result = self._cursor.fetchone()
             if result != None:
