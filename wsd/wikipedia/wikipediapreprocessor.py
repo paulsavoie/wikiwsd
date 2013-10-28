@@ -50,33 +50,17 @@ class WikipediaPreProcessor(threading.Thread):
 
         # iterate over lines
         lines = article['text'].strip().split('\n')
-        debug = False
         for line in lines:
             line = line.strip()
-            if article['title'][:38] == 'Latin American Integration Association':
-                #logging.debug(line)
-                if line[0:19] == 'Perhaps the easiest':
-                    pass #debug = True
-
             # reset html tags if an empty line (probably one was not properly closed somewhere)
             if len(line) == 0:
                 html_tags = []
-
-            if debug:
-                print "DEBUG 0"
-                print line
-                print
 
             # STEP 1 - remove hyphens and restore tags
             line = line.replace("'''", "")
             line = line.replace("''", "")
             line = line.replace('&lt;', '<')
             line = line.replace('&gt;', '>')
-
-            if debug:
-                print "DEBUG 1"
-                print line
-                print
 
             # keep <sub> and <sup> tags if preceeded by uppercase letter (chemical element)
             index = 1
@@ -89,11 +73,6 @@ class WikipediaPreProcessor(threading.Thread):
                 if content.isdigit() and letter_before == letter_before.upper():
                     line = line[:index-5] + content + line[end+6:]
                     index = index-5
-
-            if debug:
-                print "DEBUG 2"
-                print line
-                print
 
             # check if the line starts in a comment
             line_starts_in_comment = next_line_starts_in_comment
@@ -169,11 +148,6 @@ class WikipediaPreProcessor(threading.Thread):
                 else: # everything is already within a tag
                     line = ''
 
-            if debug:
-                print "DEBUG 3"
-                print line
-                print
-
             # STEP 4 - remove invalid lines
             # simply ignore too short lines and those that start with an incorrect token
             if len(line) > 4 and line[0:2] != ' |' and line[0] != '|' and line[0] != '!':
@@ -197,11 +171,6 @@ class WikipediaPreProcessor(threading.Thread):
                 # append the cleaned line to the new text
                 if len(line) > 0:
                     new_text += line + '\n'
-
-            if debug:
-                print "DEBUG 5"
-                print line
-                print
 
         # set the cleaned text in the article and return it
         article['text'] = new_text

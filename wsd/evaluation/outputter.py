@@ -87,7 +87,9 @@ class EvaluationOutputter():
                     total_resolved += 1.0
                 else:
                     logging.error('INCORRECT: no meaning found for word %s' % link['phrase'])
-                total_links += 1.0
+            else:
+                    logging.error('INCORRECT: no meaning found for word %s' % link['phrase'])
+            total_links += 1.0
         logging.info('FINISHED: got %d of %d correct (%d%%)' % (total_correct, total_links, (100.0*total_correct/total_links)))
         return {
             'total': total_links,
