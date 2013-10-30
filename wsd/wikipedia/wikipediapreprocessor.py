@@ -113,32 +113,35 @@ class WikipediaPreProcessor(threading.Thread):
                     line = line[:-1]
                 else:
                     end_tag = line.find('>', index)
-                    # if tag is a closing tag
-                    if line[index] == '/':
-                        # this query is necessary as some invalid close tags appear on wikipedia - nothging to be done about that
-                        if len(html_tags) != 0:
-                            html_tags.pop()
-                        # this is the outermost html tag
-                        if len(html_tags) == 0:
-                            line = line[:outer_start_tag] + line[end_tag+1:]
-                            # start with next tag
-                            outer_start_tag = line.find('<')
-                            index = 0
-                    # not a closing tag
+                    if end_tag == -1:
+                        line = line[:line.find('<', index)]
                     else:
-                        # a simple tag without an ending one, just remove it
-                        if line[end_tag-1] == '/':
-                            line = line[0:index-1] + line[end_tag+1:]
-                            index-= 1
-                            # if this was the outermost tag, start from the next tag
-                            if index == outer_start_tag:
+                        # if tag is a closing tag
+                        if line[index] == '/':
+                            # this query is necessary as some invalid close tags appear on wikipedia - nothging to be done about that
+                            if len(html_tags) != 0:
+                                html_tags.pop()
+                            # this is the outermost html tag
+                            if len(html_tags) == 0:
+                                line = line[:outer_start_tag] + line[end_tag+1:]
+                                # start with next tag
                                 outer_start_tag = line.find('<')
-                        # a normal tag is simply pushed to the stack
+                                index = 0
+                        # not a closing tag
                         else:
-                            tag_name = line[index:end_tag]
-                            # ignore unclean br tags
-                            if tag_name != 'br':
-                                html_tags.append(line[index:end_tag])
+                            # a simple tag without an ending one, just remove it
+                            if line[end_tag-1] == '/':
+                                line = line[0:index-1] + line[end_tag+1:]
+                                index-= 1
+                                # if this was the outermost tag, start from the next tag
+                                if index == outer_start_tag:
+                                    outer_start_tag = line.find('<')
+                            # a normal tag is simply pushed to the stack
+                            else:
+                                tag_name = line[index:end_tag]
+                                # ignore unclean br tags
+                                if tag_name != 'br':
+                                    html_tags.append(line[index:end_tag])
 
             # TODO: refactor
             if len(html_tags) > 0:
