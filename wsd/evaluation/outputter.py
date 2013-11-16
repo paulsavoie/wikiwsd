@@ -15,7 +15,7 @@ class EvaluationOutputter():
            considering the detection of links
         '''
 
-        orig_links = article['orig_links']
+        orig_links = list(article['orig_links'])
         new_links = article['links']
         # apply the longest common subsequence algorithm to
         # retrieve the number of links that were correctly found
@@ -24,32 +24,52 @@ class EvaluationOutputter():
         arr = [[0 for x in range(0, len(orig_links))] for y in range(0, len(new_links))]
 
         # fill matrix accordingly
-        for x in range(1, len(orig_links)):
-            for y in range(1, len(new_links)):
+        for x in range(0, len(orig_links)):
+            for y in range(0, len(new_links)):
                 if orig_links[x]['phrase'] == new_links[y]['phrase']:
-                    arr[y][x] = arr[y-1][x-1] + 1
+                    prev = 0
+                    if y != 0 and x != 0:
+                        prev = arr[y-1][x-1]
+                    arr[y][x] = prev + 1
                 else:
-                    arr[y][x] = max(arr[y][x-1], arr[y-1][x])
+                    prevX = 0
+                    prevY = 0
+                    if y != 0:
+                        prevY = arr[y-1][x]
+                    if x != 0:
+                        prevX = arr[y][x-1]
+                    arr[y][x] = max(prevX, prevY)
 
         # backtrack the matrix to find the chosen path
         y = len(new_links) - 1
         x = len(orig_links) - 1
-        while x != 0 and y != 0:
+        correct = 0
+        while x > 0 or y > 0:
             if new_links[y]['phrase'] == orig_links[x]['phrase']:
-                logging.info('CORRECT: found link %s' % new_links[y]['phrase'])
-                x-= 1
-                y-= 1
+                if len(new_links[y]['phrase']) != 0:
+                    logging.info('CORRECT: found link %s' % new_links[y]['phrase'])
+                    # unset new link
+                    orig_links[x]['phrase'] = ''
+                correct+= 1
+                if x != 0:
+                    x-= 1
+                if y != 0:
+                    y-= 1
             else:
-                if arr[y][x-1] > arr[y-1][x]:
+                if y == 0:
+                    logging.info('INCORRECT: did not find link %s' % orig_links[x]['phrase'])
+                    x-= 1
+                elif x == 0:
+                    logging.info('INCORRECT: found link %s, which does not exist in reference', new_links[y]['phrase'])
+                    y-= 1
+                elif arr[y][x-1] > arr[y-1][x]:
                     logging.info('INCORRECT: did not find link %s' % orig_links[x]['phrase'])
                     x-= 1
                 else:
-                    if arr[y][x-1] == arr[y-1][x]:
-                        logging.info('INCORRECT: did not find link %s' % orig_links[x]['phrase'])
                     logging.info('INCORRECT: found link %s, which does not exist in reference', new_links[y]['phrase'])
                     y-= 1
 
-        correct = arr[len(new_links)-1][len(orig_links)-1]
+        #correct = arr[len(new_links)-1][len(orig_links)-1]
         not_found = len(orig_links)-correct
         found_incorrect = len(new_links)-correct
 

@@ -29,7 +29,7 @@ class HTMLOutputter():
 
 
         html = ''
-        text = article['text']
+        text = article['text'].encode('ascii', 'ignore')
         tokens = text.split(' ')
         link_index = 0
         current_link = None

@@ -152,6 +152,14 @@ class WikipediaPreProcessor(threading.Thread):
                     line = ''
 
             # STEP 4 - remove invalid lines
+
+            # STEP 9 - strip the line
+            line = line.strip(' *\r\n')
+
+            # remove link-only lines
+            if len(line) > 4 and line.find('[[') == 0 and line.find('[[', 1) == -1 and line.find(']]') == len(line)-2:
+                line = ''
+
             # simply ignore too short lines and those that start with an incorrect token
             if len(line) > 4 and line[0:2] != ' |' and line[0] != '|' and line[0] != '!':
 
@@ -167,9 +175,6 @@ class WikipediaPreProcessor(threading.Thread):
 
                 # STEP 8 - remove emtpy brackets and double spaces that remained
                 line = self._remove_empty_brackets(line)
-
-                # STEP 9 - strip the line
-                line = line.strip(' *\r\n')
 
                 # append the cleaned line to the new text
                 if len(line) > 0:

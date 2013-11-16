@@ -76,7 +76,7 @@ class Decider:
                                 else:
                                     neighbour_meanings = [links[index]['meanings'][0]]
                             else:
-                                neighbour_meanings = links[index]['meanings']
+                                neighbour_meanings = [] #links[index]['meanings']
                             # compare each neighboring meaning to the current one
                             for neighbour_meaning in neighbour_meanings:
                                 for meaning in link['meanings']:

@@ -22,7 +22,8 @@ class LinkDetector:
         '''
 
         # retrieve ngrams
-        ngrams = self._extractor.process(article)
+        ngrams = sorted(self._extractor.process(article), key=lambda ngram: -len(ngram[0].split(' ')))
+        # sort ngrams according to length
         for ngram in ngrams:
             phrase = ngram[0]
 
@@ -47,7 +48,7 @@ class LinkDetector:
                         if left_start == -1 or left_end > left_start:
                             article['text'] = article['text'][0:index] + '[[' + phrase + ']]' + article['text'][index+len(phrase):]
                         index += len(phrase)
-        
+
         # iterate over text and extract found links in correct order
         index = 0
         while article['text'].find('[[', index) != -1:

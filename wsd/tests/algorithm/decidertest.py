@@ -57,7 +57,6 @@ class DeciderTest(unittest.TestCase):
             {
                 'phrase': 'cars',
                     'meanings': [
-                    { 'target_article_id': 3, 'commonness': 0.9, 'target_article_name': 'meaning3' },
                     { 'target_article_id': 4, 'commonness': 0.1, 'target_article_name': 'meaning4' }
                 ]
             }
@@ -138,7 +137,7 @@ class DeciderTest(unittest.TestCase):
             }
         ]
         result = self._decide(links)
-        self.assertEqual(result[0]['meanings'][0]['target_article_id'], 2)
+        self.assertEqual(result[0]['meanings'][0]['target_article_id'], 1)
         self.assertEqual(result[1]['meanings'][0]['target_article_id'], 3)
         self.assertEqual(result[2]['meanings'][0]['target_article_id'], 5)
         self.assertEqual(result[3]['meanings'][0]['target_article_id'], 7)

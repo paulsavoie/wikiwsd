@@ -49,6 +49,6 @@ class LinkDetectorTest(unittest.TestCase):
         self._view.occurrences['encapsulated term'] = { 'occurrences': 10, 'as_link': 10 }
 
         article = self._detect_links('Here is another encapsulated term.')
-        self.assertEqual(article['text'], 'Here is another encapsulated [[term]].')
+        self.assertEqual(article['text'], 'Here is another [[encapsulated term]].')
         self.assertEqual(len(article['links']), 1)
-        self.assertEqual(article['links'][0], { 'target_article_id': None, 'target_article_name': None, 'phrase': 'term' })
+        self.assertEqual(article['links'][0], { 'target_article_id': None, 'target_article_name': None, 'phrase': 'encapsulated term' })
