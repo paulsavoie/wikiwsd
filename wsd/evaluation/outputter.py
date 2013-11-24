@@ -70,15 +70,18 @@ class EvaluationOutputter():
                     y-= 1
 
         #correct = arr[len(new_links)-1][len(orig_links)-1]
-        not_found = len(orig_links)-correct
+        # count original links without incorrect ones (dead end links)
+        valid_orig_links_count = len(filter(lambda link: link['target_article_id'] != None, orig_links))
+        not_found = valid_orig_links_count-correct
         found_incorrect = len(new_links)-correct
 
         logging.info('FINISHED: got %d correct, %d found incorrectly and %d not found' % (correct, found_incorrect, not_found))
 
+        
         return {
             'correct': correct,
             'total_found': len(new_links),
-            'total_reference': len(orig_links)
+            'total_reference': valid_orig_links_count
         }
 
     def output_disambiguations(self, article):

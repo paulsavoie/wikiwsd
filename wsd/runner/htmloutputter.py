@@ -30,6 +30,7 @@ class HTMLOutputter():
 
         html = ''
         text = article['text'].encode('ascii', 'ignore')
+        
         tokens = text.split(' ')
         link_index = 0
         current_link = None
@@ -44,11 +45,8 @@ class HTMLOutputter():
 
             html+= token + ' '
 
-            if token[-2:] == ']]' or token[-3:-1] == ']]':
-                if token[-2:] == ']]':
-                    html = html[:-3]
-                else:
-                    html = html[:-4] + html[-2:-1]
+            if token.find(']]') != -1:
+                html = html[:-(len(token)-token.rfind(']]'))-1] + html[-(len(token)-token.rfind(']]'))+2-1:]
                 link_html += '<div class="disambiguations"><ul>'
                 link_html += '<li class="header"><span class="label">Meaning</span><span class="percentage">Overall</span><span class="percentage">Rel.</span><span class="percentage">Comm.</span></li>'
                 first_meaning = True
@@ -68,6 +66,7 @@ class HTMLOutputter():
                 html = html + ' ' + link_html + '</span>'
 
         html = html.strip()
+        html = html.replace('\n', '<br />')
 
         # write output
         with open(output_path, 'w') as output_f:
