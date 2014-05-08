@@ -63,7 +63,7 @@ class HTMLOutputter():
                         round(meaning['commonness']*100)))
                 link_html += '</ul></div>'
 
-                html = html + ' ' + link_html + '</span>'
+                html = html + link_html + '</span>'
 
         html = html.strip()
         html = html.replace('\n', '<br />')
