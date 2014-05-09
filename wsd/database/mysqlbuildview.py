@@ -77,8 +77,8 @@ class MySQLBuildView:
         try:
             self._cursor.executemany('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_ids)
         except MySQLdb.Error, e:
-            logging.error('error updating articleincount field for ids: ("%s"): %s (%d)'
-                % (",".join(target_article_ids),  e.args[1], e.args[0]))
+            logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
+                % (",".join([str(id) for id in target_article_ids]),  str(e.args[1]), str(e.args[0])))
 
     def insert_disambiguation(self, string, target_article_name):
         """saves a disambiguation to the database
