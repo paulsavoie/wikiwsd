@@ -133,7 +133,7 @@ class MySQLBuildView:
             self._cursor.execute('SELECT id FROM articles WHERE title=%s;', (title,))
             row = self._cursor.fetchone()
             if row == None:
-                self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
+                self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s LIMIT 1);',
                         (title,))
                 row = self._cursor.fetchone()
 
