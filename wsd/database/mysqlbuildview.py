@@ -1,5 +1,8 @@
 import MySQLdb
 import logging
+import time
+
+MYSQL_DEAD_LOCK_ERROR = 1213
 
 class MySQLBuildView:
     """The MySQLBuildView class allows database access optimized to
@@ -74,11 +77,22 @@ class MySQLBuildView:
 
            @param target_article_ids array of the referenced articles
         """
-        try:
-            self._cursor.executemany('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_ids)
-        except MySQLdb.Error, e:
-            logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
-                % (",".join([str(id) for id in target_article_ids]),  str(e.args[1]), str(e.args[0])))
+        retry = True
+        retryCount = 0
+        while retry and retryCount < 10:
+            try:
+                retryCount += 1
+                self._cursor.executemany('UPDATE articles SET articleincount=articleincount+1 WHERE id=%s;', target_article_ids)
+                retry = False
+            except MySQLdb.Error, e:
+                if e.args[0] == MYSQL_DEAD_LOCK_ERROR:
+                    logging.warning('deadlock upading articleincount field. retrying... (%d)' % (retryCount))
+                logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
+                    % (",".join([str(id) for id in target_article_ids]),  str(e.args[1]), str(e.args[0])))
+
+        if retry:
+            logging.error('error updating articleincount field %d retries DEADLOCK when updating ids: ("%s")'
+                    % (retryCount, ",".join([str(id) for id in target_article_ids]))            
 
     def insert_disambiguation(self, string, target_article_name):
         """saves a disambiguation to the database
