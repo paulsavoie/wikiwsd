@@ -127,6 +127,8 @@ class LinkExtractor(threading.Thread):
 
         if phrase.find('[[') != -1 or phrase.find(']]') != -1 or target.find('[[') != -1 or target.find(']]') != -1:
             return ('', '')
+        if target.find('#') != -1:
+            target = target[0:target.find('#')]
         return (target, phrase)
 
     def _remove_link_targets(self, line):

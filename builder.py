@@ -68,6 +68,7 @@ class BuilderApp(ConsoleApp):
         db.build()
 
         seconds = round (time.clock() - start)
+        logging.info('Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60))
         print 'Finished after %02d:%02d minutes' % (seconds / 60, seconds % 60)
 
     def _extract_articles(self):

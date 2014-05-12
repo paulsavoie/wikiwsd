@@ -37,7 +37,7 @@ class MySQLDatabase:
                            '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY,'
                            '`title` VARCHAR(200) NOT NULL,'
                            '`articleincount` INTEGER NOT NULL DEFAULT 0,'
-                           'INDEX USING HASH(`title`)'
+                           'CONSTRAINT UNIQUE INDEX USING HASH(`title`)'
                        ') ENGINE=InnoDB;')
 
         # build redirects table
@@ -46,7 +46,7 @@ class MySQLDatabase:
                            '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,'
                            '`source_article_name` VARCHAR(200) NOT NULL,'
                            '`target_article_name` VARCHAR(200) NOT NULL,'
-                           'INDEX USING HASH(`source_article_name`)'
+                           'CONSTRAINT UNIQUE INDEX USING HASH(`source_article_name`)'
                        ') ENGINE = InnoDB;')
 
         # build links table
@@ -65,7 +65,7 @@ class MySQLDatabase:
                            '`string` VARCHAR(200) NOT NULL,'
                            '`target_article_id` BIGINT UNSIGNED NOT NULL,'
                            '`occurrences` BIGINT UNSIGNED NOT NULL DEFAULT 0,'
-                           'INDEX USING HASH(`string`, `target_article_id`)'
+                           'CONSTRAINT UNIQUE INDEX USING HASH(`string`, `target_article_id`)'
                        ') ENGINE=InnoDB;')
 
         # build ngrams table
