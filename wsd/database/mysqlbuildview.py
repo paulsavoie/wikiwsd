@@ -87,12 +87,13 @@ class MySQLBuildView:
             except MySQLdb.Error, e:
                 if e.args[0] == MYSQL_DEAD_LOCK_ERROR:
                     logging.warning('deadlock upading articleincount field. retrying... (%d)' % (retryCount))
+                    time.sleep(0.05)
                 logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
                     % (",".join([str(id) for id in target_article_ids]),  str(e.args[1]), str(e.args[0])))
 
         if retry:
             logging.error('error updating articleincount field %d retries DEADLOCK when updating ids: ("%s")'
-                    % (retryCount, ",".join([str(id) for id in target_article_ids]))            
+                    % (retryCount, ",".join([str(id) for id in target_article_ids])))            
 
     def insert_disambiguation(self, string, target_article_name):
         """saves a disambiguation to the database
@@ -147,7 +148,7 @@ class MySQLBuildView:
             self._cursor.execute('SELECT id FROM articles WHERE title=%s;', (title,))
             row = self._cursor.fetchone()
             if row == None:
-                self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s LIMIT 1);',
+                self._cursor.execute('SELECT id FROM articles WHERE title=(SELECT target_article_name FROM redirects WHERE source_article_name=%s);',
                         (title,))
                 row = self._cursor.fetchone()
 

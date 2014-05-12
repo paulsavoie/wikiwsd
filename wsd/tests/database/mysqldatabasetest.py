@@ -13,14 +13,14 @@ class MySQLDatabaseTest(unittest.TestCase):
                '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY,'
                '`title` VARCHAR(200) NOT NULL,'
                '`articleincount` INTEGER NOT NULL DEFAULT 0,'
-               'INDEX USING HASH(`title`)'
+               'CONSTRAINT UNIQUE INDEX USING HASH(`title`)'
             ') ENGINE=InnoDB;')
         self.assertEqual(db.connection.cursor().queries[1],
             'CREATE TABLE `redirects` ('
                '`id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,'
                '`source_article_name` VARCHAR(200) NOT NULL,'
                '`target_article_name` VARCHAR(200) NOT NULL,'
-               'INDEX USING HASH(`source_article_name`)'
+               'CONSTRAINT UNIQUE INDEX USING HASH(`source_article_name`)'
             ') ENGINE = InnoDB;')
         self.assertEqual(db.connection.cursor().queries[2],
             'CREATE TABLE `links` ('
@@ -35,7 +35,7 @@ class MySQLDatabaseTest(unittest.TestCase):
                '`string` VARCHAR(200) NOT NULL,'
                '`target_article_id` BIGINT UNSIGNED NOT NULL,'
                '`occurrences` BIGINT UNSIGNED NOT NULL DEFAULT 0,'
-               'INDEX USING HASH(`string`, `target_article_id`)'
+               'CONSTRAINT UNIQUE INDEX USING HASH(`string`, `target_article_id`)'
             ') ENGINE=InnoDB;')
         self.assertEqual(db.connection.cursor().queries[4],
             'CREATE TABLE `ngrams` ('
