@@ -88,7 +88,8 @@ class MySQLBuildView:
                 if e.args[0] == MYSQL_DEAD_LOCK_ERROR:
                     logging.warning('deadlock upading articleincount field. retrying... (%d)' % (retryCount))
                     time.sleep(0.05)
-                logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
+                else:
+                    logging.error('error updating articleincount field for ids: ("%s"): %s (%s)'
                     % (",".join([str(id) for id in target_article_ids]),  str(e.args[1]), str(e.args[0])))
 
         if retry:
